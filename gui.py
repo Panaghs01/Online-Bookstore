@@ -12,7 +12,7 @@ root = ctk.CTk()
 root.title("BookStore")
 root.geometry('1200x600')
 
-logo = ctk.CTkImage(dark_image=Image.open(r'C:\Users\anton\Desktop\standard_test_images\ANTEIKU.jpg'))
+#logo = ctk.CTkImage(dark_image=Image.open(r'C:\Users\anton\Desktop\standard_test_images\ANTEIKU.jpg'))
 
 def on_close():
     print("Closing application...")
