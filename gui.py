@@ -57,6 +57,7 @@ contact_label = ctk.CTkLabel(root, text="Contact us!", font=("Helvetica", 22), c
 contact_label.place(x=400, y=30)
 contact_label.bind("<Button-1>", lambda e: open_contact_window())
 
+# Offer settings.
 welcome_frame = ctk.CTkFrame(root)
 welcome_frame.pack(padx=100, pady=20)
 welcome = ctk.CTkLabel(welcome_frame, text="Welcome! Today's offers...", 
