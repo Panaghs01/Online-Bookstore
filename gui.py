@@ -67,4 +67,21 @@ contact_label = ctk.CTkLabel(root, text="Contact us!", font=("Helvetica", 22), c
 contact_label.place(x=30, y=530)
 contact_label.bind("<Button-1>", lambda e: open_contact_window())
 
+# Cart button settings.
+def open_cart_window():
+    cart_window = ctk.CTk()
+    cart_window.title("Cart")
+    cart_window.mainloop()
+
+cart_label = ctk.CTkLabel(root, text="Cart", font=("Helvetica", 22), cursor="hand2")
+cart_label.place(x=1070, y=30)
+cart_label.bind("<Button-1>", lambda e: open_cart_window())
+
+# Cart image settings.
+cart_image_path = "cart.png"
+cart_image = ctk.CTkImage(light_image=Image.open(cart_image_path), 
+                          dark_image=Image.open(cart_image_path), size=(40, 40))
+cart_image_label = ctk.CTkLabel(root, text="", image=cart_image)
+cart_image_label.place(x=1120, y=25)
+
 root.mainloop()
