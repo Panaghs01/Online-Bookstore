@@ -5,6 +5,7 @@ import sys
 import customtkinter as ctk
 from tkinter import *
 from PIL import Image, ImageTk
+#import objects.py
 
 # ----------------------------- TKinter Settings -----------------------------#
 
@@ -30,12 +31,21 @@ root.protocol("WM_DELETE_WINDOW", on_close)
 logo_path = "ANTEIKU.png"
 logo = ctk.CTkImage(light_image=Image.open(logo_path), 
                     dark_image=Image.open(logo_path), size=(160, 160))
-logo_label = ctk.CTkLabel(root, text="", image=logo)
-logo_label.place(x=10, y=0)
+logo_label = ctk.CTkLabel(root, text="", image=logo).place(x=0, y=0)
 
-# Label and search settings.
+# Search and label settings.
 search_input = ctk.CTkEntry(root, placeholder_text='Search',
                             justify='center').pack(pady=30)
+
+search_icon_path = "search_icon.png"
+search_icon = ctk.CTkImage(light_image=Image.open(search_icon_path), 
+                           dark_image=Image.open(search_icon_path), size=(30, 30))
+search_label = ctk.CTkLabel(root, text="", image=search_icon).place(x=495, y=28)
+
+welcome_frame = ctk.CTkFrame(root)
+welcome_frame.pack(padx=100, pady=20)
+welcome = ctk.CTkLabel(welcome_frame, text="Welcome! Today's offers...", 
+                       font=("Helvetica", 36, "bold")).pack(padx=200, pady=20)
 
 # Contact us settings.
 def open_contact_window():
@@ -49,18 +59,12 @@ def open_contact_window():
     telephone_label = ctk.CTkLabel(contact_window, text="Telephone: xx+xxxxxxx", 
                                     font=("Helvetica", 16)).pack(pady=10)
     
-    address_label = ctk.CTkLabel(contact_window, text="Address: Lamia, Greece (unfort)", 
+    address_label = ctk.CTkLabel(contact_window, text="Address: Lamia, Greece", 
                                   font=("Helvetica", 16)).pack(pady=10)
     contact_window.mainloop()
     
 contact_label = ctk.CTkLabel(root, text="Contact us!", font=("Helvetica", 22), cursor="hand2")
-contact_label.place(x=400, y=30)
+contact_label.place(x=30, y=530)
 contact_label.bind("<Button-1>", lambda e: open_contact_window())
-
-# Offer settings.
-welcome_frame = ctk.CTkFrame(root)
-welcome_frame.pack(padx=100, pady=20)
-welcome = ctk.CTkLabel(welcome_frame, text="Welcome! Today's offers...", 
-                       font=("Helvetica", 36, "bold")).pack(padx=200, pady=20)
 
 root.mainloop()
