@@ -3,9 +3,9 @@
 import os
 import sys
 import customtkinter as ctk
-from tkinter import *
+from tkinter import messagebox
+from tkinter import ttk
 from PIL import Image, ImageTk
-#import objects.py
 
 # ----------------------------- TKinter Settings -----------------------------#
 
@@ -56,8 +56,7 @@ def open_search_results():
     
     search_window.mainloop()
 
-search_input = ctk.CTkEntry(root, placeholder_text='Search',
-                            justify='center')
+search_input = ctk.CTkEntry(root, placeholder_text='Search', justify='center')
 search_input.pack(pady=30)
 
 search_icon_path = "search_icon.png"
@@ -142,55 +141,92 @@ cart_image_label.place(x=1120, y=25)
 def open_profile():
     
     def login():
+        global username_entry
+        global password_entry
+        
         # Clearing previous data.
         for widget in user_window.winfo_children():
             widget.destroy()
         
         username_label = ctk.CTkLabel(user_window, text="Username", 
-                                      font=("Helvetica", 16)).pack(pady=10)
-        username_entry = ctk.CTkEntry(user_window).pack(pady=5)
+                                      font=("Helvetica", 16))
+        username_label.pack(pady=10)
+        username_entry = ctk.CTkEntry(user_window)
+        username_entry.pack(pady=5)
         
         password_label = ctk.CTkLabel(user_window, text="Password", 
-                                      font=("Helvetica", 16)).pack(pady=10)
-        password_entry = ctk.CTkEntry(user_window, show="*").pack(pady=5)
+                                      font=("Helvetica", 16))
+        password_label.pack(pady=10)
+        password_entry = ctk.CTkEntry(user_window, show="*")
+        password_entry.pack(pady=5)
         
         login_button = ctk.CTkButton(user_window, text="Login",
-                                     command=login_user).pack(pady=10)
+                                     command=login_user)
+        login_button.pack(pady=10)
 
     def signup():
+        global username_entry
+        global password_entry
+        global phone_entry
+        global email_entry
+        global address_entry
+
         # Clearing previous data.
         for widget in user_window.winfo_children():
             widget.destroy()
         
         username_label = ctk.CTkLabel(user_window, text="Username", 
-                                      font=("Helvetica", 16)).pack(pady=5)
-        username_entry = ctk.CTkEntry(user_window).pack(pady=5)
+                                      font=("Helvetica", 16))
+        username_label.pack(pady=5)
+        username_entry = ctk.CTkEntry(user_window)
+        username_entry.pack(pady=5)
         
         password_label = ctk.CTkLabel(user_window, text="Password", 
-                                      font=("Helvetica", 16)).pack(pady=5)
-        password_entry = ctk.CTkEntry(user_window, show="*").pack(pady=5)
+                                      font=("Helvetica", 16))
+        password_label.pack(pady=5)
+        password_entry = ctk.CTkEntry(user_window, show="*")
+        password_entry.pack(pady=5)
         
         phone_label = ctk.CTkLabel(user_window, text="Phone", 
-                                   font=("Helvetica", 16)).pack(pady=5)
-        phone_entry = ctk.CTkEntry(user_window).pack(pady=5)
+                                   font=("Helvetica", 16))
+        phone_label.pack(pady=5)
+        phone_entry = ctk.CTkEntry(user_window)
+        phone_entry.pack(pady=5)
         
         email_label = ctk.CTkLabel(user_window, text="Email", 
-                                   font=("Helvetica", 16)).pack(pady=5)
-        email_entry = ctk.CTkEntry(user_window).pack(pady=5)
+                                   font=("Helvetica", 16))
+        email_label.pack(pady=5)
+        email_entry = ctk.CTkEntry(user_window)
+        email_entry.pack(pady=5)
         
         address_label = ctk.CTkLabel(user_window, text="Address", 
-                                     font=("Helvetica", 16)).pack(pady=5)
-        address_entry = ctk.CTkEntry(user_window).pack(pady=5)
+                                     font=("Helvetica", 16))
+        address_label.pack(pady=5)
+        address_entry = ctk.CTkEntry(user_window)
+        address_entry.pack(pady=5)
         
-        signup_button = ctk.CTkButton(user_window, text="Sign Up", 
-                                      command=signup_user).pack(pady=10)
+        signup_button = ctk.CTkButton(user_window, text="Sign Up", command=signup_user)
+        signup_button.pack(pady=10)
+
+    def signup_user():
+        username = username_entry.get()
+        password = password_entry.get()
+        phone = phone_entry.get()
+        email = email_entry.get()
+        address = address_entry.get()
+
+        # Dummy function to simulate saving user data
+        save_user_data(username, password, phone, email, address)
+        messagebox.showinfo("Sign Up Successful", "Your account has been created!")
+        user_window.destroy()
 
     user_window = ctk.CTk()
     user_window.title("Profile")
-    user_window.geometry('400x400')
+    user_window.geometry('450x450')
     
     select_label = ctk.CTkLabel(user_window, text="Please select an option.", 
-                                font=("Helvetica", 16)).pack(pady=30)
+                                font=("Helvetica", 16))
+    select_label.pack(pady=30)
     
     login_button = ctk.CTkButton(user_window, text="Log In", command=login)
     login_button.pack(pady=10)
@@ -199,7 +235,11 @@ def open_profile():
     signup_button.pack(pady=10)
 
     user_window.mainloop()
-    
+
+def save_user_data(username, password, phone, email, address):
+    # Dummy function to simulate saving user data
+    print(f"Saving user data: {username}, {password}, {phone}, {email}, {address}")
+
 profile_label = ctk.CTkLabel(root, text="User", font=("Helvetica", 22), cursor="hand2")
 profile_label.place(x=960, y=30)
 profile_label.bind("<Button-1>", lambda e: open_profile())
@@ -212,6 +252,47 @@ profile_image_label.place(x=1020, y=30)
 
 # ----------------------------------------------------------------------------#
 
+
+def login_user():
+    username = username_entry.get()
+    password = password_entry.get()
+
+    # douleia gia DATABASE :D
+    is_authenticated, user_role = check_credentials(username, password)  # As poume function call
+
+    if is_authenticated:
+        # Successfully authenticated
+        messagebox.showinfo("Login Successful", "Welcome back!")
+        user_window.destroy()  # Close the login window
+        open_main_shopping_interface()  # Transition to the main shopping interface
+    else:
+        # Authentication failed
+        messagebox.showerror("Login Failed", "Invalid username or password. Please try again.")
+
+# Pali dummy function to simulate credential check
+def check_credentials(username, password):
+    
+    if username == "testuser" and password == "password123":
+        return True, "customer"  # Simulated role
+    else:
+        return False, None
+
+# Main Shopping Interface Function
+def open_main_shopping_interface():
+    # Create a new window for the main shopping interface
+    main_window = ctk.CTk()
+    main_window.title("Bookstore")
+    main_window.geometry('800x600')
+
+    
+    welcome_label = ctk.CTkLabel(main_window, text="Welcome to Anteiku!", font=("Helvetica", 22))
+    welcome_label.pack(pady=20)
+
+    main_window.mainloop()
+
+# ----------------------------------------------------------------------------#
+
 root.mainloop()
 
 # ----------------------------------------------------------------------------#
+
