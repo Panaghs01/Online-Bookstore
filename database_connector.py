@@ -3,6 +3,8 @@
 Implemented functions: 
     searching books
     signup and login for user
+    login for admin
+    add to cart 
 
 feel free to fuck around with what each function returns, to fit whatever 
 
