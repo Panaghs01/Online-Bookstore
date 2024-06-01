@@ -6,6 +6,7 @@ import customtkinter as ctk
 from tkinter import messagebox
 from tkinter import ttk
 from PIL import Image, ImageTk
+import database_connector as DB
 
 # ----------------------------- TKinter Settings -----------------------------#
 
@@ -41,8 +42,11 @@ logo_label = ctk.CTkLabel(root, text="", image=logo).place(x=0, y=0)
 def search_books():
     # Get the search query from the search input
     search_query = search_input.get()
-    
-    messagebox.showinfo("Search Results", f"Searching for: {search_query}")
+    #found is a list that contains all the books
+    found = DB.search_books(search_query) 
+    #this prints everything for the books that match user input
+    #this is ugly and should be fixed =)
+    messagebox.showinfo("Search Results", found) 
 
 def open_search_results():
     # Create a new window
@@ -165,6 +169,15 @@ def open_profile():
         login_button.pack(pady=10)
 
     def signup():
+        #ew globul 
+        #episis valte ola ta pedia tou customer sto sign up 
+        #opws einai sto DB.signup_user
+        
+        #implement checks for phone number and email 
+        #so phone is only numbers
+        #and email is of email@domain.localecode format
+        #and if not, produce errors in the gui level, so the faulty data
+        #does not reach the sql side
         global username_entry
         global password_entry
         global phone_entry

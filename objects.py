@@ -36,3 +36,19 @@ stone_ocean_1 = Book("JOJO Stone Ocean Volume 1", "10", "Manga", "Araki Hirohiko
 stone_ocean_2 = Book("JOJO Stone Ocean Volume 2", "11", "Manga", "Araki Hirohiko", "VIZ Media LLC", "12.99", "stone_ocean_2")
 stone_ocean_2 = Book("JOJO Stone Ocean Volume 3", "12", "Manga", "Araki Hirohiko", "VIZ Media LLC", "12.99", "stone_ocean_3")
 snow_country = Book("Snow Country", "13", "Literature", "Kawabata Yasunari", "Knopf Doubleday Publishing Group", "9.99", "snow_country.jpg")
+
+'''
+("01", "Kafka on the Shore", "Murakami Haruki", "Vintage Books", "Literature", "12.99", "kafka_on_the_shore.jpg"),
+("02", "1Q84 Books 1 and 2", "Murakami Haruki", "Vintage Books", "Literature", "13.99", "1q84_1.jpg"),
+("03", "1Q84 Book 3", "Murakami Haruki", "Vintage Books", "Literature", "13.99", "1q84_3.jpg"),
+("04", "Kokoro", "Natsume Soseki", "Vintage Books", "Literature", "11.99", "kokoro.jpg"),
+("05", "Nakahara Chuuya Poems", "Nakahara Chuuya", "Gracewing", "Poems", "16.99", "chuuya_poems.jpg"),
+("06", "100 poems, 100 authors", "-", "Penguin Classics", "Poems", "12.99", "poems.jpg"),
+("07", "Goodnight Punpun Volume 1", "Asano Inio", "VIZ Media LLC", "Manga", "16.99", "pun_1.jpg"),
+("08", "Goodnight Punpun Volume 2", "Asano Inio", "VIZ Media LLC", "Manga", "16.99", "pun_2.jpg"),
+("09", "Goodnight Punpun Volume 3", "Asano Inio", "VIZ Media LLC", "Manga", "16.99", "pun_3.jpg"),
+("10", "JOJO Stone Ocean Volume 1", "Araki Hirohiko", "VIZ Media LLC", "Manga", "12.99", "stone_ocean_1"),
+("11", "JOJO Stone Ocean Volume 2", "Araki Hirohiko", "VIZ Media LLC", "Manga", "12.99", "stone_ocean_2"),
+("12", "JOJO Stone Ocean Volume 3", "Araki Hirohiko", "VIZ Media LLC", "Manga", "12.99", "stone_ocean_3"),
+("13", "Snow Country", "Kawabata Yasunari", "Knopf Doubleday Publishing Group", "Literature", "9.99", "snow_country.jpg")
+'''
