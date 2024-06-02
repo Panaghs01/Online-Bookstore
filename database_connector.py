@@ -17,7 +17,7 @@ or tell me to change it however you like
 
 """
 
-import mysql.connector as sql
+import mysql.connector as sql #pip install mysql-connector
 
 database = sql.connect(user = "root", host = "localhost",
                        database = "bookstore")
@@ -38,9 +38,9 @@ def search_books(user_input, columns="*"):
 #all the necessary values for a new user
 def signup_user(name, username, password, country, city, street, street_number,
                 postal_code, phone, email):
-    cursor.execute(f"SELECT username FROM customers")
+    cursor.execute("SELECT username FROM customers")
     usernames = cursor.fetchall() 
-    cursor.execute(f"SELECT email FROM customers")
+    cursor.execute("SELECT email FROM customers")
     emails = cursor.fetchall()
     if username in usernames: return "Username already in use"
     if email in emails: return "Email already in use"
@@ -81,8 +81,9 @@ def login_admin(username, password):
 def add_book_to_cart(isbn,quantity=1):
     cursor.execute(f"SELECT quantity FROM inventory WHERE book_ISBN={isbn}")
     inventory = cursor.fetchall()
-    if inventory[0][0] - quantity >= 0: return 0 #Success
-    else: return 1 #Not enough copies of the book in stock
+    if inventory[0][0] - quantity >= 0: return isbn,quantity 
+    #Success, return the isbn and the quantity requested
+    else: return 1 #Not enough copies of the book in stock, therefore return 1
 
 
 

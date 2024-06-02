@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Εξυπηρετητής: 127.0.0.1
--- Χρόνος δημιουργίας: 01 Ιουν 2024 στις 23:30:06
+-- Χρόνος δημιουργίας: 02 Ιουν 2024 στις 15:44:46
 -- Έκδοση διακομιστή: 10.4.32-MariaDB
--- Έκδοση PHP: 8.2.12
+-- Έκδοση PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -86,7 +86,6 @@ INSERT INTO `books` (`ISBN`, `title`, `author`, `publisher`, `genre`, `price`, `
 
 CREATE TABLE `buys` (
   `Transaction_ID` int(100) NOT NULL,
-  `store_id` int(10) NOT NULL,
   `supplier_id` int(10) NOT NULL,
   `book_ISBN` varchar(12) NOT NULL,
   `quantity` int(30) NOT NULL
@@ -121,7 +120,6 @@ CREATE TABLE `customers` (
 CREATE TABLE `inventory` (
   `Inventory_ID` int(255) NOT NULL,
   `book_ISBN` varchar(12) NOT NULL,
-  `store_ID` int(10) NOT NULL,
   `quantity` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -133,21 +131,9 @@ CREATE TABLE `inventory` (
 
 CREATE TABLE `sells` (
   `Transaction_ID` int(100) NOT NULL,
-  `store_id` int(10) NOT NULL,
   `customer_id` int(10) NOT NULL,
   `book_ISBN` varchar(12) NOT NULL,
   `quantity` int(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Δομή πίνακα για τον πίνακα `store`
---
-
-CREATE TABLE `store` (
-  `id` int(10) NOT NULL,
-  `address` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -188,7 +174,6 @@ ALTER TABLE `books`
 ALTER TABLE `buys`
   ADD PRIMARY KEY (`Transaction_ID`),
   ADD KEY `book_ISBN` (`book_ISBN`),
-  ADD KEY `store_id` (`store_id`),
   ADD KEY `supplier_id` (`supplier_id`);
 
 --
@@ -202,8 +187,7 @@ ALTER TABLE `customers`
 --
 ALTER TABLE `inventory`
   ADD PRIMARY KEY (`Inventory_ID`),
-  ADD KEY `book_ISBN` (`book_ISBN`),
-  ADD KEY `store_ID` (`store_ID`);
+  ADD KEY `book_ISBN` (`book_ISBN`);
 
 --
 -- Ευρετήρια για πίνακα `sells`
@@ -211,14 +195,7 @@ ALTER TABLE `inventory`
 ALTER TABLE `sells`
   ADD PRIMARY KEY (`Transaction_ID`),
   ADD KEY `customer_id` (`customer_id`),
-  ADD KEY `book_ISBN` (`book_ISBN`) USING BTREE,
-  ADD KEY `store_id` (`store_id`);
-
---
--- Ευρετήρια για πίνακα `store`
---
-ALTER TABLE `store`
-  ADD PRIMARY KEY (`id`);
+  ADD KEY `book_ISBN` (`book_ISBN`) USING BTREE;
 
 --
 -- Ευρετήρια για πίνακα `supplier`
@@ -261,12 +238,6 @@ ALTER TABLE `sells`
   MODIFY `Transaction_ID` int(100) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT για πίνακα `store`
---
-ALTER TABLE `store`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT για πίνακα `supplier`
 --
 ALTER TABLE `supplier`
@@ -281,23 +252,20 @@ ALTER TABLE `supplier`
 --
 ALTER TABLE `buys`
   ADD CONSTRAINT `buys_ibfk_1` FOREIGN KEY (`book_ISBN`) REFERENCES `books` (`ISBN`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `buys_ibfk_2` FOREIGN KEY (`store_id`) REFERENCES `store` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `buys_ibfk_3` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Περιορισμοί για πίνακα `inventory`
 --
 ALTER TABLE `inventory`
-  ADD CONSTRAINT `inventory_ibfk_1` FOREIGN KEY (`book_ISBN`) REFERENCES `books` (`ISBN`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `inventory_ibfk_2` FOREIGN KEY (`store_ID`) REFERENCES `store` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `inventory_ibfk_1` FOREIGN KEY (`book_ISBN`) REFERENCES `books` (`ISBN`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Περιορισμοί για πίνακα `sells`
 --
 ALTER TABLE `sells`
   ADD CONSTRAINT `sells_ibfk_2` FOREIGN KEY (`book_ISBN`) REFERENCES `books` (`ISBN`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `sells_ibfk_3` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `sells_ibfk_4` FOREIGN KEY (`store_id`) REFERENCES `store` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `sells_ibfk_3` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

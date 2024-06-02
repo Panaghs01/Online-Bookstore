@@ -2,10 +2,10 @@
 
 import os
 import sys
-import customtkinter as ctk
+import customtkinter as ctk #pip install customtkinter
 from tkinter import messagebox
 from tkinter import ttk
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk #pip install pillow
 import database_connector as DB
 
 # ----------------------------- TKinter Settings -----------------------------#
