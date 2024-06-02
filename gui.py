@@ -45,6 +45,7 @@ def search_books():
     #found is a list that contains all the books
     found = DB.search_books(search_query) 
     #this prints everything for the books that match user input
+    #can also edit what db.search_books returns, if thats easier/better code
     #this is ugly and should be fixed =)
     messagebox.showinfo("Search Results", found) 
 
