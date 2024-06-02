@@ -41,6 +41,7 @@ def signup_user(name, username, password, country, city, street, street_number,
                 postal_code, phone, email):
     #this is not yet called in gui.py, need to implement more gui elements to get
     #all the necessary values for a new user
+    
     cursor.execute("SELECT username FROM customers")
     usernames = cursor.fetchall() 
     cursor.execute("SELECT email FROM customers")
@@ -74,7 +75,7 @@ def login_user(username, password):
             cursor.execute(
                 f"""SELECT id FROM customers 
                 WHERE username={username} AND password={password}""")
-            user_id = cursor.fetchall()
+            user_id = cursor.fetchall() #this might return a tuple
             return user_id #login sucessful, return users id
         
 
@@ -82,13 +83,18 @@ def login_admin(username, password):
     cursor.execute("SELECT username FROM admins")
     usernames = cursor.fetchall()
     if username not in usernames:
-        return 1 #Invalid username error
+        return -1 #Invalid username error
     else:
         cursor.execute(
             f"SELECT password FROM admins WHERE username={username}")
         passwords = cursor.fetchall()
-        if password not in passwords: return 2 #Invalid password error
-        else: return 0 #login sucessful
+        if password not in passwords: return -2 #Invalid password error
+        else:
+            cursor.execute(
+                f"""SELECT id FROM admins 
+                WHERE username={username} AND password={password}""")
+            admin_id = cursor.fetchall()
+            return admin_id #login sucessful
         
 
 def add_book_to_cart(isbn,quantity=1):        
@@ -99,7 +105,7 @@ def add_book_to_cart(isbn,quantity=1):
     cursor.execute(
         f"SELECT quantity FROM inventory WHERE book_ISBN={isbn}")
     inventory = cursor.fetchall()
-    if inventory[0][0] - quantity >= 0: return isbn,quantity 
+    if inventory[0] - quantity >= 0: return isbn,quantity 
     #Success, return the isbn and the quantity requested
     else: return 1 #Not enough copies of the book in stock, therefore return 1
     
@@ -119,12 +125,11 @@ def transaction_sell(book_dict,customer_id):
         cursor.execute(
             f"SELECT quantity FROM inventory WHERE book_ISBN={key}")
         quantity = cursor.fetchall()
-        new_quantity=quantity[0][0]-book_dict[key]
+        new_quantity=quantity[0]-book_dict[key]
         cursor.execute(
             f"""UPDATE inventory SET quantity = {new_quantity} 
             WHERE book_ISBN = {key})""")
         cursor.commit()
-    
        
 def transaction_buy(book_dict,supplier_id):
     #this function takes a dictionary of {book_isbn:quantity} format 
@@ -140,7 +145,7 @@ def transaction_buy(book_dict,supplier_id):
         cursor.execute(
             f"SELECT quantity FROM inventory WHERE book_ISBN={key}")
         quantity = cursor.fetchall()
-        new_quantity=quantity[0][0]+book_dict[key]
+        new_quantity=quantity[0]+book_dict[key]
         cursor.execute(
             f"""UPDATE inventory SET quantity = {new_quantity} 
             WHERE book_ISBN = {key})""")

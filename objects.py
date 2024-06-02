@@ -47,8 +47,8 @@ snow_country = Book("Snow Country", "13", "Literature", "Kawabata Yasunari", "Kn
 ("07", "Goodnight Punpun Volume 1", "Asano Inio", "VIZ Media LLC", "Manga", "16.99", "pun_1.jpg"),
 ("08", "Goodnight Punpun Volume 2", "Asano Inio", "VIZ Media LLC", "Manga", "16.99", "pun_2.jpg"),
 ("09", "Goodnight Punpun Volume 3", "Asano Inio", "VIZ Media LLC", "Manga", "16.99", "pun_3.jpg"),
-("10", "JOJO Stone Ocean Volume 1", "Araki Hirohiko", "VIZ Media LLC", "Manga", "12.99", "stone_ocean_1"),
-("11", "JOJO Stone Ocean Volume 2", "Araki Hirohiko", "VIZ Media LLC", "Manga", "12.99", "stone_ocean_2"),
-("12", "JOJO Stone Ocean Volume 3", "Araki Hirohiko", "VIZ Media LLC", "Manga", "12.99", "stone_ocean_3"),
+("10", "JOJO Stone Ocean Volume 1", "Araki Hirohiko", "VIZ Media LLC", "Manga", "12.99", "stone_ocean_1.jpg"),
+("11", "JOJO Stone Ocean Volume 2", "Araki Hirohiko", "VIZ Media LLC", "Manga", "12.99", "stone_ocean_2.jpg"),
+("12", "JOJO Stone Ocean Volume 3", "Araki Hirohiko", "VIZ Media LLC", "Manga", "12.99", "stone_ocean_3.jpg"),
 ("13", "Snow Country", "Kawabata Yasunari", "Knopf Doubleday Publishing Group", "Literature", "9.99", "snow_country.jpg")
 '''
