@@ -10,7 +10,7 @@ Implemented functions:
 
 feel free to fuck around with what each function returns, to fit whatever 
 
-the giu.py code requires
+the gui.py code requires
 
 e.g. you could make search books return only the name or id of the book
 or tell me to change it however you like 
