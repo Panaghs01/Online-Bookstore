@@ -42,24 +42,50 @@ logo_label = ctk.CTkLabel(root, text="", image=logo).place(x=0, y=0)
 def search_books():
     # Get the search query from the search input
     search_query = search_input.get()
-    #found is a list that contains all the books
-    found = DB.search_books(search_query) 
-    #this prints everything for the books that match user input
-    #can also edit what db.search_books returns, if thats easier/better code
-    #this is ugly and should be fixed =)
-    messagebox.showinfo("Search Results", found) 
-
-def open_search_results():
-    # Create a new window
-    search_window = ctk.CTk()
-    search_window.title("Search Results")
-    search_window.geometry('400x300')
-    
-    search_query = search_input.get()
-    search_results_label = ctk.CTkLabel(search_window, text=f"Search Results for: {search_query}", 
-                                        font=("Helvetica", 16)).pack(pady=20)
-    
-    search_window.mainloop()
+    # found is a list that contains all the books
+    found = DB.search_books(search_query)
+    # Check if any books were found
+    if found:
+        # Create a new window to display search results
+        search_window = ctk.CTk()
+        search_window.title("Search Results")
+        search_window.geometry('500x300')
+        
+        # Label to display search query
+        search_results_label = ctk.CTkLabel(search_window, text=f"Search Results for: {search_query}", 
+                                             font=("Helvetica", 16))
+        search_results_label.pack(pady=20)
+        
+        # Frame to contain search results
+        results_frame = ctk.CTkFrame(search_window)
+        results_frame.pack(padx=20, pady=10)
+        
+        # Function to add book to cart
+        def add_to_cart(isbn):
+            # Dummy function to simulate adding book to cart
+            print(f"Adding book with ISBN {isbn} to cart.")
+            messagebox.showinfo("Added to Cart", "Item added to cart successfully!")
+        
+        for book_info in found:
+            # Label to display book information
+            book_label = ctk.CTkLabel(results_frame, text=f"ISBN: {book_info[0]}\n"
+                                                         f"Title: {book_info[1]}\n"
+                                                         f"Author: {book_info[2]}\n"
+                                                         f"Publisher: {book_info[3]}\n"
+                                                         f"Genre: {book_info[4]}\n"
+                                                         f"Price: {book_info[5]}\n",
+                                       font=("Helvetica", 12), justify="left")
+            book_label.pack(pady=10, anchor="w")
+            
+            # Create an Add to Cart button for each book
+            add_to_cart_button = ctk.CTkButton(results_frame, text="Add To Cart", 
+                                                command=lambda isbn=book_info[0]: add_to_cart(isbn))
+            add_to_cart_button.pack(pady=5, anchor="w")
+        
+        search_window.mainloop()
+    else:
+        # if no books were found display a message
+        messagebox.showinfo("Search Results", "No items found matching your search.")
 
 search_input = ctk.CTkEntry(root, placeholder_text='Search', justify='center')
 search_input.pack(pady=30)
