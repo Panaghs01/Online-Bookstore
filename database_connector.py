@@ -67,42 +67,37 @@ def signup_user(name, username, password, country, city, street, street_number,
 def login_user(username, password):
 
     cursor.execute("SELECT password FROM customers WHERE username = %s", (username,))
-    stored_password = cursor.fetchone()
-    if not stored_password:
-        return -1  # Invalid username.
+    passwords = cursor.fetchall()
+    
+    if not passwords:
+        return -1  #Invalid username
 
-    stored_password = stored_password[0]
-    if stored_password != password:
-        return -2  # Invalid password.
+    if password not in passwords:
+        return -2  #Invalid password
 
     cursor.execute("SELECT id FROM customers WHERE username = %s AND password = %s", (username, password))
     user_id = cursor.fetchone()
 
-    return user_id  # Login successful, returning the user ID.
+    return user_id[0]  #Login successful, returning the user ID.
 
 
 # Same exact process as the login_user, though this time we use the admins table.
 def login_admin(username, password):
+    
     cursor.execute("SELECT password FROM admins WHERE username = %s", (username,))
-    admin_password = cursor.fetchone()
+    passwords = cursor.fetchone()
 
-    if admin_password:
-        # Password has position 0 in the tupple.
-        admin_password = admin_password[0]
+    if not passwords:
+        return -1 #Invalid username
 
-        if admin_password == password:
-            cursor.execute("SELECT id FROM admins WHERE username = %s AND password = %s", (username, password))
-            admin_id = cursor.fetchone()
+    if password not in passwords:
+        return -2 #Invalid password
+    
+    
+    cursor.execute("SELECT id FROM admins WHERE username = %s AND password = %s", (username, password))
+    admin_id = cursor.fetchone()
 
-            if admin_id:
-                return admin_id[0]  # Login successful, returning the admin ID.
-            else:
-                return -3  # Authentication failed.
-        else:
-            return -2  # Invalid password.
-    else:
-        return -1  # Invalid username.
-
+    return admin_id[0]
 
 def add_book_to_cart(isbn,quantity=1):
     #this function takes book_isbn and optionally a value that is default to 1
@@ -110,9 +105,9 @@ def add_book_to_cart(isbn,quantity=1):
     #THIS HAS NOT BEEN TESTED YET, if statement might need minor adjustments
     
     cursor.execute(
-        f"SELECT quantity FROM inventory WHERE book_ISBN={isbn}")
+        f"SELECT stock FROM books WHERE ISBN={isbn}")
     inventory = cursor.fetchall()
-    if inventory[0] - quantity >= 0: return isbn,quantity 
+    if inventory[0][0] - quantity >= 0: return isbn,quantity 
     #Success, return the isbn and the quantity requested
     else: return 1 #Not enough copies of the book in stock, therefore return 1
     
@@ -130,12 +125,12 @@ def transaction_sell(book_dict,customer_id):
             VALUES ({customer_id}, {key}, {book_dict[key]})""")
         cursor.commit()
         cursor.execute(
-            f"SELECT quantity FROM inventory WHERE book_ISBN={key}")
+            f"SELECT stock FROM books WHERE ISBN={key}")
         quantity = cursor.fetchall()
         new_quantity=quantity[0]-book_dict[key]
         cursor.execute(
-            f"""UPDATE inventory SET quantity = {new_quantity} 
-            WHERE book_ISBN = {key})""")
+            f"""UPDATE books SET stock = {new_quantity} 
+            WHERE ISBN = {key})""")
         cursor.commit()
        
 def transaction_buy(book_dict,supplier_id):
@@ -146,14 +141,14 @@ def transaction_buy(book_dict,supplier_id):
     
     for key in book_dict:
         cursor.execute(
-            f"""INSERT INTO buys (supplier_id, book_ISBN, quantity) 
+            f"""INSERT INTO buys (customer_id, book_ISBN, quantity) 
             VALUES ({supplier_id}, {key}, {book_dict[key]})""")
         cursor.commit()
         cursor.execute(
-            f"SELECT quantity FROM inventory WHERE book_ISBN={key}")
+            f"SELECT stock FROM books WHERE ISBN={key}")
         quantity = cursor.fetchall()
         new_quantity=quantity[0]+book_dict[key]
         cursor.execute(
-            f"""UPDATE inventory SET quantity = {new_quantity} 
-            WHERE book_ISBN = {key})""")
+            f"""UPDATE books SET stock = {new_quantity} 
+            WHERE ISBN = {key})""")
         cursor.commit()

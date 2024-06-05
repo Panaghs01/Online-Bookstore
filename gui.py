@@ -224,8 +224,11 @@ def open_profile():
 
     def login_user():
 
-        username = username_entry.get()
-        password = password_entry.get()
+        #these need to be strings, incase someone has only a numerical password
+        #receiving an integer number will make the validation check give 
+        #a false negative
+        username = str(username_entry.get())
+        password = str(password_entry.get())
 
         # Data base call. Checking if credentials are valid.
         user_id = DB.login_user(username, password)
