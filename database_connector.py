@@ -106,8 +106,8 @@ def add_book_to_cart(isbn,quantity=1):
     
     cursor.execute(
         f"SELECT stock FROM books WHERE ISBN={isbn}")
-    inventory = cursor.fetchall()
-    if inventory[0][0] - quantity >= 0: return isbn,quantity 
+    inventory = cursor.fetchone()
+    if inventory[0] - quantity >= 0: return isbn,quantity 
     #Success, return the isbn and the quantity requested
     else: return 1 #Not enough copies of the book in stock, therefore return 1
     

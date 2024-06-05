@@ -57,7 +57,8 @@ def search_books():
         search_window.geometry('500x300')
         
         # Label to display search query
-        search_results_label = ctk.CTkLabel(search_window, text=f"Search Results for: {search_query}", 
+        search_results_label = ctk.CTkLabel(
+            search_window, text=f"Search Results for: {search_query}", 
                                              font=("Helvetica", 16))
         search_results_label.pack(pady=20)
         
@@ -67,35 +68,50 @@ def search_books():
         
         # Function to add a book to the cart.
         def add_to_cart(isbn):
-
+            #kapou prepei na kratame ena cart, gia na mporoume na proxwrhsoyme
+            #se checkout
+            
+            #episis anti gia add to cart koumpi, mporeite na exete +1 koumpi
+            #kai -1, gia na vazei k na vgazei apo cart
+            #episis an 8elw na parw 20 vivlia prepei na pa8w epilipsia apo ta
+            #para8yra poy emfanizontai
+            
+            #mporoume na exoyme apla ena counter katw apo to vivlio poy na 
+            #ayksomeiwnetai analoga me to posa vazei sto cart o user
             result = DB.add_book_to_cart(isbn)
 
             if result != 1:
-                messagebox.showinfo("Added to Cart", "Item added to cart successfully!")
+                messagebox.showinfo(
+                    "Added to Cart", "Item added to cart successfully!")
             else:
-                messagebox.showerror("Out of Stock", "Not enough copies of the book in stock.")
+                messagebox.showerror(
+                    "Out of Stock", "Not enough copies of the book in stock.")
 
         for book_info in found:
             # Label to display book information
-            book_label = ctk.CTkLabel(results_frame, text=f"ISBN: {book_info[0]}\n"
-                                                         f"Title: {book_info[1]}\n"
-                                                         f"Author: {book_info[2]}\n"
-                                                         f"Publisher: {book_info[3]}\n"
-                                                         f"Genre: {book_info[4]}\n"
-                                                         f"Price: {book_info[5]}\n",
+            book_label = ctk.CTkLabel(
+                results_frame, text=f"ISBN: {book_info[0]}\n"
+                                    f"Title: {book_info[1]}\n"
+                                    f"Author: {book_info[2]}\n"
+                                    f"Publisher: {book_info[3]}\n"
+                                    f"Genre: {book_info[4]}\n"
+                                    f"Price: {book_info[5]}\n",
                                        font=("Helvetica", 12), justify="left")
             book_label.pack(pady=10, anchor="w")
             
             # Creating an Add to Cart button for each book.
-            add_to_cart_button = ctk.CTkButton(results_frame, text="Add To Cart", 
-                                                command=lambda isbn=book_info[0]: add_to_cart(isbn))
+            add_to_cart_button = ctk.CTkButton(
+                results_frame, text="Add To Cart", 
+                    command=lambda isbn=book_info[0]: add_to_cart(isbn))
+            
             add_to_cart_button.pack(pady=5, anchor="w")
         
         search_window.mainloop()
     # Book not found message.
     else:
 
-        messagebox.showinfo("Search Results", "No items found matching your search.")
+        messagebox.showinfo(
+            "Search Results", "No items found matching your search.")
 
 search_input = ctk.CTkEntry(root, placeholder_text='Search', justify='center')
 search_input.pack(pady=30)
@@ -125,14 +141,17 @@ def open_contact_window():
     contact_window.title("Contact Information")
     contact_window.geometry('330x180')
     
-    email_label = ctk.CTkLabel(contact_window, text="Email: anteikubookstore@gmail.com", 
-                                font=("Helvetica", 16)).pack(pady=20)
+    email_label = ctk.CTkLabel(
+                    contact_window, text="Email: anteikubookstore@gmail.com", 
+                        font=("Helvetica", 16)).pack(pady=20)
     
-    telephone_label = ctk.CTkLabel(contact_window, text="Telephone: xx+xxxxxxx", 
-                                    font=("Helvetica", 16)).pack(pady=10)
+    telephone_label = ctk.CTkLabel(
+                    contact_window, text="Telephone: xx+xxxxxxx", 
+                        font=("Helvetica", 16)).pack(pady=10)
     
-    address_label = ctk.CTkLabel(contact_window, text="Address: Lamia, Greece", 
-                                  font=("Helvetica", 16)).pack(pady=10)
+    address_label = ctk.CTkLabel(
+                    contact_window, text="Address: Lamia, Greece", 
+                        font=("Helvetica", 16)).pack(pady=10)
     contact_window.mainloop()
     
 contact_label = ctk.CTkLabel(root, text="Contact us!", font=("Helvetica", 22), 
@@ -165,13 +184,16 @@ def open_cart_window():
     
     cart_window.mainloop()
 
-cart_label = ctk.CTkLabel(root, text="Cart", font=("Helvetica", 22), cursor="hand2")
+cart_label = ctk.CTkLabel(
+                          root, text="Cart", font=("Helvetica", 22),
+                              cursor="hand2")
 cart_label.place(x=1070, y=30)
 cart_label.bind("<Button-1>", lambda e: open_cart_window())
 
 cart_image_path = "cart.png"
 cart_image = ctk.CTkImage(light_image=Image.open(cart_image_path), 
-                          dark_image=Image.open(cart_image_path), size=(40, 40))
+                          dark_image=Image.open(
+                              cart_image_path), size=(40, 40))
 cart_image_label = ctk.CTkLabel(root, text="", image=cart_image)
 cart_image_label.place(x=1120, y=25)
 
@@ -201,23 +223,33 @@ def open_profile():
 
         email = email_entry.get()
         if not validate_email(email):
-            messagebox.showerror("Invalid Email", "Please enter a valid email address.")
+            messagebox.showerror(
+                "Invalid Email", "Please enter a valid email address.")
             return
 
         phone = phone_entry.get()
         if not phone.isdigit():
-            messagebox.showerror("Invalid Phone Number", "Phone number should contain only numbers.")
+            messagebox.showerror(
+                "Invalid Phone Number",
+                "Phone number should contain only numbers.")
             return
 
         # Data base call. Signing user up.
-        result = DB.signup_user(name, username, password, country, city, street, street_number, postal_code, phone, email)
+        result = DB.signup_user(
+            name, username, password, country, city, street, street_number,
+            postal_code, phone, email)
 
         if result == "Username already in use":
-            messagebox.showerror("Signup Failed", "Username already in use. Please choose another username.")
+            messagebox.showerror(
+                "Signup Failed", 
+                    "Username already in use. Please choose another username.")
         elif result == "Email already in use":
-            messagebox.showerror("Signup Failed", "Email already in use. Please choose another email.")
+            messagebox.showerror(
+                "Signup Failed",
+                    "Email already in use. Please choose another email.")
         else:
-            messagebox.showinfo("Sign Up Successful", "Your account has been created!")
+            messagebox.showinfo(
+                "Sign Up Successful", "Your account has been created!")
             back_to_menu()
 
         back_to_menu()
@@ -234,11 +266,15 @@ def open_profile():
         user_id = DB.login_user(username, password)
 
         if user_id == -1:
-            messagebox.showerror("Login Failed", "Username not found. Please check your username.")
+            messagebox.showerror(
+                "Login Failed",
+                "Username not found. Please check your username.")
         elif user_id == -2:
-            messagebox.showerror("Login Failed", "Invalid password. Please check your password.")
+            messagebox.showerror(
+                "Login Failed", "Invalid password. Please check your password.")
         else:
-            messagebox.showinfo("Login Successful", "You have been logged in!")
+            messagebox.showinfo(
+                "Login Successful", "You have been logged in!")
             user_window.destroy()
 
     def login_admin():
@@ -250,11 +286,17 @@ def open_profile():
         user_id = DB.login_admin(username, password)
 
         if user_id == -1:
-            messagebox.showerror("Login Failed", "Username not found. Please check your username.")
+            messagebox.showerror(
+                "Login Failed",
+                "Username not found. Please check your username.")
         elif user_id == -2:
-            messagebox.showerror("Login Failed", "Invalid password. Please check your password.")
+            messagebox.showerror(
+                "Login Failed",
+                "Invalid password. Please check your password.")
         else:
-            messagebox.showinfo("Login Successful", "You have been logged in!")
+            messagebox.showinfo(
+                "Login Successful",
+                "You have been logged in!")
             user_window.destroy()
 
     def back_to_menu():
@@ -288,7 +330,8 @@ def open_profile():
                                      command=login_user)
         login_button.pack(pady=10)
 
-        back_button = ctk.CTkButton(user_window, text="Back", fg_color="Red", command=back_to_menu)
+        back_button = ctk.CTkButton(
+            user_window, text="Back", fg_color="Red", command=back_to_menu)
         back_button.pack(pady=5)
 
     def admin():
@@ -316,14 +359,17 @@ def open_profile():
                                      command=login_admin)
         login_button.pack(pady=10)
 
-        back_button = ctk.CTkButton(user_window, text="Back", fg_color="Red", command=back_to_menu)
+        back_button = ctk.CTkButton(
+            user_window, text="Back", fg_color="Red", command=back_to_menu)
         back_button.pack(pady=5)
 
     def signup():
 
         # Creating global variables for each needed field.
-        global name_entry, username_entry, password_entry, country_entry, city_entry
-        global street_entry, street_number_entry, postal_code_entry, phone_entry, email_entry
+        global name_entry, username_entry, password_entry
+        global country_entry, city_entry
+        global street_entry, street_number_entry, postal_code_entry
+        global phone_entry, email_entry
 
         # Clearing previous data.
         for widget in user_window.winfo_children():
@@ -357,13 +403,15 @@ def open_profile():
         for i, (label_text, entry_var) in enumerate(fields):
             parent_frame = left_frame if i % 2 == 0 else right_frame
 
-            label = ctk.CTkLabel(parent_frame, text=label_text, font=("Helvetica", 16))
+            label = ctk.CTkLabel(
+                parent_frame, text=label_text, font=("Helvetica", 16))
             label.pack(pady=5)
 
             if label_text in ["Phone", "Street Number"]:
-                entry = ctk.CTkEntry(parent_frame, validate="key",
-                                     validatecommand=(
-                                     validation_phone if label_text == "Phone" else validation_street_number, '%P'))
+                entry = ctk.CTkEntry(
+                    parent_frame, validate="key",
+                    validatecommand=(
+                        validation_phone if label_text == "Phone" else validation_street_number, '%P'))
             elif label_text == "Password":
                 entry = ctk.CTkEntry(parent_frame, show="*")
             else:
@@ -372,24 +420,30 @@ def open_profile():
             entry.pack(pady=5)
             globals()[entry_var] = entry
 
-        signup_button = ctk.CTkButton(user_window, text="Sign Up", command=signup_user)
+        signup_button = ctk.CTkButton(
+            user_window, text="Sign Up", command=signup_user)
         signup_button.pack(pady=10)
 
-        back_button = ctk.CTkButton(user_window, text="Back", fg_color="Red", command=back_to_menu)
+        back_button = ctk.CTkButton(
+            user_window, text="Back", fg_color="Red", command=back_to_menu)
         back_button.pack(pady=10)
 
     def build_main_menu():
-        select_label = ctk.CTkLabel(user_window, text="Please select an option.",
-                                    font=("Helvetica", 16))
+        select_label = ctk.CTkLabel(
+            user_window, text="Please select an option.",
+                font=("Helvetica", 16))
         select_label.pack(pady=30)
 
-        login_button = ctk.CTkButton(user_window, text="Log In", command=login)
+        login_button = ctk.CTkButton(
+            user_window, text="Log In", command=login)
         login_button.pack(pady=10)
 
-        signup_button = ctk.CTkButton(user_window, text="Sign Up", command=signup)
+        signup_button = ctk.CTkButton(
+            user_window, text="Sign Up", command=signup)
         signup_button.pack(pady=10)
 
-        admin_button = ctk.CTkButton(user_window, text="Admin", fg_color="Blue", command=admin)
+        admin_button = ctk.CTkButton(
+            user_window, text="Admin", fg_color="Blue", command=admin)
         admin_button.pack(pady=10)
 
     user_window = ctk.CTk()
@@ -399,13 +453,15 @@ def open_profile():
     build_main_menu()
     user_window.mainloop()
 
-profile_label = ctk.CTkLabel(root, text="User", font=("Helvetica", 22), cursor="hand2")
+profile_label = ctk.CTkLabel(
+    root, text="User", font=("Helvetica", 22), cursor="hand2")
 profile_label.place(x=960, y=30)
 profile_label.bind("<Button-1>", lambda e: open_profile())
 
 profile_image_path = "profile.png"
-profile_image = ctk.CTkImage(light_image=Image.open(profile_image_path),
-                             dark_image=Image.open(profile_image_path), size=(27, 27))
+profile_image = ctk.CTkImage(
+                light_image=Image.open(profile_image_path),
+                    dark_image=Image.open(profile_image_path), size=(27, 27))
 profile_image_label = ctk.CTkLabel(root, text="", image=profile_image)
 profile_image_label.place(x=1020, y=30)
 
