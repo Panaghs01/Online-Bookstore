@@ -1,5 +1,6 @@
 # --------------------------------- Libraries --------------------------------#
 
+import re
 import os
 import sys
 import customtkinter as ctk #pip install customtkinter
@@ -40,13 +41,17 @@ logo_label = ctk.CTkLabel(root, text="", image=logo).place(x=0, y=0)
 
 # Search settings.
 def search_books():
-    # Get the search query from the search input
+
+    # Search query from the search input.
     search_query = search_input.get()
-    # found is a list that contains all the books
+
+    # Found is a list that contains all the books.
     found = DB.search_books(search_query)
-    # Check if any books were found
+
+    # Checking if any books were found.
     if found:
-        # Create a new window to display search results
+
+        # Creating a new window to display search results.
         search_window = ctk.CTk()
         search_window.title("Search Results")
         search_window.geometry('500x300')
@@ -60,12 +65,16 @@ def search_books():
         results_frame = ctk.CTkFrame(search_window)
         results_frame.pack(padx=20, pady=10)
         
-        # Function to add book to cart
+        # Function to add a book to the cart.
         def add_to_cart(isbn):
-            # Dummy function to simulate adding book to cart
-            print(f"Adding book with ISBN {isbn} to cart.")
-            messagebox.showinfo("Added to Cart", "Item added to cart successfully!")
-        
+
+            result = DB.add_book_to_cart(isbn)
+
+            if result != 1:
+                messagebox.showinfo("Added to Cart", "Item added to cart successfully!")
+            else:
+                messagebox.showerror("Out of Stock", "Not enough copies of the book in stock.")
+
         for book_info in found:
             # Label to display book information
             book_label = ctk.CTkLabel(results_frame, text=f"ISBN: {book_info[0]}\n"
@@ -77,14 +86,15 @@ def search_books():
                                        font=("Helvetica", 12), justify="left")
             book_label.pack(pady=10, anchor="w")
             
-            # Create an Add to Cart button for each book
+            # Creating an Add to Cart button for each book.
             add_to_cart_button = ctk.CTkButton(results_frame, text="Add To Cart", 
                                                 command=lambda isbn=book_info[0]: add_to_cart(isbn))
             add_to_cart_button.pack(pady=5, anchor="w")
         
         search_window.mainloop()
+    # Book not found message.
     else:
-        # if no books were found display a message
+
         messagebox.showinfo("Search Results", "No items found matching your search.")
 
 search_input = ctk.CTkEntry(root, placeholder_text='Search', justify='center')
@@ -104,7 +114,7 @@ search_label.bind("<Button-1>", lambda e: search_books())
 # Front label settings.
 welcome_frame = ctk.CTkFrame(root)
 welcome_frame.pack(padx=100, pady=20)
-welcome = ctk.CTkLabel(welcome_frame, text="Welcome! Today's offers...", 
+welcome = ctk.CTkLabel(welcome_frame, text="Welcome! Our latest releases...",
                        font=("Helvetica", 36, "bold")).pack(padx=200, pady=20)
 
 # ----------------------------------------------------------------------------#
@@ -140,11 +150,10 @@ def open_cart_window():
     
     items_label = ctk.CTkLabel(cart_window, text="Total Items",
                                font=("Helvetica", 20)).pack(pady=10)
-    
-    
+
     # Showing the items bought.
-    
-    
+
+
     def orderComplete():
         
         # Sending the order data to the database.
@@ -170,15 +179,96 @@ cart_image_label.place(x=1120, y=25)
 
 # User settings. (Log in - Sign up)
 def open_profile():
-    
+
+    # Validation functions.
+    # Phone, Street Number -> Digits.
+    # Email -> example@something.something format.
+    validate_phone = lambda new_value: new_value.isdigit() or new_value == ""
+    validate_street_number = lambda new_value: new_value.isdigit() or new_value == ""
+    validate_email = lambda email: re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', email)
+
+    def signup_user():
+
+        # Getting all data from the text boxes.
+        name = name_entry.get()
+        username = username_entry.get()
+        password = password_entry.get()
+        country = country_entry.get()
+        city = city_entry.get()
+        street = street_entry.get()
+        street_number = street_number_entry.get()
+        postal_code = postal_code_entry.get()
+
+        email = email_entry.get()
+        if not validate_email(email):
+            messagebox.showerror("Invalid Email", "Please enter a valid email address.")
+            return
+
+        phone = phone_entry.get()
+        if not phone.isdigit():
+            messagebox.showerror("Invalid Phone Number", "Phone number should contain only numbers.")
+            return
+
+        # Data base call. Signing user up.
+        result = DB.signup_user(name, username, password, country, city, street, street_number, postal_code, phone, email)
+
+        if result == "Username already in use":
+            messagebox.showerror("Signup Failed", "Username already in use. Please choose another username.")
+        elif result == "Email already in use":
+            messagebox.showerror("Signup Failed", "Email already in use. Please choose another email.")
+        else:
+            messagebox.showinfo("Sign Up Successful", "Your account has been created!")
+            back_to_menu()
+
+        back_to_menu()
+
+    def login_user():
+
+        username = username_entry.get()
+        password = password_entry.get()
+
+        # Data base call. Checking if credentials are valid.
+        user_id = DB.login_user(username, password)
+
+        if user_id == -1:
+            messagebox.showerror("Login Failed", "Username not found. Please check your username.")
+        elif user_id == -2:
+            messagebox.showerror("Login Failed", "Invalid password. Please check your password.")
+        else:
+            messagebox.showinfo("Login Successful", "You have been logged in!")
+            user_window.destroy()
+
+    def login_admin():
+
+        username = username_entry.get()
+        password = password_entry.get()
+
+        # Data base call. Checking if credentials are valid.
+        user_id = DB.login_admin(username, password)
+
+        if user_id == -1:
+            messagebox.showerror("Login Failed", "Username not found. Please check your username.")
+        elif user_id == -2:
+            messagebox.showerror("Login Failed", "Invalid password. Please check your password.")
+        else:
+            messagebox.showinfo("Login Successful", "You have been logged in!")
+            user_window.destroy()
+
+    def back_to_menu():
+
+        for widget in user_window.winfo_children():
+            widget.destroy()
+        build_main_menu()
+
     def login():
+
         global username_entry
         global password_entry
         
         # Clearing previous data.
         for widget in user_window.winfo_children():
             widget.destroy()
-        
+
         username_label = ctk.CTkLabel(user_window, text="Username", 
                                       font=("Helvetica", 16))
         username_label.pack(pady=10)
@@ -188,97 +278,123 @@ def open_profile():
         password_label = ctk.CTkLabel(user_window, text="Password", 
                                       font=("Helvetica", 16))
         password_label.pack(pady=10)
-        password_entry = ctk.CTkEntry(user_window, show="*")
+        password_entry = ctk.CTkEntry(user_window, show="*") # Hiding the password.
         password_entry.pack(pady=5)
         
         login_button = ctk.CTkButton(user_window, text="Login",
                                      command=login_user)
         login_button.pack(pady=10)
 
-    def signup():
-        #ew globul 
-        #episis valte ola ta pedia tou customer sto sign up 
-        #opws einai sto DB.signup_user
-        
-        #implement checks for phone number and email 
-        #so phone is only numbers
-        #and email is of email@domain.localecode format
-        #and if not, produce errors in the gui level, so the faulty data
-        #does not reach the sql side
+        back_button = ctk.CTkButton(user_window, text="Back", fg_color="Red", command=back_to_menu)
+        back_button.pack(pady=5)
+
+    def admin():
+
         global username_entry
         global password_entry
-        global phone_entry
-        global email_entry
-        global address_entry
 
         # Clearing previous data.
         for widget in user_window.winfo_children():
             widget.destroy()
-        
-        username_label = ctk.CTkLabel(user_window, text="Username", 
+
+        username_label = ctk.CTkLabel(user_window, text="Username",
                                       font=("Helvetica", 16))
-        username_label.pack(pady=5)
+        username_label.pack(pady=10)
         username_entry = ctk.CTkEntry(user_window)
         username_entry.pack(pady=5)
-        
-        password_label = ctk.CTkLabel(user_window, text="Password", 
+
+        password_label = ctk.CTkLabel(user_window, text="Password",
                                       font=("Helvetica", 16))
-        password_label.pack(pady=5)
-        password_entry = ctk.CTkEntry(user_window, show="*")
+        password_label.pack(pady=10)
+        password_entry = ctk.CTkEntry(user_window, show="*")  # Hiding the password.
         password_entry.pack(pady=5)
-        
-        phone_label = ctk.CTkLabel(user_window, text="Phone", 
-                                   font=("Helvetica", 16))
-        phone_label.pack(pady=5)
-        phone_entry = ctk.CTkEntry(user_window)
-        phone_entry.pack(pady=5)
-        
-        email_label = ctk.CTkLabel(user_window, text="Email", 
-                                   font=("Helvetica", 16))
-        email_label.pack(pady=5)
-        email_entry = ctk.CTkEntry(user_window)
-        email_entry.pack(pady=5)
-        
-        address_label = ctk.CTkLabel(user_window, text="Address", 
-                                     font=("Helvetica", 16))
-        address_label.pack(pady=5)
-        address_entry = ctk.CTkEntry(user_window)
-        address_entry.pack(pady=5)
-        
+
+        login_button = ctk.CTkButton(user_window, text="Login",
+                                     command=login_admin)
+        login_button.pack(pady=10)
+
+        back_button = ctk.CTkButton(user_window, text="Back", fg_color="Red", command=back_to_menu)
+        back_button.pack(pady=5)
+
+    def signup():
+
+        # Creating global variables for each needed field.
+        global name_entry, username_entry, password_entry, country_entry, city_entry
+        global street_entry, street_number_entry, postal_code_entry, phone_entry, email_entry
+
+        # Clearing previous data.
+        for widget in user_window.winfo_children():
+            widget.destroy()
+
+        # Checking for valid phone number and street number values.
+        validation_phone = user_window.register(validate_phone)
+        validation_street_number = user_window.register(validate_street_number)
+
+        fields = [
+            ("Name", "name_entry"),
+            ("Username", "username_entry"),
+            ("Password", "password_entry"),
+            ("Country", "country_entry"),
+            ("City", "city_entry"),
+            ("Street", "street_entry"),
+            ("Street Number", "street_number_entry"),
+            ("Postal Code", "postal_code_entry"),
+            ("Phone", "phone_entry"),
+            ("Email", "email_entry")
+        ]
+
+        # Working with frames to make the fields be left and right.
+        left_frame = ctk.CTkFrame(user_window)
+        left_frame.pack(side=ctk.LEFT, padx=20, pady=20)
+
+        right_frame = ctk.CTkFrame(user_window)
+        right_frame.pack(side=ctk.RIGHT, padx=20, pady=20)
+
+        # Using a for loop instead of manually adding every single field necessary.
+        for i, (label_text, entry_var) in enumerate(fields):
+            parent_frame = left_frame if i % 2 == 0 else right_frame
+
+            label = ctk.CTkLabel(parent_frame, text=label_text, font=("Helvetica", 16))
+            label.pack(pady=5)
+
+            if label_text in ["Phone", "Street Number"]:
+                entry = ctk.CTkEntry(parent_frame, validate="key",
+                                     validatecommand=(
+                                     validation_phone if label_text == "Phone" else validation_street_number, '%P'))
+            elif label_text == "Password":
+                entry = ctk.CTkEntry(parent_frame, show="*")
+            else:
+                entry = ctk.CTkEntry(parent_frame)
+
+            entry.pack(pady=5)
+            globals()[entry_var] = entry
+
         signup_button = ctk.CTkButton(user_window, text="Sign Up", command=signup_user)
         signup_button.pack(pady=10)
 
-    def signup_user():
-        username = username_entry.get()
-        password = password_entry.get()
-        phone = phone_entry.get()
-        email = email_entry.get()
-        address = address_entry.get()
+        back_button = ctk.CTkButton(user_window, text="Back", fg_color="Red", command=back_to_menu)
+        back_button.pack(pady=10)
 
-        # Dummy function to simulate saving user data
-        save_user_data(username, password, phone, email, address)
-        messagebox.showinfo("Sign Up Successful", "Your account has been created!")
-        user_window.destroy()
+    def build_main_menu():
+        select_label = ctk.CTkLabel(user_window, text="Please select an option.",
+                                    font=("Helvetica", 16))
+        select_label.pack(pady=30)
+
+        login_button = ctk.CTkButton(user_window, text="Log In", command=login)
+        login_button.pack(pady=10)
+
+        signup_button = ctk.CTkButton(user_window, text="Sign Up", command=signup)
+        signup_button.pack(pady=10)
+
+        admin_button = ctk.CTkButton(user_window, text="Admin", fg_color="Blue", command=admin)
+        admin_button.pack(pady=10)
 
     user_window = ctk.CTk()
     user_window.title("Profile")
     user_window.geometry('450x450')
-    
-    select_label = ctk.CTkLabel(user_window, text="Please select an option.", 
-                                font=("Helvetica", 16))
-    select_label.pack(pady=30)
-    
-    login_button = ctk.CTkButton(user_window, text="Log In", command=login)
-    login_button.pack(pady=10)
-    
-    signup_button = ctk.CTkButton(user_window, text="Sign Up", command=signup)
-    signup_button.pack(pady=10)
 
+    build_main_menu()
     user_window.mainloop()
-
-def save_user_data(username, password, phone, email, address):
-    # Dummy function to simulate saving user data
-    print(f"Saving user data: {username}, {password}, {phone}, {email}, {address}")
 
 profile_label = ctk.CTkLabel(root, text="User", font=("Helvetica", 22), cursor="hand2")
 profile_label.place(x=960, y=30)
@@ -286,9 +402,12 @@ profile_label.bind("<Button-1>", lambda e: open_profile())
 
 profile_image_path = "profile.png"
 profile_image = ctk.CTkImage(light_image=Image.open(profile_image_path),
-                             dark_image=Image.open(profile_image_path), size=(27,27))
+                             dark_image=Image.open(profile_image_path), size=(27, 27))
 profile_image_label = ctk.CTkLabel(root, text="", image=profile_image)
 profile_image_label.place(x=1020, y=30)
+
+root.mainloop()
+
 
 # ----------------------------------------------------------------------------#
 
@@ -330,9 +449,11 @@ def open_main_shopping_interface():
 
     main_window.mainloop()
 
+
 # ----------------------------------------------------------------------------#
+
 
 root.mainloop()
 
-# ----------------------------------------------------------------------------#
 
+# ----------------------------------------------------------------------------#

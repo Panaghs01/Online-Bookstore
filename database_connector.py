@@ -37,67 +37,74 @@ def search_books(user_input, columns="*"):
     return result
 
 
+# Takes every field of the sign up boxes, checks if the username or email is in use
+# and inserts the fields into the database. (Turned into %s)
 def signup_user(name, username, password, country, city, street, street_number,
                 postal_code, phone, email):
-    #this is not yet called in gui.py, need to implement more gui elements to get
-    #all the necessary values for a new user
-    
-    cursor.execute("SELECT username FROM customers")
-    usernames = cursor.fetchall() 
-    cursor.execute("SELECT email FROM customers")
-    emails = cursor.fetchall()
-    if username in usernames: return "Username already in use"
-    if email in emails: return "Email already in use"
-    #dont know if multiline string breaks the sql query
-    #only time will tell
+
+    cursor.execute("SELECT username FROM customers WHERE username = %s", (username,))
+    existing_username = cursor.fetchone()
+    if existing_username: # Username already in use.
+        return "Username already in use!"
+
+    cursor.execute("SELECT email FROM customers WHERE email = %s", (email,))
+    existing_email = cursor.fetchone()
+    if existing_email: # Email already in use.
+        return "Email already in use!"
+
+    # Adding data into the database.
     cursor.execute(
-        f"""INSERT INTO customers (name, username, password, country, city, 
-                street, street_num, postal_code, phone, email) 
-        VALUES ({name}, {username}, {password}, {country}, {city}, {street}, 
-                {street_number}, {postal_code}, {phone}, {email})""")
-    cursor.commit()
-    
-   
+        """INSERT INTO customers (name, username, password, country, city, 
+        street, street_num, postal_code, phone, email) 
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+        (name, username, password, country, city, street, street_number, postal_code, phone, email)
+    )
+
+    database.commit()
+
+
+# Checks if the username and password combination is valid. If yes, the user ID is returned.
 def login_user(username, password):
-    #this is also not yet called in gui.py, im letting it up to you to decide 
-    #when and how to call it 
-    
-    cursor.execute("SELECT username FROM customers")
-    usernames = cursor.fetchall()
-    if username not in usernames:
-        return -1 #Invalid username error
-    else:
-        cursor.execute(
-            f"SELECT password FROM customers WHERE username={username}")
-        passwords = cursor.fetchall()
-        if password not in passwords: return -2 #Invalid password error
-        else: 
-            cursor.execute(
-                f"""SELECT id FROM customers 
-                WHERE username={username} AND password={password}""")
-            user_id = cursor.fetchall() #this might return a tuple
-            return user_id #login sucessful, return users id
-        
 
+    cursor.execute("SELECT password FROM customers WHERE username = %s", (username,))
+    stored_password = cursor.fetchone()
+    if not stored_password:
+        return -1  # Invalid username.
+
+    stored_password = stored_password[0]
+    if stored_password != password:
+        return -2  # Invalid password.
+
+    cursor.execute("SELECT id FROM customers WHERE username = %s AND password = %s", (username, password))
+    user_id = cursor.fetchone()
+
+    return user_id  # Login successful, returning the user ID.
+
+
+# Same exact process as the login_user, though this time we use the admins table.
 def login_admin(username, password):
-    cursor.execute("SELECT username FROM admins")
-    usernames = cursor.fetchall()
-    if username not in usernames:
-        return -1 #Invalid username error
-    else:
-        cursor.execute(
-            f"SELECT password FROM admins WHERE username={username}")
-        passwords = cursor.fetchall()
-        if password not in passwords: return -2 #Invalid password error
-        else:
-            cursor.execute(
-                f"""SELECT id FROM admins 
-                WHERE username={username} AND password={password}""")
-            admin_id = cursor.fetchall()
-            return admin_id #login sucessful
-        
+    cursor.execute("SELECT password FROM admins WHERE username = %s", (username,))
+    admin_password = cursor.fetchone()
 
-def add_book_to_cart(isbn,quantity=1):        
+    if admin_password:
+        # Password has position 0 in the tupple.
+        admin_password = admin_password[0]
+
+        if admin_password == password:
+            cursor.execute("SELECT id FROM admins WHERE username = %s AND password = %s", (username, password))
+            admin_id = cursor.fetchone()
+
+            if admin_id:
+                return admin_id[0]  # Login successful, returning the admin ID.
+            else:
+                return -3  # Authentication failed.
+        else:
+            return -2  # Invalid password.
+    else:
+        return -1  # Invalid username.
+
+
+def add_book_to_cart(isbn,quantity=1):
     #this function takes book_isbn and optionally a value that is default to 1
     #and returns if book can be added to cart or if it is out of stock
     #THIS HAS NOT BEEN TESTED YET, if statement might need minor adjustments
