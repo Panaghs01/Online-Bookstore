@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jun 04, 2024 at 01:50 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Εξυπηρετητής: 127.0.0.1
+-- Χρόνος δημιουργίας: 05 Ιουν 2024 στις 17:56:25
+-- Έκδοση διακομιστή: 10.4.32-MariaDB
+-- Έκδοση PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `bookstore`
+-- Βάση δεδομένων: `bookstore`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admins`
+-- Δομή πίνακα για τον πίνακα `admins`
 --
 
 CREATE TABLE `admins` (
@@ -34,7 +34,7 @@ CREATE TABLE `admins` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `admins`
+-- Άδειασμα δεδομένων του πίνακα `admins`
 --
 
 INSERT INTO `admins` (`ID`, `username`, `password`) VALUES
@@ -46,7 +46,7 @@ INSERT INTO `admins` (`ID`, `username`, `password`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `books`
+-- Δομή πίνακα για τον πίνακα `books`
 --
 
 CREATE TABLE `books` (
@@ -57,32 +57,33 @@ CREATE TABLE `books` (
   `genre` varchar(30) NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `stock` int(100) NOT NULL,
-  `cover` blob DEFAULT NULL
+  `date` date DEFAULT NULL,
+  `cover` varchar(1000) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `books`
+-- Άδειασμα δεδομένων του πίνακα `books`
 --
 
-INSERT INTO `books` (`ISBN`, `title`, `author`, `publisher`, `genre`, `price`, `stock`, `cover`) VALUES
-('01', 'Kafka on the Shore', 'Murakami Haruki', 'Vintage Books', 'Literature', 12.99, 0, 0x6b61666b615f6f6e5f7468655f73686f72652e6a7067),
-('02', '1Q84 Books 1 and 2', 'Murakami Haruki', 'Vintage Books', 'Literature', 13.99, 0, 0x317138345f312e6a7067),
-('03', '1Q84 Book 3', 'Murakami Haruki', 'Vintage Books', 'Literature', 13.99, 0, 0x317138345f332e6a7067),
-('04', 'Kokoro', 'Natsume Soseki', 'Vintage Books', 'Literature', 11.99, 0, 0x6b6f6b6f726f2e6a7067),
-('05', 'Nakahara Chuuya Poems', 'Nakahara Chuuya', 'Gracewing', 'Poems', 16.99, 0, 0x6368757579615f706f656d732e6a7067),
-('06', '100 poems, 100 authors', '-', 'Penguin Classics', 'Poems', 12.99, 0, 0x706f656d732e6a7067),
-('07', 'Goodnight Punpun Volume 1', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 0, 0x70756e5f312e6a7067),
-('08', 'Goodnight Punpun Volume 2', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 0, 0x70756e5f322e6a7067),
-('09', 'Goodnight Punpun Volume 3', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 0, 0x70756e5f332e6a7067),
-('10', 'JOJO Stone Ocean Volume 1', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 0, 0x73746f6e655f6f6365616e5f312e6a6770),
-('11', 'JOJO Stone Ocean Volume 2', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 0, 0x73746f6e655f6f6365616e5f322e6a6770),
-('12', 'JOJO Stone Ocean Volume 3', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 0, 0x73746f6e655f6f6365616e5f332e6a6770),
-('13', 'Snow Country', 'Kawabata Yasunari', 'Knopf Doubleday Publishing Gro', 'Literature', 9.99, 0, 0x736e6f775f636f756e7472792e6a7067);
+INSERT INTO `books` (`ISBN`, `title`, `author`, `publisher`, `genre`, `price`, `stock`, `date`, `cover`) VALUES
+('01', 'Kafka on the Shore', 'Murakami Haruki', 'Vintage Books', 'Literature', 12.99, 12, NULL, 'kafka_on_the_shore.jpg'),
+('02', '1Q84 Books 1 and 2', 'Murakami Haruki', 'Vintage Books', 'Literature', 13.99, 10, NULL, '1q84_1.jpg'),
+('03', '1Q84 Book 3', 'Murakami Haruki', 'Vintage Books', 'Literature', 13.99, 2, '0000-00-00', '1q84_3.jpg'),
+('04', 'Kokoro', 'Natsume Soseki', 'Vintage Books', 'Literature', 11.99, 6, '0000-00-00', 'kokoro.jpg'),
+('05', 'Nakahara Chuuya Poems', 'Nakahara Chuuya', 'Gracewing', 'Poems', 16.99, 1, '0000-00-00', 'chuuya_poems.jpg'),
+('06', '100 poems, 100 authors', '-', 'Penguin Classics', 'Poems', 12.99, 20, '0000-00-00', 'poems.jpg'),
+('07', 'Goodnight Punpun Volume 1', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 9, '0000-00-00', 'pun_1.jpg'),
+('08', 'Goodnight Punpun Volume 2', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 9, '0000-00-00', 'pun_2.jpg'),
+('09', 'Goodnight Punpun Volume 3', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 10, '0000-00-00', 'pun_3.jpg'),
+('10', 'JOJO Stone Ocean Volume 1', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 25, '0000-00-00', 'stone_ocean_1.jgp'),
+('11', 'JOJO Stone Ocean Volume 2', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 6, '0000-00-00', 'stone_ocean_2.jgp'),
+('12', 'JOJO Stone Ocean Volume 3', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 27, '0000-00-00', 'stone_ocean_3.jgp'),
+('13', 'Snow Country', 'Kawabata Yasunari', 'Knopf Doubleday Publishing Gro', 'Literature', 9.99, 2, '0000-00-00', 'snow_country.jpg');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `buys`
+-- Δομή πίνακα για τον πίνακα `buys`
 --
 
 CREATE TABLE `buys` (
@@ -95,7 +96,7 @@ CREATE TABLE `buys` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `customers`
+-- Δομή πίνακα για τον πίνακα `customers`
 --
 
 CREATE TABLE `customers` (
@@ -112,10 +113,17 @@ CREATE TABLE `customers` (
   `email` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Άδειασμα δεδομένων του πίνακα `customers`
+--
+
+INSERT INTO `customers` (`id`, `name`, `username`, `password`, `country`, `city`, `street`, `street_num`, `postal_code`, `phone`, `email`) VALUES
+(1, 'phn', 'user', '123456789', 'greece', 'athens', 'phn', '51', '11242', '6985414123', 'phn@gmail.com');
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sells`
+-- Δομή πίνακα για τον πίνακα `sells`
 --
 
 CREATE TABLE `sells` (
@@ -128,7 +136,7 @@ CREATE TABLE `sells` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `supplier`
+-- Δομή πίνακα για τον πίνακα `supplier`
 --
 
 CREATE TABLE `supplier` (
@@ -142,23 +150,23 @@ CREATE TABLE `supplier` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Indexes for dumped tables
+-- Ευρετήρια για άχρηστους πίνακες
 --
 
 --
--- Indexes for table `admins`
+-- Ευρετήρια για πίνακα `admins`
 --
 ALTER TABLE `admins`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indexes for table `books`
+-- Ευρετήρια για πίνακα `books`
 --
 ALTER TABLE `books`
   ADD PRIMARY KEY (`ISBN`);
 
 --
--- Indexes for table `buys`
+-- Ευρετήρια για πίνακα `buys`
 --
 ALTER TABLE `buys`
   ADD PRIMARY KEY (`Transaction_ID`),
@@ -166,13 +174,13 @@ ALTER TABLE `buys`
   ADD KEY `supplier_id` (`supplier_id`);
 
 --
--- Indexes for table `customers`
+-- Ευρετήρια για πίνακα `customers`
 --
 ALTER TABLE `customers`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sells`
+-- Ευρετήρια για πίνακα `sells`
 --
 ALTER TABLE `sells`
   ADD PRIMARY KEY (`Transaction_ID`),
@@ -180,58 +188,58 @@ ALTER TABLE `sells`
   ADD KEY `book_ISBN` (`book_ISBN`) USING BTREE;
 
 --
--- Indexes for table `supplier`
+-- Ευρετήρια για πίνακα `supplier`
 --
 ALTER TABLE `supplier`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT για άχρηστους πίνακες
 --
 
 --
--- AUTO_INCREMENT for table `admins`
+-- AUTO_INCREMENT για πίνακα `admins`
 --
 ALTER TABLE `admins`
   MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `buys`
+-- AUTO_INCREMENT για πίνακα `buys`
 --
 ALTER TABLE `buys`
   MODIFY `Transaction_ID` int(100) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `customers`
+-- AUTO_INCREMENT για πίνακα `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `sells`
+-- AUTO_INCREMENT για πίνακα `sells`
 --
 ALTER TABLE `sells`
   MODIFY `Transaction_ID` int(100) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `supplier`
+-- AUTO_INCREMENT για πίνακα `supplier`
 --
 ALTER TABLE `supplier`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
--- Constraints for dumped tables
+-- Περιορισμοί για άχρηστους πίνακες
 --
 
 --
--- Constraints for table `buys`
+-- Περιορισμοί για πίνακα `buys`
 --
 ALTER TABLE `buys`
   ADD CONSTRAINT `buys_ibfk_1` FOREIGN KEY (`book_ISBN`) REFERENCES `books` (`ISBN`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `buys_ibfk_3` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `sells`
+-- Περιορισμοί για πίνακα `sells`
 --
 ALTER TABLE `sells`
   ADD CONSTRAINT `sells_ibfk_2` FOREIGN KEY (`book_ISBN`) REFERENCES `books` (`ISBN`) ON DELETE CASCADE ON UPDATE CASCADE,
