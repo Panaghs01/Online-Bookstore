@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Εξυπηρετητής: 127.0.0.1
--- Χρόνος δημιουργίας: 05 Ιουν 2024 στις 17:56:25
+-- Χρόνος δημιουργίας: 05 Ιουν 2024 στις 21:08:09
 -- Έκδοση διακομιστή: 10.4.32-MariaDB
 -- Έκδοση PHP: 8.0.30
 
@@ -66,19 +66,19 @@ CREATE TABLE `books` (
 --
 
 INSERT INTO `books` (`ISBN`, `title`, `author`, `publisher`, `genre`, `price`, `stock`, `date`, `cover`) VALUES
-('01', 'Kafka on the Shore', 'Murakami Haruki', 'Vintage Books', 'Literature', 12.99, 12, NULL, 'kafka_on_the_shore.jpg'),
-('02', '1Q84 Books 1 and 2', 'Murakami Haruki', 'Vintage Books', 'Literature', 13.99, 10, NULL, '1q84_1.jpg'),
-('03', '1Q84 Book 3', 'Murakami Haruki', 'Vintage Books', 'Literature', 13.99, 2, '0000-00-00', '1q84_3.jpg'),
-('04', 'Kokoro', 'Natsume Soseki', 'Vintage Books', 'Literature', 11.99, 6, '0000-00-00', 'kokoro.jpg'),
-('05', 'Nakahara Chuuya Poems', 'Nakahara Chuuya', 'Gracewing', 'Poems', 16.99, 1, '0000-00-00', 'chuuya_poems.jpg'),
-('06', '100 poems, 100 authors', '-', 'Penguin Classics', 'Poems', 12.99, 20, '0000-00-00', 'poems.jpg'),
-('07', 'Goodnight Punpun Volume 1', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 9, '0000-00-00', 'pun_1.jpg'),
-('08', 'Goodnight Punpun Volume 2', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 9, '0000-00-00', 'pun_2.jpg'),
-('09', 'Goodnight Punpun Volume 3', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 10, '0000-00-00', 'pun_3.jpg'),
-('10', 'JOJO Stone Ocean Volume 1', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 25, '0000-00-00', 'stone_ocean_1.jgp'),
-('11', 'JOJO Stone Ocean Volume 2', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 6, '0000-00-00', 'stone_ocean_2.jgp'),
-('12', 'JOJO Stone Ocean Volume 3', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 27, '0000-00-00', 'stone_ocean_3.jgp'),
-('13', 'Snow Country', 'Kawabata Yasunari', 'Knopf Doubleday Publishing Gro', 'Literature', 9.99, 2, '0000-00-00', 'snow_country.jpg');
+('01', 'Kafka on the Shore', 'Murakami Haruki', 'Vintage Books', 'Literature', 12.99, 12, '2002-09-12', 'kafka_on_the_shore.jpg'),
+('02', '1Q84 Books 1 and 2', 'Murakami Haruki', 'Vintage Books', 'Literature', 13.99, 10, '2009-05-29', '1q84_1.jpg'),
+('03', '1Q84 Book 3', 'Murakami Haruki', 'Vintage Books', 'Literature', 13.99, 2, '2010-04-10', '1q84_3.jpg'),
+('04', 'Kokoro', 'Natsume Soseki', 'Vintage Books', 'Literature', 11.99, 6, '1914-08-11', 'kokoro.jpg'),
+('05', 'Nakahara Chuuya Poems', 'Nakahara Chuuya', 'Gracewing', 'Poems', 16.99, 1, '2004-02-01', 'chuuya_poems.jpg'),
+('06', '100 poems, 100 authors', '-', 'Penguin Classics', 'Poems', 12.99, 20, '2007-07-20', 'poems.jpg'),
+('07', 'Goodnight Punpun Volume 1', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 9, '2007-08-03', 'pun_1.jpg'),
+('08', 'Goodnight Punpun Volume 2', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 9, '2007-12-28', 'pun_2.jpg'),
+('09', 'Goodnight Punpun Volume 3', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 10, '2008-06-05', 'pun_3.jpg'),
+('10', 'JOJO Stone Ocean Volume 1', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 25, '2008-04-18', 'stone_ocean_1.jgp'),
+('11', 'JOJO Stone Ocean Volume 2', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 6, '2008-05-16', 'stone_ocean_2.jgp'),
+('12', 'JOJO Stone Ocean Volume 3', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 27, '2008-06-18', 'stone_ocean_3.jgp'),
+('13', 'Snow Country', 'Kawabata Yasunari', 'Knopf Doubleday Publishing Gro', 'Literature', 9.99, 2, '1948-11-05', 'snow_country.jpg');
 
 -- --------------------------------------------------------
 
