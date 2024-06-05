@@ -504,7 +504,8 @@ def open_main_shopping_interface():
     main_window.geometry('800x600')
 
     
-    welcome_label = ctk.CTkLabel(main_window, text="Welcome to Anteiku!", font=("Helvetica", 22))
+    welcome_label = ctk.CTkLabel(
+        main_window, text="Welcome to Anteiku!", font=("Helvetica", 22))
     welcome_label.pack(pady=20)
 
     main_window.mainloop()
