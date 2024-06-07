@@ -67,7 +67,7 @@ def signup_user(name, username, password, country, city, street, street_number,
 def login_user(username, password):
 
     cursor.execute("SELECT password FROM customers WHERE username = %s", (username,))
-    passwords = cursor.fetchall()
+    passwords = cursor.fetchone()
     
     if not passwords:
         return -1  #Invalid username
@@ -152,3 +152,20 @@ def transaction_buy(book_dict,supplier_id):
             f"""UPDATE books SET stock = {new_quantity} 
             WHERE ISBN = {key})""")
         cursor.commit()
+
+def return_transactions():
+    transactions=[]
+    cursor.execute("SELECT date FROM sells GROUP BY(date)")
+    dates = cursor.fetchall()
+    cursor.execute("SELECT customer_id FROM sells GROUP BY(customer_id)")
+    customers = cursor.fetchall()
+    for date in dates:
+        for customer in customers:
+            cursor.execute(
+                f"""SELECT book_ISBN FROM sells 
+                WHERE (date='{date[0]}' AND customer_id='{customer[0]}')""") 
+            transaction = cursor.fetchall()
+            for i in range(len(transaction)):
+                transaction[i]=transaction[i][0]
+            transactions.append(transaction)
+    return transactions

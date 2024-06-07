@@ -348,8 +348,8 @@ def open_profile():
         #these need to be strings, incase someone has only a numerical password
         #receiving an integer number will make the validation check give 
         #a false negative
-        username = str(username_entry.get())
-        password = str(password_entry.get())
+        username = username_entry.get()
+        password = password_entry.get()
 
         # Data base call. Checking if credentials are valid.
         user_id = DB.login_user(username, password)
@@ -560,30 +560,6 @@ root.mainloop()
 # ----------------------------------------------------------------------------#
 
 
-def login_user():
-    
-    username = username_entry.get()
-    password = password_entry.get()
-
-    # douleia gia DATABASE :D
-    is_authenticated, user_role = check_credentials(username, password)  # As poume function call
-
-    if is_authenticated:
-        # Successfully authenticated
-        messagebox.showinfo("Login Successful", "Welcome back!")
-        user_window.destroy()  # Close the login window
-        open_main_shopping_interface()  # Transition to the main shopping interface
-    else:
-        # Authentication failed
-        messagebox.showerror("Login Failed", "Invalid username or password. Please try again.")
-
-# Pali dummy function to simulate credential check
-def check_credentials(username, password):
-    
-    if username == "testuser" and password == "password123":
-        return True, "customer"  # Simulated role
-    else:
-        return False, None
 
 # Main Shopping Interface Function
 def open_main_shopping_interface():
