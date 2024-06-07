@@ -39,6 +39,7 @@ logo_label = ctk.CTkLabel(root, text="", image=logo).place(x=0, y=0)
 
 # ----------------------------------------------------------------------------#
 
+cart={}
 # Search settings.
 def search_books():
 
@@ -54,64 +55,88 @@ def search_books():
         # Creating a new window to display search results.
         search_window = ctk.CTk()
         search_window.title("Search Results")
-        search_window.geometry('500x300')
+        search_window.geometry('1000x600')
         
         # Label to display search query
         search_results_label = ctk.CTkLabel(
             search_window, text=f"Search Results for: {search_query}", 
                                              font=("Helvetica", 16))
         search_results_label.pack(pady=20)
-        
+
         # Frame to contain search results
         results_frame = ctk.CTkFrame(search_window)
         results_frame.pack(padx=20, pady=10)
-        
-        # Function to add a book to the cart.
-        def add_to_cart(isbn):
-            #kapou prepei na kratame ena cart, gia na mporoume na proxwrhsoyme
-            #se checkout
-            
-            #episis anti gia add to cart koumpi, mporeite na exete +1 koumpi
-            #kai -1, gia na vazei k na vgazei apo cart
-            #episis an 8elw na parw 20 vivlia prepei na pa8w epilipsia apo ta
-            #para8yra poy emfanizontai
-            
-            #mporoume na exoyme apla ena counter katw apo to vivlio poy na 
-            #ayksomeiwnetai analoga me to posa vazei sto cart o user
-            result = DB.add_book_to_cart(isbn)
 
-            if result != 1:
-                messagebox.showinfo(
-                    "Added to Cart", "Item added to cart successfully!")
-            else:
-                messagebox.showerror(
-                    "Out of Stock", "Not enough copies of the book in stock.")
+        def add_to_cart(isbn, quantity_entry):
+            global cart
+            book_info = next((book for book in found if book[0] == isbn), None)
+            if book_info:
+                quantity = int(quantity_entry.get())  # Get the quantity from the entry widget
+                if isbn in cart:
+                    cart[isbn]['quantity'] += quantity
+                else:
+                    cart[isbn] = {'info': book_info, 'quantity': quantity}
+
+                result = DB.add_book_to_cart(isbn)
+
+                if result != 1:
+                    messagebox.showinfo("Added to Cart", "Item added to cart successfully!")
+                else:
+                    messagebox.showerror("Out of Stock", "Not enough copies of the book in stock.")
 
         for book_info in found:
+        # Frame for each book entry
+            book_frame = ctk.CTkFrame(results_frame)
+            book_frame.pack(pady=10, anchor="w")
+            
             # Label to display book information
             book_label = ctk.CTkLabel(
-                results_frame, text=f"ISBN: {book_info[0]}\n"
-                                    f"Title: {book_info[1]}\n"
-                                    f"Author: {book_info[2]}\n"
-                                    f"Publisher: {book_info[3]}\n"
-                                    f"Genre: {book_info[4]}\n"
-                                    f"Price: {book_info[5]}\n",
+                book_frame, text=f"ISBN: {book_info[0]}\n"
+                                 f"Title: {book_info[1]}\n"
+                                 f"Author: {book_info[2]}\n"
+                                 f"Publisher: {book_info[3]}\n"
+                                 f"Genre: {book_info[4]}\n"
+                                 f"Price: {book_info[5]}\n",
                                        font=("Helvetica", 12), justify="left")
-            book_label.pack(pady=10, anchor="w")
+            book_label.pack(pady=5, anchor="w")
+
+            # Entry widget for displaying quantity
+            quantity_entry = ctk.CTkEntry(book_frame, placeholder_text="1", justify="center", width=5)
+            quantity_entry.insert(0, "1")  # Default quantity is 1
+            quantity_entry.pack(side="left", padx=10)
+        
+            # Buttons for adjusting quantity
+            increment_button = ctk.CTkButton(
+            book_frame, text="+", command=lambda entry=quantity_entry: increment_quantity(entry))
+            increment_button.pack(side="left")
+        
+            decrement_button = ctk.CTkButton(
+                book_frame, text="-", command=lambda entry=quantity_entry: decrement_quantity(entry))
+            decrement_button.pack(side="left")
             
             # Creating an Add to Cart button for each book.
             add_to_cart_button = ctk.CTkButton(
-                results_frame, text="Add To Cart", 
-                    command=lambda isbn=book_info[0]: add_to_cart(isbn))
-            
+                book_frame, text="Add To Cart", 
+                command=lambda isbn=book_info[0], entry=quantity_entry: add_to_cart(isbn, entry))
             add_to_cart_button.pack(pady=5, anchor="w")
         
         search_window.mainloop()
-    # Book not found message.
-    else:
 
+     # Book not found message.
+    else:
         messagebox.showinfo(
             "Search Results", "No items found matching your search.")
+
+def increment_quantity(entry):
+    current_value = int(entry.get())
+    entry.delete(0, "end")
+    entry.insert(0, str(current_value + 1))
+            
+def decrement_quantity(entry):
+    current_value = int(entry.get())
+    if current_value > 1:  # Ensure the quantity doesn't go below 1
+        entry.delete(0, "end")
+        entry.insert(0, str(current_value - 1))       
 
 search_input = ctk.CTkEntry(root, placeholder_text='Search', justify='center')
 search_input.pack(pady=30)
@@ -163,26 +188,89 @@ contact_label.bind("<Button-1>", lambda e: open_contact_window())
 
 # Cart button settings.
 def open_cart_window():
+
+    def increment_cart_quantity(isbn, entry):
+        global cart
+        current_value = int(entry.get())
+        new_value = current_value + 1
+        entry.delete(0, "end")
+        entry.insert(0, str(new_value))
+        cart[isbn]['quantity'] = new_value
+
+    def decrement_cart_quantity(isbn, entry):
+        global cart
+        current_value = int(entry.get())
+        if current_value > 1:
+            new_value = current_value - 1
+            entry.delete(0, "end")
+            entry.insert(0, str(new_value))
+            cart[isbn]['quantity'] = new_value
+
+    def remove_from_cart(isbn):
+        global cart
+        if isbn in cart:
+            del cart[isbn]
+            cart_window.destroy()  # Close the current cart window
+            open_cart_window()  # Open a new cart window 
+
     cart_window = ctk.CTk()
     cart_window.title("Cart")
-    cart_window.geometry('400x400')
-    
+    cart_window.geometry('600x400')
+
     items_label = ctk.CTkLabel(cart_window, text="Total Items",
                                font=("Helvetica", 20)).pack(pady=10)
 
-    # Showing the items bought.
+    # Frame to contain cart items
+    cart_frame = ctk.CTkFrame(cart_window)
+    cart_frame.pack(padx=20, pady=10)
 
+    for isbn, book_data in cart.items():
+        book_info = book_data['info']
+        quantity = book_data['quantity']
+
+        book_frame = ctk.CTkFrame(cart_frame)
+        book_frame.pack(pady=10, anchor="w")
+
+        book_label = ctk.CTkLabel(
+            book_frame, text=f"ISBN: {book_info[0]}\n"
+                            f"Title: {book_info[1]}\n"
+                            f"Author: {book_info[2]}\n"
+                            f"Publisher: {book_info[3]}\n"
+                            f"Genre: {book_info[4]}\n"
+                            f"Price: {book_info[5]}\n",
+                            font=("Helvetica", 12), justify="left")
+        book_label.pack(pady=5, anchor="w")
+
+        # Entry widget for displaying quantity
+        quantity_entry = ctk.CTkEntry(book_frame, justify="center", width=5)
+        quantity_entry.insert(0, str(quantity))  # Set the current quantity
+        quantity_entry.pack(side="left", padx=10)
+
+        # Buttons for adjusting quantity
+        increment_button = ctk.CTkButton(
+            book_frame, text="+", command=lambda isbn=isbn, entry=quantity_entry: increment_cart_quantity(isbn, entry))
+        increment_button.pack(side="left")
+
+        decrement_button = ctk.CTkButton(
+            book_frame, text="-", command=lambda isbn=isbn, entry=quantity_entry: decrement_cart_quantity(isbn, entry))
+        decrement_button.pack(side="left")
+
+        # Button to remove the item from cart
+        remove_button = ctk.CTkButton(book_frame, text="Remove",
+                                      command=lambda isbn=isbn: remove_from_cart(isbn))
+        remove_button.pack(side="left", padx=10)
 
     def orderComplete():
-        
         # Sending the order data to the database.
-        
         pass
-    
-    proceed_button = ctk.CTkButton(cart_window, text="Proceed to Purchase", 
-                                   command=orderComplete).place(x=130, y=350)
+
+    # Proceed to Purchase button
+    proceed_button = ctk.CTkButton(cart_window, text="Proceed to Purchase",
+                                   command=orderComplete)
+    proceed_button.pack(pady=20, side="bottom")
     
     cart_window.mainloop()
+
 
 cart_label = ctk.CTkLabel(
                           root, text="Cart", font=("Helvetica", 22),
@@ -196,6 +284,7 @@ cart_image = ctk.CTkImage(light_image=Image.open(cart_image_path),
                               cart_image_path), size=(40, 40))
 cart_image_label = ctk.CTkLabel(root, text="", image=cart_image)
 cart_image_label.place(x=1120, y=25)
+
 
 # ----------------------------------------------------------------------------#
 
