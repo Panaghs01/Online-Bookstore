@@ -28,6 +28,9 @@ def on_close():
     sys.exit()
 
 root.protocol("WM_DELETE_WINDOW", on_close)
+#-----------------------------------------------------------------------------#
+user_id_label = ctk.CTkLabel(root, text="", font=("Helvetica", 16))
+user_id_label.pack()
 
 # ----------------------------------------------------------------------------#
 
@@ -147,7 +150,7 @@ search_icon = ctk.CTkImage(light_image=Image.open(search_icon_path),
                            size=(27, 27))
 
 search_label = ctk.CTkLabel(root, text="", image=search_icon, cursor="hand2")
-search_label.place(x=495, y=29)
+search_label.place(x=480, y=29)
 search_label.bind("<Button-1>", lambda e: search_books())
 
 # ----------------------------------------------------------------------------#
@@ -232,11 +235,7 @@ def open_cart_window():
         book_frame.pack(pady=10, anchor="w")
 
         book_label = ctk.CTkLabel(
-            book_frame, text=f"ISBN: {book_info[0]}\n"
-                            f"Title: {book_info[1]}\n"
-                            f"Author: {book_info[2]}\n"
-                            f"Publisher: {book_info[3]}\n"
-                            f"Genre: {book_info[4]}\n"
+            book_frame, text=f"Title: {book_info[1]}\n"
                             f"Price: {book_info[5]}\n",
                             font=("Helvetica", 12), justify="left")
         book_label.pack(pady=5, anchor="w")
@@ -260,13 +259,23 @@ def open_cart_window():
                                       command=lambda isbn=isbn: remove_from_cart(isbn))
         remove_button.pack(side="left", padx=10)
 
-    def orderComplete():
-        # Sending the order data to the database.
-        pass
+    def order_complete():
+        global cart
+        # Clear the cart
+        cart.clear()
+        # Close the cart window
+        cart_window.destroy()
+        # Order success message
+        order_success_window = ctk.CTk()
+        order_success_window.title("Order Successful")
+        order_success_window.geometry('300x200')
+        success_label = ctk.CTkLabel(order_success_window, text="Your order was successful!", font=("Helvetica", 16))
+        success_label.pack(pady=50)
+        order_success_window.mainloop()
 
     # Proceed to Purchase button
     proceed_button = ctk.CTkButton(cart_window, text="Proceed to Purchase",
-                                   command=orderComplete)
+                                   command=order_complete)
     proceed_button.pack(pady=20, side="bottom")
     
     cart_window.mainloop()
@@ -364,6 +373,9 @@ def open_profile():
         else:
             messagebox.showinfo(
                 "Login Successful", "You have been logged in!")
+            username = DB.return_user(user_id)  # Get the username from the user ID
+            user_id_label.configure(text=f"{username}", font=("Helvetica", 22))  # Update label
+            user_id_label.place(x=860, y=30)
             user_window.destroy()
 
     def login_admin():
@@ -372,13 +384,13 @@ def open_profile():
         password = password_entry.get()
 
         # Data base call. Checking if credentials are valid.
-        user_id = DB.login_admin(username, password)
+        admin_id = DB.login_admin(username, password)
 
-        if user_id == -1:
+        if admin_id == -1:
             messagebox.showerror(
                 "Login Failed",
                 "Username not found. Please check your username.")
-        elif user_id == -2:
+        elif admin_id == -2:
             messagebox.showerror(
                 "Login Failed",
                 "Invalid password. Please check your password.")
@@ -386,6 +398,9 @@ def open_profile():
             messagebox.showinfo(
                 "Login Successful",
                 "You have been logged in!")
+            username = DB.return_admin(admin_id)  # Get the username from the admin ID
+            user_id_label.configure(text=f"{username}", font=("Helvetica", 22))
+            user_id_label.place(x=860, y=30)
             user_window.destroy()
 
     def back_to_menu():
