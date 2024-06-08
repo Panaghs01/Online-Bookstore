@@ -169,3 +169,10 @@ def return_transactions():
                 transaction[i]=transaction[i][0]
             transactions.append(transaction)
     return transactions
+
+
+def return_username(customer):
+    cursor.execute(
+        f"SELECT username FROM customers WHERE ID = {customer}")
+    customer_id = cursor.fetchone()
+    return customer_id[0]
