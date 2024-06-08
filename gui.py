@@ -258,21 +258,21 @@ def open_cart_window():
         remove_button = ctk.CTkButton(book_frame, text="Remove",
                                       command=lambda isbn=isbn: remove_from_cart(isbn))
         remove_button.pack(side="left", padx=10)
-
+    user_logged_in = False
     def order_complete():
         global cart
-        # Clear the cart
-        cart.clear()
-        # Close the cart window
-        cart_window.destroy()
-        # Order success message
-        order_success_window = ctk.CTk()
-        order_success_window.title("Order Successful")
-        order_success_window.geometry('300x200')
-        success_label = ctk.CTkLabel(order_success_window, text="Your order was successful!", font=("Helvetica", 16))
-        success_label.pack(pady=50)
-        order_success_window.mainloop()
-
+        if not user_logged_in:
+            messagebox.showinfo("Authentication Required", "Please log in or sign up before placing an order!")
+            open_profile() 
+        else:
+            cart.clear()
+            cart_window.destroy()
+            order_success_window = ctk.CTk()
+            order_success_window.title("Order Successful")
+            order_success_window.geometry('300x200')
+            success_label = ctk.CTkLabel(order_success_window, text="Your order was successful!", font=("Helvetica", 16))
+            success_label.pack(pady=50)
+            order_success_window.mainloop()
     # Proceed to Purchase button
     proceed_button = ctk.CTkButton(cart_window, text="Proceed to Purchase",
                                    command=order_complete)
@@ -352,8 +352,10 @@ def open_profile():
 
         back_to_menu()
 
+    user_logged_in = False
+    
     def login_user():
-
+        global user_logged_in
         #these need to be strings, incase someone has only a numerical password
         #receiving an integer number will make the validation check give 
         #a false negative
@@ -377,6 +379,7 @@ def open_profile():
             user_id_label.configure(text=f"{username}", font=("Helvetica", 22))  # Update label
             user_id_label.place(x=860, y=30)
             user_window.destroy()
+            user_logged_in = True # User is now logged in
 
     def login_admin():
 
