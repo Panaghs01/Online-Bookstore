@@ -258,7 +258,9 @@ def open_cart_window():
         remove_button = ctk.CTkButton(book_frame, text="Remove",
                                       command=lambda isbn=isbn: remove_from_cart(isbn))
         remove_button.pack(side="left", padx=10)
+        
     user_logged_in = False
+    
     def order_complete():
         global cart
         if not user_logged_in:
