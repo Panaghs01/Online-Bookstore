@@ -176,3 +176,9 @@ def return_username(customer):
         f"SELECT username FROM customers WHERE ID = {customer}")
     customer_id = cursor.fetchone()
     return customer_id[0]
+
+def return_admin(admin):
+    cursor.execute(
+        f"SELECT username FROM admins WHERE ID = {admin}")
+    admin_id = cursor.fetchone()
+    return admin_id[0]
