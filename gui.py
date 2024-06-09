@@ -190,6 +190,8 @@ contact_label.bind("<Button-1>", lambda e: open_contact_window())
 # ----------------------------------------------------------------------------#
 
 # Cart button settings.
+
+user_logged_in = False
 def open_cart_window():
 
     def increment_cart_quantity(isbn, entry):
@@ -259,7 +261,6 @@ def open_cart_window():
                                       command=lambda isbn=isbn: remove_from_cart(isbn))
         remove_button.pack(side="left", padx=10)
         
-    user_logged_in = False
     
     def order_complete():
         global cart
