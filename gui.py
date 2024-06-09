@@ -263,11 +263,18 @@ def open_cart_window():
         
     
     def order_complete():
-        global cart
+        global cart, user_id
         if not user_logged_in:
             messagebox.showinfo("Authentication Required", "Please log in or sign up before placing an order!")
             open_profile() 
         else:
+            
+            # Dictionary with book ISBNs and quantities
+            book_dict = {isbn: book_data['quantity'] for isbn, book_data in cart.items()}
+        
+            # Send the transaction to the database
+            DB.transaction_sell(book_dict, user_id)
+            
             cart.clear()
             cart_window.destroy()
             order_success_window = ctk.CTk()
@@ -356,9 +363,10 @@ def open_profile():
         back_to_menu()
 
     user_logged_in = False
+    user_id=None
     
     def login_user():
-        global user_logged_in
+        global user_logged_in, user_id
         #these need to be strings, incase someone has only a numerical password
         #receiving an integer number will make the validation check give 
         #a false negative
