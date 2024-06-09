@@ -415,7 +415,20 @@ def open_profile():
             username = DB.return_admin(admin_id)  # Get the username from the admin ID
             user_id_label.configure(text=f"{username}", font=("Helvetica", 22))
             user_id_label.place(x=860, y=30)
+            show_statistics_button = ctk.CTkButton(root, text="Show Statistics", command=show_statistics)
+            show_statistics_button.place(x=1040, y=522)
             user_window.destroy()
+    def show_statistics():
+        statistics_window = ctk.CTk()
+        statistics_window.title("Statistics")
+        statistics_window.geometry('500x400')
+
+        statistics_label = ctk.CTkLabel(
+            statistics_window, text="Statistics will be displayed here", font=("Helvetica", 16))
+        statistics_label.pack(pady=50)
+
+        statistics_window.mainloop()
+
 
     def back_to_menu():
 
@@ -583,8 +596,8 @@ profile_image = ctk.CTkImage(
 profile_image_label = ctk.CTkLabel(root, text="", image=profile_image)
 profile_image_label.place(x=1020, y=30)
 
-root.mainloop()
 
+root.mainloop()
 
 # ----------------------------------------------------------------------------#
 
@@ -612,3 +625,4 @@ root.mainloop()
 
 
 # ----------------------------------------------------------------------------#
+
