@@ -277,12 +277,8 @@ def open_cart_window():
             
             cart.clear()
             cart_window.destroy()
-            order_success_window = ctk.CTk()
-            order_success_window.title("Order Successful")
-            order_success_window.geometry('300x200')
-            success_label = ctk.CTkLabel(order_success_window, text="Your order was successful!", font=("Helvetica", 16))
-            success_label.pack(pady=50)
-            order_success_window.mainloop()
+            messagebox.showinfo("Order Successful", "Your order was successful!")
+            
     # Proceed to Purchase button
     proceed_button = ctk.CTkButton(cart_window, text="Proceed to Purchase",
                                    command=order_complete)
