@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Εξυπηρετητής: 127.0.0.1
--- Χρόνος δημιουργίας: 05 Ιουν 2024 στις 21:08:09
+-- Χρόνος δημιουργίας: 10 Ιουν 2024 στις 16:42:23
 -- Έκδοση διακομιστή: 10.4.32-MariaDB
--- Έκδοση PHP: 8.0.30
+-- Έκδοση PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -78,7 +78,7 @@ INSERT INTO `books` (`ISBN`, `title`, `author`, `publisher`, `genre`, `price`, `
 ('10', 'JOJO Stone Ocean Volume 1', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 25, '2008-04-18', 'stone_ocean_1.jgp'),
 ('11', 'JOJO Stone Ocean Volume 2', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 6, '2008-05-16', 'stone_ocean_2.jgp'),
 ('12', 'JOJO Stone Ocean Volume 3', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 27, '2008-06-18', 'stone_ocean_3.jgp'),
-('13', 'Snow Country', 'Kawabata Yasunari', 'Knopf Doubleday Publishing Gro', 'Literature', 9.99, 2, '1948-11-05', 'snow_country.jpg');
+('13', 'Snow Country', 'Kawabata Yasunari', 'Knopf Doubleday Publishing Gro', 'Literature', 9.99, -1, '1948-11-05', 'snow_country.jpg');
 
 -- --------------------------------------------------------
 
@@ -88,7 +88,6 @@ INSERT INTO `books` (`ISBN`, `title`, `author`, `publisher`, `genre`, `price`, `
 
 CREATE TABLE `buys` (
   `Transaction_ID` int(100) NOT NULL,
-  `supplier_id` int(10) NOT NULL,
   `book_ISBN` varchar(12) NOT NULL,
   `quantity` int(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -118,7 +117,10 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`id`, `name`, `username`, `password`, `country`, `city`, `street`, `street_num`, `postal_code`, `phone`, `email`) VALUES
-(1, 'phn', 'user', '123456789', 'greece', 'athens', 'phn', '51', '11242', '6985414123', 'phn@gmail.com');
+(1, 'phn', 'user', '123456789', 'greece', 'athens', 'phn', '51', '11242', '6985414123', 'phn@gmail.com'),
+(2, 'Sofiaa', 'sofiaaa', '12345', 'greece', 'athens', 'miaou', '2', '35100', '6940884497', 'dndif@jfi.com'),
+(3, 'sofia', 'sofini', '12345', 'greece', 'ath', 'ath', '2', '12345', '1234567890', 'sof@gmail.com'),
+(4, 'test', 'test', '12345', 'sdvc', 'dsvgsdft', 'detf', '3', '12345', '1234565890', 'sdvg@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -133,21 +135,17 @@ CREATE TABLE `sells` (
   `quantity` int(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
 --
--- Δομή πίνακα για τον πίνακα `supplier`
+-- Άδειασμα δεδομένων του πίνακα `sells`
 --
 
-CREATE TABLE `supplier` (
-  `id` int(10) NOT NULL,
-  `name` varchar(30) NOT NULL,
-  `country` varchar(30) NOT NULL,
-  `city` varchar(30) NOT NULL,
-  `street` varchar(30) NOT NULL,
-  `street_number` varchar(10) NOT NULL,
-  `postal_code` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+INSERT INTO `sells` (`Transaction_ID`, `customer_id`, `book_ISBN`, `quantity`) VALUES
+(3, 3, '13', 1),
+(4, 3, '13', 1),
+(5, 3, '13', 1),
+(7, 3, '13', 1),
+(8, 3, '13', 1),
+(11, 3, '13', 1);
 
 --
 -- Ευρετήρια για άχρηστους πίνακες
@@ -170,8 +168,7 @@ ALTER TABLE `books`
 --
 ALTER TABLE `buys`
   ADD PRIMARY KEY (`Transaction_ID`),
-  ADD KEY `book_ISBN` (`book_ISBN`),
-  ADD KEY `supplier_id` (`supplier_id`);
+  ADD KEY `book_ISBN` (`book_ISBN`);
 
 --
 -- Ευρετήρια για πίνακα `customers`
@@ -186,12 +183,6 @@ ALTER TABLE `sells`
   ADD PRIMARY KEY (`Transaction_ID`),
   ADD KEY `customer_id` (`customer_id`),
   ADD KEY `book_ISBN` (`book_ISBN`) USING BTREE;
-
---
--- Ευρετήρια για πίνακα `supplier`
---
-ALTER TABLE `supplier`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT για άχρηστους πίνακες
@@ -213,19 +204,13 @@ ALTER TABLE `buys`
 -- AUTO_INCREMENT για πίνακα `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT για πίνακα `sells`
 --
 ALTER TABLE `sells`
-  MODIFY `Transaction_ID` int(100) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT για πίνακα `supplier`
---
-ALTER TABLE `supplier`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `Transaction_ID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Περιορισμοί για άχρηστους πίνακες
@@ -235,8 +220,7 @@ ALTER TABLE `supplier`
 -- Περιορισμοί για πίνακα `buys`
 --
 ALTER TABLE `buys`
-  ADD CONSTRAINT `buys_ibfk_1` FOREIGN KEY (`book_ISBN`) REFERENCES `books` (`ISBN`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `buys_ibfk_3` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `buys_ibfk_1` FOREIGN KEY (`book_ISBN`) REFERENCES `books` (`ISBN`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Περιορισμοί για πίνακα `sells`
