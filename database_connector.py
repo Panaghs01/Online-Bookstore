@@ -102,7 +102,6 @@ def login_admin(username, password):
 def add_book_to_cart(isbn,quantity=1):
     #this function takes book_isbn and optionally a value that is default to 1
     #and returns if book can be added to cart or if it is out of stock
-    #THIS HAS NOT BEEN TESTED YET, if statement might need minor adjustments
     
     cursor.execute(
         f"SELECT stock FROM books WHERE ISBN={isbn}")
@@ -119,11 +118,11 @@ def transaction_sell(book_dict,customer_id):
     #it is to be called after all validity checks have been made 
     #and it is to commit a new sale to the 
     
-    for key in book_dict:
+    for key in book_dict.keys():
         cursor.execute(
             f"""INSERT INTO sells (customer_id, book_ISBN, quantity) 
-            VALUES ({customer_id}, {key}, {book_dict[key]})""")
-        database.commit()
+            VALUES ('{customer_id}', '{key}', '{book_dict[key]}')""")
+        cursor.commit()
         cursor.execute(
             f"SELECT stock FROM books WHERE ISBN='{key}'")
         quantity = cursor.fetchone()
@@ -131,7 +130,7 @@ def transaction_sell(book_dict,customer_id):
         cursor.execute(
             f"""UPDATE books SET stock = {new_quantity} 
             WHERE ISBN = '{key}'""")
-        database.commit()
+        cursor.commit()
        
 def transaction_buy(book_dict):
     #this function takes a dictionary of {book_isbn:quantity} format 
@@ -139,11 +138,11 @@ def transaction_buy(book_dict):
     #then makes a transaction
     #it is to be called to commit a new sale to the database 
 
-    for key in book_dict:
+    for key in book_dict.keys():
         cursor.execute(
             f"""INSERT INTO buys (book_ISBN, quantity) 
             VALUES ({key}, {book_dict[key]})""")
-        database.commit()
+        cursor.commit()
         cursor.execute(
             f"SELECT stock FROM books WHERE ISBN={key}")
         quantity = cursor.fetchall()
@@ -151,7 +150,7 @@ def transaction_buy(book_dict):
         cursor.execute(
             f"""UPDATE books SET stock = {new_quantity} 
             WHERE ISBN = {key}""")
-        database.commit()
+        cursor.commit()
 
 def return_transactions():
     transactions=[]

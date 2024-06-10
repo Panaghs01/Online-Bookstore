@@ -28,7 +28,9 @@ def on_close():
     sys.exit()
 
 root.protocol("WM_DELETE_WINDOW", on_close)
+
 #-----------------------------------------------------------------------------#
+
 user_id_label = ctk.CTkLabel(root, text="", font=("Helvetica", 16))
 user_id_label.pack()
 
@@ -42,7 +44,11 @@ logo_label = ctk.CTkLabel(root, text="", image=logo).place(x=0, y=0)
 
 # ----------------------------------------------------------------------------#
 
+user_id=None
+admin_id=None
+
 cart={}
+
 # Search settings.
 def search_books():
 
@@ -163,32 +169,6 @@ welcome = ctk.CTkLabel(welcome_frame, text="Welcome! Our latest releases...",
 
 # ----------------------------------------------------------------------------#
 
-# Contact us settings.
-def open_contact_window():
-    contact_window = ctk.CTk()
-    contact_window.title("Contact Information")
-    contact_window.geometry('330x180')
-    
-    email_label = ctk.CTkLabel(
-                    contact_window, text="Email: anteikubookstore@gmail.com", 
-                        font=("Helvetica", 16)).pack(pady=20)
-    
-    telephone_label = ctk.CTkLabel(
-                    contact_window, text="Telephone: xx+xxxxxxx", 
-                        font=("Helvetica", 16)).pack(pady=10)
-    
-    address_label = ctk.CTkLabel(
-                    contact_window, text="Address: Lamia, Greece", 
-                        font=("Helvetica", 16)).pack(pady=10)
-    contact_window.mainloop()
-    
-contact_label = ctk.CTkLabel(root, text="Contact us!", font=("Helvetica", 22), 
-                             cursor="hand2")
-contact_label.place(x=30, y=530)
-contact_label.bind("<Button-1>", lambda e: open_contact_window())
-
-# ----------------------------------------------------------------------------#
-
 # Cart button settings.
 
 user_logged_in = False
@@ -268,22 +248,26 @@ def open_cart_window():
         global cart, user_logged_in, admin_logged_in
         
         if  admin_logged_in:
-            # Thelw kati me to supplier id
-            #book_dict = {isbn: book_data['quantity'] for isbn, book_data in cart.items()}
-            #DB.transaction_buy(book_dict, supplier_id)
-            messagebox.showinfo("Purchase Complete", "Books bought and added to stock successfully!")
+
+            book_dict = {isbn: book_data['quantity'] for isbn, book_data in cart.items()}
+            DB.transaction_buy(book_dict)
+            messagebox.showinfo(
+                "Purchase Complete",
+                "Books bought and added to stock successfully!")
                 
         else:
             if not user_logged_in:
-                messagebox.showinfo("Authentication Required", "Please log in or sign up before placing an order!")
+                messagebox.showinfo(
+                    "Authentication Required",
+                    "Please log in or sign up before placing an order!")
                 open_profile() 
             else:
-            
+                print("\n\n\n\n\n\n\n\n\n\n",user_id,"\n\n\n\n\n\n\n\n\n\n")
                 # Dictionary with book ISBNs and quantities
-                #book_dict = {isbn: book_data['quantity'] for isbn, book_data in cart.items()}
+                book_dict = {isbn: book_data['quantity'] for isbn, book_data in cart.items()}
                 
                 # Send the transaction to the database
-                #DB.transaction_sell(book_dict, user_id)
+                DB.transaction_sell(book_dict, user_id)
                     
                 cart.clear()
                 cart_window.destroy()
@@ -310,6 +294,32 @@ cart_image = ctk.CTkImage(light_image=Image.open(cart_image_path),
 cart_image_label = ctk.CTkLabel(root, text="", image=cart_image)
 cart_image_label.place(x=1120, y=25)
 
+
+# ----------------------------------------------------------------------------#
+
+# Contact us settings.
+def open_contact_window():
+    contact_window = ctk.CTk()
+    contact_window.title("Contact Information")
+    contact_window.geometry('330x180')
+    
+    email_label = ctk.CTkLabel(
+                    contact_window, text="Email: anteikubookstore@gmail.com", 
+                        font=("Helvetica", 16)).pack(pady=20)
+    
+    telephone_label = ctk.CTkLabel(
+                    contact_window, text="Telephone: xx+xxxxxxx", 
+                        font=("Helvetica", 16)).pack(pady=10)
+    
+    address_label = ctk.CTkLabel(
+                    contact_window, text="Address: Lamia, Greece", 
+                        font=("Helvetica", 16)).pack(pady=10)
+    contact_window.mainloop()
+    
+contact_label = ctk.CTkLabel(root, text="Contact us!", font=("Helvetica", 22), 
+                             cursor="hand2")
+contact_label.place(x=30, y=530)
+contact_label.bind("<Button-1>", lambda e: open_contact_window())
 
 # ----------------------------------------------------------------------------#
 
@@ -367,10 +377,7 @@ def open_profile():
             back_to_menu()
 
         back_to_menu()
-
-    user_id=None
-    admin_id=None
-    
+ 
     def login_user():
         global user_logged_in
         #these need to be strings, incase someone has only a numerical password
