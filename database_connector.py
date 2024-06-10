@@ -153,7 +153,6 @@ def transaction_buy(book_dict):
             WHERE ISBN = {key}""")
         database.commit()
 
-
 def return_transactions():
     transactions=[]
     cursor.execute("SELECT date FROM sells GROUP BY(date)")
@@ -172,7 +171,7 @@ def return_transactions():
     return transactions
 
 
-def return_username(customer):
+def return_user(customer):
     cursor.execute(
         f"SELECT username FROM customers WHERE ID = {customer}")
     customer_id = cursor.fetchone()
