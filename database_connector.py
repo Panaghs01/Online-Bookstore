@@ -122,7 +122,7 @@ def transaction_sell(book_dict,customer_id):
         cursor.execute(
             f"""INSERT INTO sells (customer_id, book_ISBN, quantity) 
             VALUES ('{customer_id}', '{key}', '{book_dict[key]}')""")
-        cursor.commit()
+        database.commit()
         cursor.execute(
             f"SELECT stock FROM books WHERE ISBN='{key}'")
         quantity = cursor.fetchone()
@@ -130,7 +130,7 @@ def transaction_sell(book_dict,customer_id):
         cursor.execute(
             f"""UPDATE books SET stock = {new_quantity} 
             WHERE ISBN = '{key}'""")
-        cursor.commit()
+        database.commit()
        
 def transaction_buy(book_dict):
     #this function takes a dictionary of {book_isbn:quantity} format 
@@ -142,7 +142,7 @@ def transaction_buy(book_dict):
         cursor.execute(
             f"""INSERT INTO buys (book_ISBN, quantity) 
             VALUES ({key}, {book_dict[key]})""")
-        cursor.commit()
+        database.commit()
         cursor.execute(
             f"SELECT stock FROM books WHERE ISBN={key}")
         quantity = cursor.fetchall()
@@ -150,7 +150,7 @@ def transaction_buy(book_dict):
         cursor.execute(
             f"""UPDATE books SET stock = {new_quantity} 
             WHERE ISBN = {key}""")
-        cursor.commit()
+        database.commit()
 
 def return_transactions():
     transactions=[]
