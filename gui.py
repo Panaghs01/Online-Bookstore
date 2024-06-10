@@ -379,7 +379,7 @@ def open_profile():
         back_to_menu()
  
     def login_user():
-        global user_logged_in
+        global user_logged_in, user_id
         #these need to be strings, incase someone has only a numerical password
         #receiving an integer number will make the validation check give 
         #a false negative
@@ -406,7 +406,7 @@ def open_profile():
             user_logged_in = True # User is now logged in
 
     def login_admin():
-        global admin_logged_in
+        global admin_logged_in, admin_id
 
         username = username_entry.get()
         password = password_entry.get()
