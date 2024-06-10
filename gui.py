@@ -192,6 +192,8 @@ contact_label.bind("<Button-1>", lambda e: open_contact_window())
 # Cart button settings.
 
 user_logged_in = False
+admin_logged_in = False
+
 def open_cart_window():
 
     def increment_cart_quantity(isbn, entry):
@@ -263,21 +265,29 @@ def open_cart_window():
         
     
     def order_complete():
-        global cart, user_id
-        if not user_logged_in:
-            messagebox.showinfo("Authentication Required", "Please log in or sign up before placing an order!")
-            open_profile() 
-        else:
-            
-            # Dictionary with book ISBNs and quantities
-            book_dict = {isbn: book_data['quantity'] for isbn, book_data in cart.items()}
+        global cart, user_logged_in, admin_logged_in
         
-            # Send the transaction to the database
-            DB.transaction_sell(book_dict, user_id)
+        if  admin_logged_in:
+            # Thelw kati me to supplier id
+            #book_dict = {isbn: book_data['quantity'] for isbn, book_data in cart.items()}
+            #DB.transaction_buy(book_dict, supplier_id)
+            messagebox.showinfo("Purchase Complete", "Books bought and added to stock successfully!")
+                
+        else:
+            if not user_logged_in:
+                messagebox.showinfo("Authentication Required", "Please log in or sign up before placing an order!")
+                open_profile() 
+            else:
             
-            cart.clear()
-            cart_window.destroy()
-            messagebox.showinfo("Order Successful", "Your order was successful!")
+                # Dictionary with book ISBNs and quantities
+                #book_dict = {isbn: book_data['quantity'] for isbn, book_data in cart.items()}
+                
+                # Send the transaction to the database
+                #DB.transaction_sell(book_dict, user_id)
+                    
+                cart.clear()
+                cart_window.destroy()
+                messagebox.showinfo("Order Successful", "Your order was successful!")
             
     # Proceed to Purchase button
     proceed_button = ctk.CTkButton(cart_window, text="Proceed to Purchase",
@@ -358,11 +368,11 @@ def open_profile():
 
         back_to_menu()
 
-    user_logged_in = False
     user_id=None
+    admin_id=None
     
     def login_user():
-        global user_logged_in, user_id
+        global user_logged_in
         #these need to be strings, incase someone has only a numerical password
         #receiving an integer number will make the validation check give 
         #a false negative
@@ -389,6 +399,7 @@ def open_profile():
             user_logged_in = True # User is now logged in
 
     def login_admin():
+        global admin_logged_in
 
         username = username_entry.get()
         password = password_entry.get()
@@ -414,6 +425,8 @@ def open_profile():
             show_statistics_button = ctk.CTkButton(root, text="Show Statistics", command=show_statistics)
             show_statistics_button.place(x=1040, y=522)
             user_window.destroy()
+            admin_logged_in = True
+  
     def show_statistics():
         statistics_window = ctk.CTk()
         statistics_window.title("Statistics")
