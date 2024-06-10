@@ -123,35 +123,36 @@ def transaction_sell(book_dict,customer_id):
         cursor.execute(
             f"""INSERT INTO sells (customer_id, book_ISBN, quantity) 
             VALUES ({customer_id}, {key}, {book_dict[key]})""")
-        cursor.commit()
+        database.commit()
         cursor.execute(
-            f"SELECT stock FROM books WHERE ISBN={key}")
-        quantity = cursor.fetchall()
+            f"SELECT stock FROM books WHERE ISBN='{key}'")
+        quantity = cursor.fetchone()
         new_quantity=quantity[0]-book_dict[key]
         cursor.execute(
             f"""UPDATE books SET stock = {new_quantity} 
-            WHERE ISBN = {key})""")
-        cursor.commit()
+            WHERE ISBN = '{key}'""")
+        database.commit()
        
-def transaction_buy(book_dict,supplier_id):
+def transaction_buy(book_dict):
     #this function takes a dictionary of {book_isbn:quantity} format 
-    #and the supplier_id as arguments
+    #as an argument
     #then makes a transaction
     #it is to be called to commit a new sale to the database 
-    
+
     for key in book_dict:
         cursor.execute(
-            f"""INSERT INTO buys (customer_id, book_ISBN, quantity) 
-            VALUES ({supplier_id}, {key}, {book_dict[key]})""")
-        cursor.commit()
+            f"""INSERT INTO buys (book_ISBN, quantity) 
+            VALUES ({key}, {book_dict[key]})""")
+        database.commit()
         cursor.execute(
             f"SELECT stock FROM books WHERE ISBN={key}")
         quantity = cursor.fetchall()
         new_quantity=quantity[0]+book_dict[key]
         cursor.execute(
             f"""UPDATE books SET stock = {new_quantity} 
-            WHERE ISBN = {key})""")
-        cursor.commit()
+            WHERE ISBN = {key}""")
+        database.commit()
+
 
 def return_transactions():
     transactions=[]
