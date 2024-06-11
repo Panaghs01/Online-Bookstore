@@ -3,10 +3,10 @@
 import re
 import os
 import sys
-import customtkinter as ctk #pip install customtkinter
+import customtkinter as ctk # pip install customtkinter
 from tkinter import messagebox
 from tkinter import ttk
-from PIL import Image, ImageTk #pip install pillow
+from PIL import Image, ImageTk # pip install pillow
 import database_connector as DB
 
 # ----------------------------- TKinter Settings -----------------------------#
@@ -34,11 +34,16 @@ root.protocol("WM_DELETE_WINDOW", on_close)
 user_id_label = ctk.CTkLabel(root, text="", font=("Helvetica", 16))
 user_id_label.pack()
 
+#----------------------------------------------------------------------------#
+
+user_id_label = ctk.CTkLabel(root, text="", font=("Helvetica", 16))
+user_id_label.place(x=860, y=30)  # Fixed position for user ID label
+
 # ----------------------------------------------------------------------------#
 
 # Top left logo settings.
 logo_path = "ANTEIKU.png"
-logo = ctk.CTkImage(light_image=Image.open(logo_path), 
+logo = ctk.CTkImage(light_image=Image.open(logo_path),
                     dark_image=Image.open(logo_path), size=(160, 160))
 logo_label = ctk.CTkLabel(root, text="", image=logo).place(x=0, y=0)
 
@@ -65,10 +70,10 @@ def search_books():
         search_window = ctk.CTk()
         search_window.title("Search Results")
         search_window.geometry('1000x600')
-        
+
         # Label to display search query
         search_results_label = ctk.CTkLabel(
-            search_window, text=f"Search Results for: {search_query}", 
+            search_window, text=f"Search Results for: {search_query}",
                                              font=("Helvetica", 16))
         search_results_label.pack(pady=20)
 
@@ -97,7 +102,7 @@ def search_books():
         # Frame for each book entry
             book_frame = ctk.CTkFrame(results_frame)
             book_frame.pack(pady=10, anchor="w")
-            
+
             # Label to display book information
             book_label = ctk.CTkLabel(
                 book_frame, text=f"ISBN: {book_info[0]}\n"
@@ -113,22 +118,22 @@ def search_books():
             quantity_entry = ctk.CTkEntry(book_frame, placeholder_text="1", justify="center", width=5)
             quantity_entry.insert(0, "1")  # Default quantity is 1
             quantity_entry.pack(side="left", padx=10)
-        
+
             # Buttons for adjusting quantity
             increment_button = ctk.CTkButton(
             book_frame, text="+", command=lambda entry=quantity_entry: increment_quantity(entry))
             increment_button.pack(side="left")
-        
+
             decrement_button = ctk.CTkButton(
                 book_frame, text="-", command=lambda entry=quantity_entry: decrement_quantity(entry))
             decrement_button.pack(side="left")
-            
+
             # Creating an Add to Cart button for each book.
             add_to_cart_button = ctk.CTkButton(
-                book_frame, text="Add To Cart", 
+                book_frame, text="Add To Cart",
                 command=lambda isbn=book_info[0], entry=quantity_entry: add_to_cart(isbn, entry))
             add_to_cart_button.pack(pady=5, anchor="w")
-        
+
         search_window.mainloop()
 
      # Book not found message.
@@ -140,24 +145,26 @@ def increment_quantity(entry):
     current_value = int(entry.get())
     entry.delete(0, "end")
     entry.insert(0, str(current_value + 1))
-            
+
 def decrement_quantity(entry):
     current_value = int(entry.get())
     if current_value > 1:  # Ensure the quantity doesn't go below 1
         entry.delete(0, "end")
-        entry.insert(0, str(current_value - 1))       
+        entry.insert(0, str(current_value - 1))
 
 search_input = ctk.CTkEntry(root, placeholder_text='Search', justify='center')
-search_input.pack(pady=30)
+search_input.pack(pady=9)
 
 search_icon_path = "search_icon.png"
-search_icon = ctk.CTkImage(light_image=Image.open(search_icon_path), 
-                           dark_image=Image.open(search_icon_path), 
+search_icon = ctk.CTkImage(light_image=Image.open(search_icon_path),
+                           dark_image=Image.open(search_icon_path),
                            size=(27, 27))
 
 search_label = ctk.CTkLabel(root, text="", image=search_icon, cursor="hand2")
-search_label.place(x=480, y=29)
-search_label.bind("<Button-1>", lambda e: search_books())
+search_label.place(x=480, y=36)
+
+search_label.bind("<Button-1>", lambda e: search_books()) # Clicking on the button to get input.
+search_input.bind("<Return>", lambda e: search_books()) # Pressing enter to get input.
 
 # ----------------------------------------------------------------------------#
 
@@ -198,7 +205,7 @@ def open_cart_window():
         if isbn in cart:
             del cart[isbn]
             cart_window.destroy()  # Close the current cart window
-            open_cart_window()  # Open a new cart window 
+            open_cart_window()  # Open a new cart window
 
     cart_window = ctk.CTk()
     cart_window.title("Cart")
@@ -242,11 +249,11 @@ def open_cart_window():
         remove_button = ctk.CTkButton(book_frame, text="Remove",
                                       command=lambda isbn=isbn: remove_from_cart(isbn))
         remove_button.pack(side="left", padx=10)
-        
-    
+
+
     def order_complete():
         global cart, user_logged_in, admin_logged_in
-        
+
         if  admin_logged_in:
 
             book_dict = {isbn: book_data['quantity'] for isbn, book_data in cart.items()}
@@ -254,30 +261,30 @@ def open_cart_window():
             messagebox.showinfo(
                 "Purchase Complete",
                 "Books bought and added to stock successfully!")
-                
+
         else:
             if not user_logged_in:
                 messagebox.showinfo(
                     "Authentication Required",
                     "Please log in or sign up before placing an order!")
-                open_profile() 
+                open_profile()
             else:
                 print("\n\n\n\n\n\n\n\n\n\n",user_id,"\n\n\n\n\n\n\n\n\n\n")
                 # Dictionary with book ISBNs and quantities
                 book_dict = {isbn: book_data['quantity'] for isbn, book_data in cart.items()}
-                
+
                 # Send the transaction to the database
                 DB.transaction_sell(book_dict, user_id)
-                    
+
                 cart.clear()
                 cart_window.destroy()
                 messagebox.showinfo("Order Successful", "Your order was successful!")
-            
+
     # Proceed to Purchase button
     proceed_button = ctk.CTkButton(cart_window, text="Proceed to Purchase",
                                    command=order_complete)
     proceed_button.pack(pady=20, side="bottom")
-    
+
     cart_window.mainloop()
 
 
@@ -288,7 +295,7 @@ cart_label.place(x=1070, y=30)
 cart_label.bind("<Button-1>", lambda e: open_cart_window())
 
 cart_image_path = "cart.png"
-cart_image = ctk.CTkImage(light_image=Image.open(cart_image_path), 
+cart_image = ctk.CTkImage(light_image=Image.open(cart_image_path),
                           dark_image=Image.open(
                               cart_image_path), size=(40, 40))
 cart_image_label = ctk.CTkLabel(root, text="", image=cart_image)
@@ -302,21 +309,21 @@ def open_contact_window():
     contact_window = ctk.CTk()
     contact_window.title("Contact Information")
     contact_window.geometry('330x180')
-    
+
     email_label = ctk.CTkLabel(
-                    contact_window, text="Email: anteikubookstore@gmail.com", 
+                    contact_window, text="Email: anteikubookstore@gmail.com",
                         font=("Helvetica", 16)).pack(pady=20)
-    
+
     telephone_label = ctk.CTkLabel(
-                    contact_window, text="Telephone: xx+xxxxxxx", 
+                    contact_window, text="Telephone: xx+xxxxxxx",
                         font=("Helvetica", 16)).pack(pady=10)
-    
+
     address_label = ctk.CTkLabel(
-                    contact_window, text="Address: Lamia, Greece", 
+                    contact_window, text="Address: Lamia, Greece",
                         font=("Helvetica", 16)).pack(pady=10)
     contact_window.mainloop()
-    
-contact_label = ctk.CTkLabel(root, text="Contact us!", font=("Helvetica", 22), 
+
+contact_label = ctk.CTkLabel(root, text="Contact us!", font=("Helvetica", 22),
                              cursor="hand2")
 contact_label.place(x=30, y=530)
 contact_label.bind("<Button-1>", lambda e: open_contact_window())
@@ -365,7 +372,7 @@ def open_profile():
 
         if result == "Username already in use":
             messagebox.showerror(
-                "Signup Failed", 
+                "Signup Failed",
                     "Username already in use. Please choose another username.")
         elif result == "Email already in use":
             messagebox.showerror(
@@ -377,11 +384,11 @@ def open_profile():
             back_to_menu()
 
         back_to_menu()
- 
+
     def login_user():
         global user_logged_in, user_id
         #these need to be strings, incase someone has only a numerical password
-        #receiving an integer number will make the validation check give 
+        #receiving an integer number will make the validation check give
         #a false negative
         username = username_entry.get()
         password = password_entry.get()
@@ -400,8 +407,9 @@ def open_profile():
             messagebox.showinfo(
                 "Login Successful", "You have been logged in!")
             username = DB.return_user(user_id)  # Get the username from the user ID
-            user_id_label.configure(text=f"{username}", font=("Helvetica", 22))  # Update label
-            user_id_label.place(x=860, y=30)
+
+            user_id_label.configure(text=f"{username}", font=("Helvetica", 22), cursor="hand2")  # Updating label (it has been created already).
+
             user_window.destroy()
             user_logged_in = True # User is now logged in
 
@@ -433,7 +441,7 @@ def open_profile():
             show_statistics_button.place(x=1040, y=522)
             user_window.destroy()
             admin_logged_in = True
-  
+
     def show_statistics():
         statistics_window = ctk.CTk()
         statistics_window.title("Statistics")
@@ -456,23 +464,23 @@ def open_profile():
 
         global username_entry
         global password_entry
-        
+
         # Clearing previous data.
         for widget in user_window.winfo_children():
             widget.destroy()
 
-        username_label = ctk.CTkLabel(user_window, text="Username", 
+        username_label = ctk.CTkLabel(user_window, text="Username",
                                       font=("Helvetica", 16))
         username_label.pack(pady=10)
         username_entry = ctk.CTkEntry(user_window)
         username_entry.pack(pady=5)
-        
-        password_label = ctk.CTkLabel(user_window, text="Password", 
+
+        password_label = ctk.CTkLabel(user_window, text="Password",
                                       font=("Helvetica", 16))
         password_label.pack(pady=10)
         password_entry = ctk.CTkEntry(user_window, show="*") # Hiding the password.
         password_entry.pack(pady=5)
-        
+
         login_button = ctk.CTkButton(user_window, text="Login",
                                      command=login_user)
         login_button.pack(pady=10)
@@ -600,6 +608,71 @@ def open_profile():
     build_main_menu()
     user_window.mainloop()
 
+# ----------------------------------------------------------------------------#
+
+# Past transactions function for when the username on the top right is clicked.
+def showTransactions():
+
+    global user_id  # Access the user_id variable
+    if user_id:  # If no user has been logged in they won't see this :).
+
+        transactions = DB.customer_transactions(user_id)  # Accessing from DB.
+
+        past_transactions_window = ctk.CTk()
+        past_transactions_window.title("Past Transactions")
+        past_transactions_window.geometry('550x500')
+
+        transactions_label = ctk.CTkLabel(
+            past_transactions_window, text="Past Transactions:", font=("Helvetica", 16))
+        transactions_label.pack(pady=10)
+
+        transactions_frame = ctk.CTkFrame(past_transactions_window)
+        transactions_frame.pack(fill="y", expand=True, padx=10, pady=10)
+
+        # Creating the canvas to be able to scroll through the past transactions.
+        canvas = ctk.CTkCanvas(transactions_frame)
+        canvas.pack(side="left", fill="both", expand=True)
+
+        # Adding a scrollbar in case of a lot of purchases.
+        scrollbar = ctk.CTkScrollbar(transactions_frame, command=canvas.yview)
+        scrollbar.pack(side="right", fill="y")
+
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        # Linking the scrollbar to the canvas.
+        inner_frame = ctk.CTkFrame(canvas)
+        canvas.create_window((0, 0), window=inner_frame, anchor="nw")
+
+        inner_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+
+        for i, transaction in enumerate(transactions, start=1):
+
+            transaction_frame = ctk.CTkFrame(inner_frame)
+            transaction_frame.pack(pady=5, padx=10, fill="x")
+
+            # Book details for each book purchased printed based on the isbn.
+            for book_isbn in transaction:
+                book_details = DB.get_book_details(book_isbn)
+                if book_details:
+                    book_info_label = ctk.CTkLabel(
+                        transaction_frame,
+                        text=f"ISBN: {book_details[0]}\n"
+                             f"Title: {book_details[1]}\n"
+                             f"Author: {book_details[2]}\n"
+                             f"Publisher: {book_details[3]}\n"
+                             f"Genre: {book_details[4]}\n"
+                             f"Price: {book_details[5]}\n",
+                        font=("Helvetica", 12))
+                    book_info_label.pack(anchor="w", padx=10, pady=2)
+
+        past_transactions_window.mainloop()
+
+user_id_label.bind("<Button-1>", lambda e: showTransactions())
+
+
+# ----------------------------------------------------------------------------#
+
+
 profile_label = ctk.CTkLabel(
     root, text="User", font=("Helvetica", 22), cursor="hand2")
 profile_label.place(x=960, y=30)
@@ -615,8 +688,8 @@ profile_image_label.place(x=1020, y=30)
 
 root.mainloop()
 
-# ----------------------------------------------------------------------------#
 
+# ----------------------------------------------------------------------------#
 
 
 # Main Shopping Interface Function
@@ -626,7 +699,7 @@ def open_main_shopping_interface():
     main_window.title("Bookstore")
     main_window.geometry('800x600')
 
-    
+
     welcome_label = ctk.CTkLabel(
         main_window, text="Welcome to Anteiku!", font=("Helvetica", 22))
     welcome_label.pack(pady=20)
@@ -641,4 +714,3 @@ root.mainloop()
 
 
 # ----------------------------------------------------------------------------#
-

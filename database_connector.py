@@ -99,6 +99,7 @@ def login_admin(username, password):
 
     return admin_id[0]
 
+
 def add_book_to_cart(isbn,quantity=1):
     #this function takes book_isbn and optionally a value that is default to 1
     #and returns if book can be added to cart or if it is out of stock
@@ -131,7 +132,8 @@ def transaction_sell(book_dict,customer_id):
             f"""UPDATE books SET stock = {new_quantity} 
             WHERE ISBN = '{key}'""")
         database.commit()
-       
+
+
 def transaction_buy(book_dict):
     #this function takes a dictionary of {book_isbn:quantity} format 
     #as an argument
@@ -152,17 +154,44 @@ def transaction_buy(book_dict):
             WHERE ISBN = {key}""")
         database.commit()
 
+
+# im baby
+def customer_transactions(user_id):
+    transactions=[]
+
+    cursor.execute("SELECT book_ISBN FROM sells WHERE customer_id=%s", (user_id,))
+    result = cursor.fetchall()
+
+    if result:
+        transactions.append([isbn[0] for isbn in result])
+
+    return transactions
+
+'''
+    GOING TO REVERT WHEN TRANSACTION DATE IS ADDED
+    
+    #cursor.execute("SELECT DISTINCT date FROM sells WHERE customer_id=%s", (user_id,))
+    dates = cursor.fetchall()
+
+    for adate in date:
+        cursor.execute("SELECT book_ISBN FROM sells WHERE date=? AND customer_id=%s", (adate[0], user_id))
+        transaction = cursor.fetchall()
+        transactions.append((adate[0], [isbn[0] for isbn in transaction]))
+
+    return transaction'''
+
+
 def return_transactions():
     transactions=[]
     cursor.execute("SELECT date FROM sells GROUP BY(date)")
     dates = cursor.fetchall()
     cursor.execute("SELECT customer_id FROM sells GROUP BY(customer_id)")
     customers = cursor.fetchall()
-    for date in dates:
+    for adate in date:
         for customer in customers:
             cursor.execute(
                 f"""SELECT book_ISBN FROM sells 
-                WHERE (date='{date[0]}' AND customer_id='{customer[0]}')""") 
+                WHERE (date='{adate[0]}' AND customer_id='{customer[0]}')""")
             transaction = cursor.fetchall()
             for i in range(len(transaction)):
                 transaction[i]=transaction[i][0]
@@ -176,8 +205,15 @@ def return_user(customer):
     customer_id = cursor.fetchone()
     return customer_id[0]
 
+
 def return_admin(admin):
     cursor.execute(
         f"SELECT username FROM admins WHERE ID = {admin}")
     admin_id = cursor.fetchone()
     return admin_id[0]
+
+
+def get_book_details(isbn):
+    cursor.execute("SELECT * FROM books WHERE ISBN = %s", (isbn,))
+    book_details = cursor.fetchone()
+    return book_details
