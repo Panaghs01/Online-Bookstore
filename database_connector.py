@@ -217,3 +217,9 @@ def get_book_details(isbn):
     cursor.execute("SELECT * FROM books WHERE ISBN = %s", (isbn,))
     book_details = cursor.fetchone()
     return book_details
+
+def get_latest_books():
+    query = "SELECT * FROM books ORDER BY date DESC LIMIT 3"
+    cursor.execute(query)
+    latest_books = cursor.fetchall()
+    return latest_books
