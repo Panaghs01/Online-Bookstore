@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 12, 2024 at 02:54 PM
+-- Generation Time: Jun 12, 2024 at 09:08 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -66,18 +66,18 @@ CREATE TABLE `books` (
 --
 
 INSERT INTO `books` (`ISBN`, `title`, `author`, `publisher`, `genre`, `price`, `stock`, `date`, `cover`) VALUES
-('01', 'Kafka on the Shore', 'Murakami Haruki', 'Vintage Books', 'Literature', 12.99, 10, '2002-09-12', 'kafka_on_the_shore.jpg'),
-('02', '1Q84 Books 1 and 2', 'Murakami Haruki', 'Vintage Books', 'Literature', 13.99, 9, '2009-05-29', '1q84_1.jpg'),
+('01', 'Kafka on the Shore', 'Murakami Haruki', 'Vintage Books', 'Literature', 12.99, 11, '2002-09-12', 'kafka_on_the_shore.jpg'),
+('02', '1Q84 Books 1 and 2', 'Murakami Haruki', 'Vintage Books', 'Literature', 13.99, 10, '2009-05-29', '1q84_1.jpg'),
 ('03', '1Q84 Book 3', 'Murakami Haruki', 'Vintage Books', 'Literature', 13.99, 2, '2010-04-10', '1q84_3.jpg'),
-('04', 'Kokoro', 'Natsume Soseki', 'Vintage Books', 'Literature', 11.99, 6, '1914-08-11', 'kokoro.jpg'),
+('04', 'Kokoro', 'Natsume Soseki', 'Vintage Books', 'Literature', 11.99, 4, '1914-08-11', 'kokoro.jpg'),
 ('05', 'Nakahara Chuuya Poems', 'Nakahara Chuuya', 'Gracewing', 'Poems', 16.99, 1, '2004-02-01', 'chuuya_poems.jpg'),
 ('06', '100 poems, 100 authors', '-', 'Penguin Classics', 'Poems', 12.99, 20, '2007-07-20', 'poems.jpg'),
-('07', 'Goodnight Punpun Volume 1', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 6, '2007-08-03', 'pun_1.jpg'),
-('08', 'Goodnight Punpun Volume 2', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 6, '2007-12-28', 'pun_2.jpg'),
-('09', 'Goodnight Punpun Volume 3', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 8, '2008-06-05', 'pun_3.jpg'),
-('10', 'JOJO Stone Ocean Volume 1', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 22, '2008-04-18', 'stone_ocean_1.jgp'),
-('11', 'JOJO Stone Ocean Volume 2', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 3, '2008-05-16', 'stone_ocean_2.jgp'),
-('12', 'JOJO Stone Ocean Volume 3', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 24, '2008-06-18', 'stone_ocean_3.jgp'),
+('07', 'Goodnight Punpun Volume 1', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 9, '2007-08-03', 'pun_1.jpg'),
+('08', 'Goodnight Punpun Volume 2', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 8, '2007-12-28', 'pun_2.jpg'),
+('09', 'Goodnight Punpun Volume 3', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 10, '2008-06-05', 'pun_3.jpg'),
+('10', 'JOJO Stone Ocean Volume 1', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 25, '2008-04-18', 'stone_ocean_1.jpg'),
+('11', 'JOJO Stone Ocean Volume 2', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 5, '2008-05-16', 'stone_ocean_2.jpg'),
+('12', 'JOJO Stone Ocean Volume 3', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 26, '2008-06-18', 'stone_ocean_3.jpg'),
 ('13', 'Snow Country', 'Kawabata Yasunari', 'Knopf Doubleday Publishing Gro', 'Literature', 9.99, -1, '1948-11-05', 'snow_country.jpg');
 
 -- --------------------------------------------------------
@@ -89,9 +89,15 @@ INSERT INTO `books` (`ISBN`, `title`, `author`, `publisher`, `genre`, `price`, `
 CREATE TABLE `buys` (
   `Transaction_ID` int(100) NOT NULL,
   `book_ISBN` varchar(12) NOT NULL,
-  `quantity` int(30) NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp()
+  `quantity` int(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `buys`
+--
+
+INSERT INTO `buys` (`Transaction_ID`, `book_ISBN`, `quantity`) VALUES
+(2, '13', 1);
 
 -- --------------------------------------------------------
 
@@ -121,10 +127,7 @@ INSERT INTO `customers` (`id`, `name`, `username`, `password`, `country`, `city`
 (1, 'phn', 'user', '123456789', 'greece', 'athens', 'phn', '51', '11242', '6985414123', 'phn@gmail.com'),
 (2, 'Sofiaa', 'sofiaaa', '12345', 'greece', 'athens', 'miaou', '2', '35100', '6940884497', 'dndif@jfi.com'),
 (3, 'sofia', 'sofini', '12345', 'greece', 'ath', 'ath', '2', '12345', '1234567890', 'sof@gmail.com'),
-(4, 'test', 'test', '12345', 'sdvc', 'dsvgsdft', 'detf', '3', '12345', '1234565890', 'sdvg@gmail.com'),
-(5, 'Jolyne', 'jolyne', '12345', 'Japan', '', 'Jojolandstreet', '12', '1234', '14534423', 'wheresmydad@gmail.com'),
-(6, 'Jotaro', 'jotaro', '12345', 'Japan', 'Tokyo', '3232GSHJKS', '2', '232', '343434323', 'jotaro@gmail.com'),
-(7, 'diavolo', 'diavolo', '12345', 'Japan', 'DLSKJSKD', 'ABSJAHDLKASJ', '1', '123', '2325345345', 'diavolo@gmail.com');
+(4, 'test', 'test', '12345', 'sdvc', 'dsvgsdft', 'detf', '3', '12345', '1234565890', 'sdvg@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -136,32 +139,26 @@ CREATE TABLE `sells` (
   `Transaction_ID` int(100) NOT NULL,
   `customer_id` int(10) NOT NULL,
   `book_ISBN` varchar(12) NOT NULL,
-  `quantity` int(30) NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp()
+  `quantity` int(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `sells`
 --
 
-INSERT INTO `sells` (`Transaction_ID`, `customer_id`, `book_ISBN`, `quantity`, `date`) VALUES
-(17, 6, '11', 1, '2024-06-12'),
-(18, 6, '10', 1, '2024-06-12'),
-(19, 6, '12', 1, '2024-06-12'),
-(20, 5, '11', 1, '2024-06-12'),
-(21, 5, '10', 1, '2024-06-12'),
-(22, 5, '10', 1, '2024-06-12'),
-(23, 5, '12', 1, '2024-06-12'),
-(24, 7, '11', 1, '2024-06-12'),
-(25, 7, '12', 1, '2024-06-12'),
-(26, 4, '07', 1, '2024-06-12'),
-(27, 4, '08', 1, '2024-06-12'),
-(28, 1, '07', 1, '2024-06-12'),
-(29, 1, '08', 1, '2024-06-12'),
-(30, 1, '09', 1, '2024-06-12'),
-(31, 3, '07', 1, '2024-06-12'),
-(32, 3, '08', 1, '2024-06-12'),
-(33, 3, '09', 1, '2024-06-12');
+INSERT INTO `sells` (`Transaction_ID`, `customer_id`, `book_ISBN`, `quantity`) VALUES
+(3, 3, '13', 1),
+(4, 3, '13', 1),
+(5, 3, '13', 1),
+(7, 3, '13', 1),
+(8, 3, '13', 1),
+(11, 3, '13', 1),
+(15, 3, '12', 1),
+(17, 3, '08', 1),
+(19, 3, '04', 1),
+(20, 3, '04', 1),
+(21, 3, '11', 1),
+(22, 3, '01', 1);
 
 --
 -- Indexes for dumped tables
@@ -220,13 +217,13 @@ ALTER TABLE `buys`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `sells`
 --
 ALTER TABLE `sells`
-  MODIFY `Transaction_ID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `Transaction_ID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- Constraints for dumped tables
