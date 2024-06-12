@@ -136,7 +136,7 @@ def search_books():
 
         search_window.mainloop()
 
-     # Book not found message.
+    # Book not found message.
     else:
         messagebox.showinfo(
             "Search Results", "No items found matching your search.")
@@ -169,10 +169,16 @@ search_input.bind("<Return>", lambda e: search_books()) # Pressing enter to get 
 # ----------------------------------------------------------------------------#
 
 # Front label settings.
-welcome_frame = ctk.CTkFrame(root)
-welcome_frame.pack(padx=100, pady=20)
-welcome = ctk.CTkLabel(welcome_frame, text="Welcome! Our latest releases...",
+latest_frame = ctk.CTkFrame(root)
+latest_frame.pack(padx=100, pady=20)
+welcome = ctk.CTkLabel(latest_frame, text="Our latest releases...",
                        font=("Helvetica", 36, "bold")).pack(padx=200, pady=20)
+
+# Front label settings.
+latest_frame = ctk.CTkFrame(root)
+latest_frame.pack(padx=100, pady=20)
+welcome = ctk.CTkLabel(latest_frame, text="Most popular picks.",
+                       font=("Helvetica", 36, "bold")).pack(padx=210, pady=20)
 
 # ----------------------------------------------------------------------------#
 
@@ -269,7 +275,6 @@ def open_cart_window():
                     "Please log in or sign up before placing an order!")
                 open_profile()
             else:
-                print("\n\n\n\n\n\n\n\n\n\n",user_id,"\n\n\n\n\n\n\n\n\n\n")
                 # Dictionary with book ISBNs and quantities
                 book_dict = {isbn: book_data['quantity'] for isbn, book_data in cart.items()}
 
