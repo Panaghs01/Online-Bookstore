@@ -102,6 +102,19 @@ def search_books():
         # Frame for each book entry
             book_frame = ctk.CTkFrame(results_frame)
             book_frame.pack(pady=10, anchor="w")
+            
+            
+            #cover_path = book_info[8]
+            #cover_image = ctk.CTkImage(light_image=Image.open(cover_path), dark_image=Image.open(cover_path), size=(100, 150))
+            #cover_label = ctk.CTkLabel(book_frame, text="", image=cover_image)
+            #cover_label.pack(side="right", padx=10)
+            
+
+            #cover_image_path = book_info[8]
+            #cover_image = Image.open(cover_image_path)
+            #cover_photo = ImageTk.PhotoImage(cover_image)
+            #cover_label = ctk.CTkLabel(book_frame, image=cover_photo)
+            #cover_label.pack(side="left", padx=10)
 
             # Label to display book information
             book_label = ctk.CTkLabel(
@@ -168,19 +181,46 @@ search_input.bind("<Return>", lambda e: search_books()) # Pressing enter to get 
 
 # ----------------------------------------------------------------------------#
 
-# Front label settings.
-latest_frame = ctk.CTkFrame(root)
-latest_frame.pack(padx=100, pady=20)
-welcome = ctk.CTkLabel(latest_frame, text="Our latest releases...",
-                       font=("Helvetica", 36, "bold")).pack(padx=200, pady=20)
+def get_latest_books():
+    return DB.get_latest_books()
+
+def display_latest_books():
+    latest_books = get_latest_books()
+    
+    if latest_books:
+        latest_books_frame = ctk.CTkFrame(root)
+        latest_books_frame.pack(pady=5)
+        
+        for book in latest_books:
+            cover_path = book[8] 
+            cover_image = Image.open(cover_path)
+            cover_image = cover_image.resize((90, 110), Image.LANCZOS)
+
+            cover_photo = ImageTk.PhotoImage(cover_image)
+            cover_ctk_image = ctk.CTkImage(light_image=cover_image,
+                                           dark_image=cover_image,
+                                           size=(100, 150))
+            
+            cover_label = ctk.CTkLabel(latest_books_frame, text="", image=cover_ctk_image)
+            cover_label.pack(side="left", padx=10)
+
 
 # Front label settings.
 latest_frame = ctk.CTkFrame(root)
-latest_frame.pack(padx=100, pady=20)
+latest_frame.pack(padx=100, pady=10)
+welcome = ctk.CTkLabel(latest_frame, text="Our latest releases...",
+                       font=("Helvetica", 36, "bold")).pack(padx=200, pady=10)
+
+display_latest_books()
+
+# Front label settings.
+latest_frame = ctk.CTkFrame(root)
+latest_frame.pack(padx=100, pady=10)
 welcome = ctk.CTkLabel(latest_frame, text="Most popular picks.",
-                       font=("Helvetica", 36, "bold")).pack(padx=210, pady=20)
+                       font=("Helvetica", 36, "bold")).pack(padx=210, pady=10)
 
 # ----------------------------------------------------------------------------#
+
 
 # Cart button settings.
 
