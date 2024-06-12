@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Εξυπηρετητής: 127.0.0.1
--- Χρόνος δημιουργίας: 10 Ιουν 2024 στις 16:42:23
+-- Χρόνος δημιουργίας: 12 Ιουν 2024 στις 13:22:57
 -- Έκδοση διακομιστή: 10.4.32-MariaDB
 -- Έκδοση PHP: 8.2.12
 
@@ -66,8 +66,8 @@ CREATE TABLE `books` (
 --
 
 INSERT INTO `books` (`ISBN`, `title`, `author`, `publisher`, `genre`, `price`, `stock`, `date`, `cover`) VALUES
-('01', 'Kafka on the Shore', 'Murakami Haruki', 'Vintage Books', 'Literature', 12.99, 12, '2002-09-12', 'kafka_on_the_shore.jpg'),
-('02', '1Q84 Books 1 and 2', 'Murakami Haruki', 'Vintage Books', 'Literature', 13.99, 10, '2009-05-29', '1q84_1.jpg'),
+('01', 'Kafka on the Shore', 'Murakami Haruki', 'Vintage Books', 'Literature', 12.99, 10, '2002-09-12', 'kafka_on_the_shore.jpg'),
+('02', '1Q84 Books 1 and 2', 'Murakami Haruki', 'Vintage Books', 'Literature', 13.99, 9, '2009-05-29', '1q84_1.jpg'),
 ('03', '1Q84 Book 3', 'Murakami Haruki', 'Vintage Books', 'Literature', 13.99, 2, '2010-04-10', '1q84_3.jpg'),
 ('04', 'Kokoro', 'Natsume Soseki', 'Vintage Books', 'Literature', 11.99, 6, '1914-08-11', 'kokoro.jpg'),
 ('05', 'Nakahara Chuuya Poems', 'Nakahara Chuuya', 'Gracewing', 'Poems', 16.99, 1, '2004-02-01', 'chuuya_poems.jpg'),
@@ -89,7 +89,8 @@ INSERT INTO `books` (`ISBN`, `title`, `author`, `publisher`, `genre`, `price`, `
 CREATE TABLE `buys` (
   `Transaction_ID` int(100) NOT NULL,
   `book_ISBN` varchar(12) NOT NULL,
-  `quantity` int(30) NOT NULL
+  `quantity` int(30) NOT NULL,
+  `date` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -132,20 +133,9 @@ CREATE TABLE `sells` (
   `Transaction_ID` int(100) NOT NULL,
   `customer_id` int(10) NOT NULL,
   `book_ISBN` varchar(12) NOT NULL,
-  `quantity` int(30) NOT NULL
+  `quantity` int(30) NOT NULL,
+  `date` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Άδειασμα δεδομένων του πίνακα `sells`
---
-
-INSERT INTO `sells` (`Transaction_ID`, `customer_id`, `book_ISBN`, `quantity`) VALUES
-(3, 3, '13', 1),
-(4, 3, '13', 1),
-(5, 3, '13', 1),
-(7, 3, '13', 1),
-(8, 3, '13', 1),
-(11, 3, '13', 1);
 
 --
 -- Ευρετήρια για άχρηστους πίνακες
@@ -198,7 +188,7 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT για πίνακα `buys`
 --
 ALTER TABLE `buys`
-  MODIFY `Transaction_ID` int(100) NOT NULL AUTO_INCREMENT;
+  MODIFY `Transaction_ID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT για πίνακα `customers`
@@ -210,7 +200,7 @@ ALTER TABLE `customers`
 -- AUTO_INCREMENT για πίνακα `sells`
 --
 ALTER TABLE `sells`
-  MODIFY `Transaction_ID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `Transaction_ID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Περιορισμοί για άχρηστους πίνακες
