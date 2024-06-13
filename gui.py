@@ -20,7 +20,7 @@ ctk.set_default_color_theme("green")
 root = ctk.CTk()
 
 root.title("BookStore")
-root.geometry('1200x600')
+root.geometry('1200x800')
 
 def on_close():
     print("Closing application...")
