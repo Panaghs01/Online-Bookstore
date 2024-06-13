@@ -20,7 +20,7 @@ ctk.set_default_color_theme("green")
 root = ctk.CTk()
 
 root.title("BookStore")
-root.geometry('1200x800')
+root.geometry('1200x700')
 
 def on_close():
     print("Closing application...")
@@ -370,7 +370,7 @@ def open_contact_window():
 
 contact_label = ctk.CTkLabel(root, text="Contact us!", font=("Helvetica", 22),
                              cursor="hand2")
-contact_label.place(x=30, y=530)
+contact_label.place(x=30, y=630)
 contact_label.bind("<Button-1>", lambda e: open_contact_window())
 
 # ----------------------------------------------------------------------------#
@@ -483,7 +483,7 @@ def open_profile():
             user_id_label.configure(text=f"{username}", font=("Helvetica", 22))
             user_id_label.place(x=860, y=30)
             show_statistics_button = ctk.CTkButton(root, text="Show Statistics", command=show_statistics)
-            show_statistics_button.place(x=1040, y=522)
+            show_statistics_button.place(x=1040, y=630)
             user_window.destroy()
             admin_logged_in = True
 
