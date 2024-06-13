@@ -147,7 +147,7 @@ def transaction_buy(book_dict):
         database.commit()
         cursor.execute(
             f"SELECT stock FROM books WHERE ISBN={key}")
-        quantity = cursor.fetchall()
+        quantity = cursor.fetchone()
         new_quantity=quantity[0]+book_dict[key]
         cursor.execute(
             f"""UPDATE books SET stock = {new_quantity} 
