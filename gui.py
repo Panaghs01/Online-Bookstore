@@ -86,18 +86,23 @@ def search_books():
             book_info = next((book for book in found if book[0] == isbn), None)
             if book_info:
                 quantity = int(quantity_entry.get())  # Get the quantity from the entry widget
-                if isbn in cart:
-                    cart[isbn]['quantity'] += quantity
-                else:
-                    cart[isbn] = {'info': book_info, 'quantity': quantity}
-
-                result = DB.add_book_to_cart(isbn)
-
-                if result != 1:
-                    messagebox.showinfo("Added to Cart", "Item added to cart successfully!")
+                if admin_logged_in:
+                    if isbn in cart:
+                        cart[isbn]['quantity'] += quantity
+                    else:
+                        cart[isbn] = {'info': book_info, 'quantity': quantity}
+                        result = DB.add_book_to_cart(isbn)
+                    return
+                
+                if book_info[6] >= quantity:
+                    if isbn in cart:
+                        cart[isbn]['quantity'] += quantity
+                    else:
+                        cart[isbn] = {'info': book_info, 'quantity': quantity}
+                        result = DB.add_book_to_cart(isbn)
                 else:
                     messagebox.showerror("Out of Stock", "Not enough copies of the book in stock.")
-
+                
         for book_info in found:
         # Frame for each book entry
             book_frame = ctk.CTkFrame(results_frame)
@@ -203,7 +208,6 @@ def display_latest_books():
             
             cover_label = ctk.CTkLabel(latest_books_frame, text="", image=cover_ctk_image)
             cover_label.pack(side="left", padx=10)
-
 
 # Front label settings.
 latest_frame = ctk.CTkFrame(root)
