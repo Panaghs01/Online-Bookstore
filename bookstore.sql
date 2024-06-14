@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 12, 2024 at 09:08 PM
+-- Generation Time: Jun 14, 2024 at 07:10 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -89,15 +89,16 @@ INSERT INTO `books` (`ISBN`, `title`, `author`, `publisher`, `genre`, `price`, `
 CREATE TABLE `buys` (
   `Transaction_ID` int(100) NOT NULL,
   `book_ISBN` varchar(12) NOT NULL,
-  `quantity` int(30) NOT NULL
+  `quantity` int(30) NOT NULL,
+  `date` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `buys`
 --
 
-INSERT INTO `buys` (`Transaction_ID`, `book_ISBN`, `quantity`) VALUES
-(2, '13', 1);
+INSERT INTO `buys` (`Transaction_ID`, `book_ISBN`, `quantity`, `date`) VALUES
+(2, '13', 1, '2024-06-14');
 
 -- --------------------------------------------------------
 
@@ -127,7 +128,8 @@ INSERT INTO `customers` (`id`, `name`, `username`, `password`, `country`, `city`
 (1, 'phn', 'user', '123456789', 'greece', 'athens', 'phn', '51', '11242', '6985414123', 'phn@gmail.com'),
 (2, 'Sofiaa', 'sofiaaa', '12345', 'greece', 'athens', 'miaou', '2', '35100', '6940884497', 'dndif@jfi.com'),
 (3, 'sofia', 'sofini', '12345', 'greece', 'ath', 'ath', '2', '12345', '1234567890', 'sof@gmail.com'),
-(4, 'test', 'test', '12345', 'sdvc', 'dsvgsdft', 'detf', '3', '12345', '1234565890', 'sdvg@gmail.com');
+(4, 'test', 'test', '12345', 'sdvc', 'dsvgsdft', 'detf', '3', '12345', '1234565890', 'sdvg@gmail.com'),
+(5, 'june', 'june', 'june', 'Greece', 'Athens', 'AAAA', '123', 'AB21', '293832934', 'june@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -139,26 +141,27 @@ CREATE TABLE `sells` (
   `Transaction_ID` int(100) NOT NULL,
   `customer_id` int(10) NOT NULL,
   `book_ISBN` varchar(12) NOT NULL,
-  `quantity` int(30) NOT NULL
+  `quantity` int(30) NOT NULL,
+  `date` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `sells`
 --
 
-INSERT INTO `sells` (`Transaction_ID`, `customer_id`, `book_ISBN`, `quantity`) VALUES
-(3, 3, '13', 1),
-(4, 3, '13', 1),
-(5, 3, '13', 1),
-(7, 3, '13', 1),
-(8, 3, '13', 1),
-(11, 3, '13', 1),
-(15, 3, '12', 1),
-(17, 3, '08', 1),
-(19, 3, '04', 1),
-(20, 3, '04', 1),
-(21, 3, '11', 1),
-(22, 3, '01', 1);
+INSERT INTO `sells` (`Transaction_ID`, `customer_id`, `book_ISBN`, `quantity`, `date`) VALUES
+(3, 3, '13', 1, '2024-06-05'),
+(4, 3, '13', 1, '2024-06-13'),
+(5, 3, '13', 1, '2024-05-14'),
+(7, 3, '13', 1, '2024-06-12'),
+(8, 3, '13', 1, '2024-06-08'),
+(11, 3, '13', 1, '2024-06-10'),
+(15, 3, '12', 1, '2024-06-15'),
+(17, 3, '08', 1, '2024-06-04'),
+(19, 3, '04', 1, '2024-06-01'),
+(20, 3, '04', 1, '2024-06-03'),
+(21, 3, '11', 1, '2024-06-12'),
+(22, 3, '01', 1, '2024-06-08');
 
 --
 -- Indexes for dumped tables
@@ -217,7 +220,7 @@ ALTER TABLE `buys`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `sells`

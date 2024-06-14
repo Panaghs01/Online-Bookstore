@@ -76,6 +76,8 @@ def search_books(search_query=None):
                                              font=("Helvetica", 16))
         search_results_label.pack(pady=20)
 
+        image_refs = [] # List to store image paths.
+
         # Frame to contain search results
         results_frame = ctk.CTkFrame(search_window)
         results_frame.pack(padx=20, pady=10)
@@ -106,19 +108,6 @@ def search_books(search_query=None):
         # Frame for each book entry
             book_frame = ctk.CTkFrame(results_frame)
             book_frame.pack(pady=10, anchor="w")
-            
-            
-            #cover_path = book_info[8]
-            #cover_image = ctk.CTkImage(light_image=Image.open(cover_path), dark_image=Image.open(cover_path), size=(100, 150))
-            #cover_label = ctk.CTkLabel(book_frame, text="", image=cover_image)
-            #cover_label.pack(side="right", padx=10)
-            
-
-            #cover_image_path = book_info[8]
-            #cover_image = Image.open(cover_image_path)
-            #cover_photo = ImageTk.PhotoImage(cover_image)
-            #cover_label = ctk.CTkLabel(book_frame, image=cover_photo)
-            #cover_label.pack(side="left", padx=10)
 
             # Label to display book information
             book_label = ctk.CTkLabel(
@@ -129,6 +118,16 @@ def search_books(search_query=None):
                                  f"Genre: {book_info[4]}\n"
                                  f"Price: {book_info[5]}\n",
                                        font=("Helvetica", 12), justify="left")
+
+            '''cover_path = book_info[8]
+
+            cover_photo = ctk.CTkImage(light_image=Image.open(cover_path),
+                                       dark_image=Image.open(cover_path),
+                                       size = (90, 110))
+
+            cover_label = ctk.CTkLabel(book_frame, text="", image=cover_photo) # ERROR HERE.
+            cover_label.pack(side="right", padx=20)'''
+
             book_label.pack(pady=5, anchor="w")
 
             # Entry widget for displaying quantity
@@ -441,7 +440,8 @@ def open_profile():
         back_to_menu()
 
     def login_user():
-        global user_logged_in, user_id
+
+        global user_logged_in, user_id, admin_logged_in
         #these need to be strings, incase someone has only a numerical password
         #receiving an integer number will make the validation check give
         #a false negative
@@ -467,9 +467,10 @@ def open_profile():
 
             user_window.destroy()
             user_logged_in = True # User is now logged in
+            admin_logged_in = False
 
     def login_admin():
-        global admin_logged_in, admin_id
+        global admin_logged_in, admin_id, user_logged_in
 
         username = username_entry.get()
         password = password_entry.get()
@@ -496,6 +497,7 @@ def open_profile():
             show_statistics_button.place(x=1040, y=630)
             user_window.destroy()
             admin_logged_in = True
+            user_logged_in = False
 
     def show_statistics():
         statistics_window = ctk.CTk()

@@ -105,7 +105,7 @@ def add_book_to_cart(isbn,quantity=1):
     #and returns if book can be added to cart or if it is out of stock
     
     cursor.execute(
-        f"SELECT stock FROM books WHERE ISBN={isbn}")
+        f"SELECT stock FROM books WHERE ISBN='{isbn}'")
     inventory = cursor.fetchone()
     if inventory[0] - quantity >= 0: return isbn,quantity 
     #Success, return the isbn and the quantity requested
@@ -143,19 +143,18 @@ def transaction_buy(book_dict):
     for key in book_dict.keys():
         cursor.execute(
             f"""INSERT INTO buys (book_ISBN, quantity) 
-            VALUES ({key}, {book_dict[key]})""")
+            VALUES ('{key}', '{book_dict[key]}')""")
         database.commit()
         cursor.execute(
-            f"SELECT stock FROM books WHERE ISBN={key}")
+            f"SELECT stock FROM books WHERE ISBN='{key}'")
         quantity = cursor.fetchone()
         new_quantity=quantity[0]+book_dict[key]
         cursor.execute(
-            f"""UPDATE books SET stock = {new_quantity} 
-            WHERE ISBN = {key}""")
+            f"""UPDATE books SET stock = '{new_quantity}' 
+            WHERE ISBN = '{key}'""")
         database.commit()
 
 
-# im baby
 def customer_transactions(user_id):
     transactions=[]
 
@@ -167,7 +166,7 @@ def customer_transactions(user_id):
 
     return transactions
 
-'''
+    '''
     GOING TO REVERT WHEN TRANSACTION DATE IS ADDED
     
     #cursor.execute("SELECT DISTINCT date FROM sells WHERE customer_id=%s", (user_id,))
@@ -178,8 +177,8 @@ def customer_transactions(user_id):
         transaction = cursor.fetchall()
         transactions.append((adate[0], [isbn[0] for isbn in transaction]))
 
-    return transaction'''
-
+    return transaction
+    '''
 
 def return_transactions():
     transactions=[]
@@ -201,14 +200,14 @@ def return_transactions():
 
 def return_user(customer):
     cursor.execute(
-        f"SELECT username FROM customers WHERE ID = {customer}")
+        f"SELECT username FROM customers WHERE ID = '{customer}'")
     customer_id = cursor.fetchone()
     return customer_id[0]
 
 
 def return_admin(admin):
     cursor.execute(
-        f"SELECT username FROM admins WHERE ID = {admin}")
+        f"SELECT username FROM admins WHERE ID = '{admin}'")
     admin_id = cursor.fetchone()
     return admin_id[0]
 
@@ -223,3 +222,11 @@ def get_latest_books():
     cursor.execute(query)
     latest_books = cursor.fetchall()
     return latest_books
+
+# Might use it somewhere in the future modcheck
+def validate_username(username):
+    cursor.execute(
+        f"SELECT * FROM customers WHERE username = '{username}'")
+    a = cursor.fetchone()
+    if a: return True
+    return False
