@@ -55,10 +55,9 @@ admin_id=None
 cart={}
 
 # Search settings.
-def search_books():
-
-    # Search query from the search input.
-    search_query = search_input.get()
+def search_books(search_query=None):
+    if search_query is None:
+        search_query = search_input.get()
 
     # Found is a list that contains all the books.
     found = DB.search_books(search_query)
@@ -189,6 +188,9 @@ search_input.bind("<Return>", lambda e: search_books()) # Pressing enter to get 
 def get_latest_books():
     return DB.get_latest_books()
 
+def open_book_details(book):
+    search_books(book[1])
+
 def display_latest_books():
     latest_books = get_latest_books()
     
@@ -206,8 +208,10 @@ def display_latest_books():
                                            dark_image=cover_image,
                                            size=(100, 150))
             
-            cover_label = ctk.CTkLabel(latest_books_frame, text="", image=cover_ctk_image)
+            cover_label = ctk.CTkLabel(latest_books_frame, text="", image=cover_ctk_image, cursor="hand2")
             cover_label.pack(side="left", padx=10)
+            cover_label.bind("<Button-1>", lambda e, book=book: open_book_details(book))
+          
 
 # Front label settings.
 latest_frame = ctk.CTkFrame(root)
@@ -222,6 +226,8 @@ latest_frame = ctk.CTkFrame(root)
 latest_frame.pack(padx=100, pady=10)
 welcome = ctk.CTkLabel(latest_frame, text="Most popular picks.",
                        font=("Helvetica", 36, "bold")).pack(padx=210, pady=10)
+
+
 
 # ----------------------------------------------------------------------------#
 
