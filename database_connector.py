@@ -167,20 +167,6 @@ def customer_transactions(user_id):
 
     return transactions
 
-    '''
-    GOING TO REVERT WHEN TRANSACTION DATE IS ADDED
-    
-    #cursor.execute("SELECT DISTINCT date FROM sells WHERE customer_id=%s", (user_id,))
-    dates = cursor.fetchall()
-
-    for adate in date:
-        cursor.execute("SELECT book_ISBN FROM sells WHERE date=? AND customer_id=%s", (adate[0], user_id))
-        transaction = cursor.fetchall()
-        transactions.append((adate[0], [isbn[0] for isbn in transaction]))
-
-    return transaction
-    '''
-
 def return_transactions():
     transactions=[]
     cursor.execute("SELECT date FROM sells GROUP BY(date)")
@@ -238,24 +224,6 @@ def validate_username(username):
     if a: return True
     return False
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def income_last_month():
     income_per_day=[]
     for i in range(30,-1,-1):
@@ -263,6 +231,7 @@ def income_last_month():
         date_variable = date.today()- timedelta(days = i)
         temp = date_variable.strftime('%Y-X%m-X%d').replace('X0', 'X').replace('X', '')
         date_variable = datetime.strptime(temp, "%Y-%m-%d").date()
+        cursor.execute(
             f"SELECT book_ISBN,quantity FROM sells WHERE(date='{date_variable}')")
         a= cursor.fetchall()
         if a:
