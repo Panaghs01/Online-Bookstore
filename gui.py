@@ -74,7 +74,7 @@ def search_books(search_query=None):
         # to use images. (customtkinter feature)
         search_window = ctk.CTkToplevel(root)
         search_window.title("Search Results")
-        search_window.geometry('800x600')
+        search_window.geometry('800x650')
 
         # Label to display search query
         search_results_label = ctk.CTkLabel(
