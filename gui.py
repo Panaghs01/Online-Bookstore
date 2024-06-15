@@ -8,6 +8,7 @@ from tkinter import messagebox
 from tkinter import ttk
 from PIL import Image, ImageTk  # pip install pillow
 import database_connector as DB
+import ML
 
 # ----------------------------- TKinter Settings -----------------------------#
 
@@ -31,7 +32,7 @@ def on_close():
 
 root.protocol("WM_DELETE_WINDOW", on_close)
 
-# -----------------------------------------------------------------------------#
+# ----------------------------------------------------------------------------#
 
 user_id_label = ctk.CTkLabel(root, text="", font=("Helvetica", 16))
 user_id_label.pack()
@@ -222,6 +223,28 @@ def display_latest_books():
             cover_label = ctk.CTkLabel(latest_books_frame, text="", image=cover_ctk_image, cursor="hand2")
             cover_label.pack(side="left", padx=10)
             cover_label.bind("<Button-1>", lambda e, book=book: open_book_details(book))
+            
+def display_popular_books():
+    popular_books = ML.top3()
+    
+    if popular_books:
+        popular_books_frame = ctk.CTkFrame(root)
+        popular_books_frame.pack(pady=5)
+
+        for book in popular_books:
+            book = DB.get_book_details(book)
+            cover_path = book[8]
+            cover_image = Image.open(cover_path)
+            cover_image = cover_image.resize((90, 110), Image.LANCZOS)
+
+            cover_photo = ImageTk.PhotoImage(cover_image)
+            cover_ctk_image = ctk.CTkImage(light_image=cover_image,
+                                           dark_image=cover_image,
+                                           size=(100, 150))
+
+            cover_label = ctk.CTkLabel(popular_books_frame, text="", image=cover_ctk_image, cursor="hand2")
+            cover_label.pack(side="left", padx=10)
+            cover_label.bind("<Button-1>", lambda e, book=book: open_book_details(book))
 
 
 # Front label settings.
@@ -237,6 +260,8 @@ latest_frame = ctk.CTkFrame(root)
 latest_frame.pack(padx=100, pady=10)
 welcome = ctk.CTkLabel(latest_frame, text="Most popular picks.",
                        font=("Helvetica", 36, "bold")).pack(padx=210, pady=10)
+
+display_popular_books()
 
 # ----------------------------------------------------------------------------#
 
@@ -276,7 +301,7 @@ def open_cart_window():
 
     cart_window = ctk.CTkToplevel(root)
     cart_window.title("Cart")
-    cart_window.geometry('600x400')
+    cart_window.geometry('600x600')
 
     items_label = ctk.CTkLabel(cart_window, text="Total Items",
                                font=("Helvetica", 20)).pack(pady=10)
@@ -354,6 +379,11 @@ def open_cart_window():
                 cart.clear()
                 cart_window.destroy()
                 messagebox.showinfo("Order Successful", "Your order was successful!")
+
+    def recommend_books():
+        username_label = ctk.CTkLabel(cart_window, text="Recommended for you!",
+                                      font=("Helvetica", 16))
+        username_label.pack(pady=10)
 
     # Proceed to Purchase button
     proceed_button = ctk.CTkButton(cart_window, text="Proceed to Purchase",

@@ -8,7 +8,7 @@ import database_connector as DB
 pd.set_option('display.max_rows', None)
 
 transactions = DB.return_transactions()
-print(transactions)
+#print(transactions)
 
 #DATASET = BOOKS ISBNs OF EACH TRANSACTION
 dataset = transactions
@@ -64,7 +64,7 @@ def recommendations(cart):
         return next(iter(result))
 
     
-print(recommendations(['13','07']))
+#print(recommendations(['13','07']))
 
 
 
