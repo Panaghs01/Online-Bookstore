@@ -187,13 +187,20 @@ def return_transactions():
     customers = cursor.fetchall()
     for date in dates:
         for customer in customers:
+            #for each date look at what each customer bought
+            #if they did buy anything that day, add it to a list
+            #then append that single date/customer list to the transactions
+            #list, and finally return it
+            tmp=[]
             cursor.execute(
                 f"""SELECT book_ISBN FROM sells 
                 WHERE (date='{date[0]}' AND customer_id='{customer[0]}')""")
             transaction = cursor.fetchall()
-            for i in range(len(transaction)):
-                if transaction[i][0]:
-                    transactions.append(transaction[i][0])
+            if transaction:
+                for i in transaction:
+                    i=i[0]
+                    tmp.append(i)
+                transactions.append(tmp)
     return transactions
 
 
