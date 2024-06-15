@@ -25,7 +25,6 @@ database = sql.connect(user = "root", host = "localhost",
                        database = "bookstore")
 cursor = database.cursor()
 
-
 #returns books that are like user_input, takes optional argument columns(tuple)
 #which is default as * and returns everything for that book
 def search_books(user_input, columns="*"): 
@@ -186,15 +185,15 @@ def return_transactions():
     dates = cursor.fetchall()
     cursor.execute("SELECT customer_id FROM sells GROUP BY(customer_id)")
     customers = cursor.fetchall()
-    for adate in dates:
+    for date in dates:
         for customer in customers:
             cursor.execute(
                 f"""SELECT book_ISBN FROM sells 
-                WHERE (date='{adate[0]}' AND customer_id='{customer[0]}')""")
+                WHERE (date='{date[0]}' AND customer_id='{customer[0]}')""")
             transaction = cursor.fetchall()
             for i in range(len(transaction)):
-                transaction[i]=transaction[i][0]
-            transactions.append(transaction)
+                if transaction[i][0]:
+                    transactions.append(transaction[i][0])
     return transactions
 
 

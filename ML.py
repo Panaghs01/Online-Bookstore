@@ -1,6 +1,7 @@
 import numpy as np 
 import pandas as pd 
-from mlxtend.frequent_patterns import apriori, association_rules
+#pip install mlxtend
+from mlxtend.frequent_patterns import apriori, association_rules 
 from mlxtend.preprocessing import TransactionEncoder
 import database_connector as DB
 
