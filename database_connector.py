@@ -93,7 +93,9 @@ def login_admin(username, password):
         return -2 #Invalid password
     
     
-    cursor.execute("SELECT id FROM admins WHERE username = %s AND password = %s", (username, password))
+    cursor.execute(
+        """SELECT id FROM admins 
+        WHERE username = %s AND password = %s""", (username, password))
     admin_id = cursor.fetchone()
 
     return admin_id[0]
@@ -104,7 +106,7 @@ def add_book_to_cart(isbn,quantity=1):
     #and returns if book can be added to cart or if it is out of stock
     
     cursor.execute(
-        f"SELECT stock FROM books WHERE ISBN='{isbn}'")
+        "SELECT stock FROM books WHERE ISBN=%s", isbn)
     inventory = cursor.fetchone()
     if inventory[0] - quantity >= 0: return isbn,quantity 
     #Success, return the isbn and the quantity requested
@@ -120,16 +122,16 @@ def transaction_sell(book_dict,customer_id):
     
     for key in book_dict.keys():
         cursor.execute(
-            f"""INSERT INTO sells (customer_id, book_ISBN, quantity) 
-            VALUES ('{customer_id}', '{key}', '{book_dict[key]}')""")
+            """INSERT INTO sells (customer_id, book_ISBN, quantity) 
+            VALUES (%s ,%s, %s)""", customer_id, key, book_dict[key])
         database.commit()
         cursor.execute(
-            f"SELECT stock FROM books WHERE ISBN='{key}'")
+            "SELECT stock FROM books WHERE ISBN=%s", key)
         quantity = cursor.fetchone()
         new_quantity=quantity[0]-book_dict[key]
         cursor.execute(
-            f"""UPDATE books SET stock = {new_quantity} 
-            WHERE ISBN = '{key}'""")
+            """UPDATE books SET stock = %s 
+            WHERE ISBN = %s """, new_quantity, key)
         database.commit()
 
 
@@ -141,16 +143,16 @@ def transaction_buy(book_dict):
 
     for key in book_dict.keys():
         cursor.execute(
-            f"""INSERT INTO buys (book_ISBN, quantity) 
-            VALUES ('{key}', '{book_dict[key]}')""")
+            """INSERT INTO buys (book_ISBN, quantity) 
+            VALUES (%s,%s)""", key, book_dict[key])
         database.commit()
         cursor.execute(
-            f"SELECT stock FROM books WHERE ISBN='{key}'")
+            "SELECT stock FROM books WHERE ISBN=%s", key)
         quantity = cursor.fetchone()
         new_quantity=quantity[0]+book_dict[key]
         cursor.execute(
-            f"""UPDATE books SET stock = '{new_quantity}' 
-            WHERE ISBN = '{key}'""")
+            """UPDATE books SET stock = %s
+            WHERE ISBN = %s""",new_quantity, key)
         database.commit()
 
 
@@ -193,8 +195,8 @@ def return_transactions():
             #list, and finally return it
             tmp=[]
             cursor.execute(
-                f"""SELECT book_ISBN FROM sells 
-                WHERE (date='{date[0]}' AND customer_id='{customer[0]}')""")
+                """SELECT book_ISBN FROM sells 
+                WHERE (date= %s AND customer_id= %s)""",date[0],customer[0])
             transaction = cursor.fetchall()
             if transaction:
                 for i in transaction:
@@ -206,14 +208,14 @@ def return_transactions():
 
 def return_user(customer):
     cursor.execute(
-        f"SELECT username FROM customers WHERE ID = '{customer}'")
+        "SELECT username FROM customers WHERE ID = %s ", customer)
     customer_id = cursor.fetchone()
     return customer_id[0]
 
 
 def return_admin(admin):
     cursor.execute(
-        f"SELECT username FROM admins WHERE ID = '{admin}'")
+        "SELECT username FROM admins WHERE ID = %s ", admin)
     admin_id = cursor.fetchone()
     return admin_id[0]
 
@@ -224,15 +226,39 @@ def get_book_details(isbn):
     return book_details
 
 def get_latest_books():
-    query = "SELECT * FROM books ORDER BY date DESC LIMIT 3"
-    cursor.execute(query)
+    cursor.execute("SELECT * FROM books ORDER BY date DESC LIMIT 3")
     latest_books = cursor.fetchall()
     return latest_books
 
 # Might use it somewhere in the future modcheck
 def validate_username(username):
     cursor.execute(
-        f"SELECT * FROM customers WHERE username = '{username}'")
+        "SELECT * FROM customers WHERE username = %s", username)
     a = cursor.fetchone()
     if a: return True
     return False
+
+
+lista=[]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
