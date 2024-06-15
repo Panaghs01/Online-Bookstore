@@ -516,22 +516,69 @@ def open_profile():
             username = DB.return_admin(admin_id)  # Get the username from the admin ID
             user_id_label.configure(text=f"{username}", font=("Helvetica", 22))
             user_id_label.place(x=860, y=30)
-            show_statistics_button = ctk.CTkButton(root, text="Show Statistics", command=show_statistics)
+            show_statistics_button = ctk.CTkButton(root, text="Show Statistics", cursor="hand2", command=show_statistics)
             show_statistics_button.place(x=1040, y=630)
             user_window.destroy()
             admin_logged_in = True
             user_logged_in = False
 
+
     def show_statistics():
+        
+        def clear_statistics_window():
+            # Destroy all widgets in the statistics window
+            for widget in statistics_window.winfo_children():
+                widget.destroy()
+                
+        def back_to_statistics_menu():
+            clear_statistics_window()
+            show_statistics_buttons()
+            
+        def show_sale_stats():
+            clear_statistics_window()
+            back_button = ctk.CTkButton(statistics_window, text="Back", fg_color="Red", command=back_to_statistics_menu)
+            back_button.pack(pady=10)
+            
+        def show_stats_per_genre():
+            clear_statistics_window()
+
+            back_button = ctk.CTkButton(statistics_window, text="Back", fg_color="Red", command=back_to_statistics_menu)
+            back_button.pack(pady=10)
+            
+        def show_commonly_bought():
+            clear_statistics_window()
+
+            back_button = ctk.CTkButton(statistics_window, text="Back", fg_color="Red", command=back_to_statistics_menu)
+            back_button.pack(pady=10)
+            
+        def show_statistics_buttons():
+            
+            select_label = ctk.CTkLabel(
+            statistics_window, text="Please select an option.",
+            font=("Helvetica", 16))
+            select_label.pack(pady=30)
+            
+            sale_stats_button = ctk.CTkButton(statistics_window, text="Sale stats",
+                                            command=lambda: show_sale_stats())
+            sale_stats_button.pack(pady=10)
+
+            stats_per_genre_button = ctk.CTkButton(statistics_window, text="Stats per genre",
+                                                command=lambda: show_stats_per_genre())
+            stats_per_genre_button.pack(pady=10)
+
+            commonly_bought_button = ctk.CTkButton(statistics_window, text="Commonly bought",
+                                                command=lambda: show_commonly_bought())
+            commonly_bought_button.pack(pady=10)
+            
         statistics_window = ctk.CTk()
         statistics_window.title("Statistics")
         statistics_window.geometry('500x400')
-
-        statistics_label = ctk.CTkLabel(
-            statistics_window, text="Statistics will be displayed here", font=("Helvetica", 16))
-        statistics_label.pack(pady=50)
+            
+        show_statistics_buttons()
 
         statistics_window.mainloop()
+        
+        
 
     def back_to_menu():
 
