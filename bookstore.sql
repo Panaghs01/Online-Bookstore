@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 14, 2024 at 07:10 PM
+-- Generation Time: Jun 15, 2024 at 12:46 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -67,18 +67,18 @@ CREATE TABLE `books` (
 
 INSERT INTO `books` (`ISBN`, `title`, `author`, `publisher`, `genre`, `price`, `stock`, `date`, `cover`) VALUES
 ('01', 'Kafka on the Shore', 'Murakami Haruki', 'Vintage Books', 'Literature', 12.99, 11, '2002-09-12', 'kafka_on_the_shore.jpg'),
-('02', '1Q84 Books 1 and 2', 'Murakami Haruki', 'Vintage Books', 'Literature', 13.99, 10, '2009-05-29', '1q84_1.jpg'),
-('03', '1Q84 Book 3', 'Murakami Haruki', 'Vintage Books', 'Literature', 13.99, 2, '2010-04-10', '1q84_3.jpg'),
+('02', '1Q84 Books 1 and 2', 'Murakami Haruki', 'Vintage Books', 'Literature', 13.99, 14, '2009-05-29', '1q84_1.jpg'),
+('03', '1Q84 Book 3', 'Murakami Haruki', 'Vintage Books', 'Literature', 13.99, 6, '2010-04-10', '1q84_3.jpg'),
 ('04', 'Kokoro', 'Natsume Soseki', 'Vintage Books', 'Literature', 11.99, 4, '1914-08-11', 'kokoro.jpg'),
-('05', 'Nakahara Chuuya Poems', 'Nakahara Chuuya', 'Gracewing', 'Poems', 16.99, 1, '2004-02-01', 'chuuya_poems.jpg'),
-('06', '100 poems, 100 authors', '-', 'Penguin Classics', 'Poems', 12.99, 20, '2007-07-20', 'poems.jpg'),
-('07', 'Goodnight Punpun Volume 1', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 9, '2007-08-03', 'pun_1.jpg'),
-('08', 'Goodnight Punpun Volume 2', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 8, '2007-12-28', 'pun_2.jpg'),
-('09', 'Goodnight Punpun Volume 3', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 10, '2008-06-05', 'pun_3.jpg'),
-('10', 'JOJO Stone Ocean Volume 1', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 25, '2008-04-18', 'stone_ocean_1.jpg'),
-('11', 'JOJO Stone Ocean Volume 2', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 5, '2008-05-16', 'stone_ocean_2.jpg'),
-('12', 'JOJO Stone Ocean Volume 3', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 26, '2008-06-18', 'stone_ocean_3.jpg'),
-('13', 'Snow Country', 'Kawabata Yasunari', 'Knopf Doubleday Publishing Gro', 'Literature', 9.99, -1, '1948-11-05', 'snow_country.jpg');
+('05', 'Nakahara Chuuya Poems', 'Nakahara Chuuya', 'Gracewing', 'Poems', 16.99, 0, '2004-02-01', 'chuuya_poems.jpg'),
+('06', '100 poems, 100 authors', '-', 'Penguin Classics', 'Poems', 12.99, 14, '2007-07-20', 'poems.jpg'),
+('07', 'Goodnight Punpun Volume 1', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 2, '2007-08-03', 'pun_1.jpg'),
+('08', 'Goodnight Punpun Volume 2', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 4, '2007-12-28', 'pun_2.jpg'),
+('09', 'Goodnight Punpun Volume 3', 'Asano Inio', 'VIZ Media LLC', 'Manga', 16.99, 5, '2008-06-05', 'pun_3.jpg'),
+('10', 'JOJO Stone Ocean Volume 1', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 24, '2008-04-18', 'stone_ocean_1.jpg'),
+('11', 'JOJO Stone Ocean Volume 2', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 2, '2008-05-16', 'stone_ocean_2.jpg'),
+('12', 'JOJO Stone Ocean Volume 3', 'Araki Hirohiko', 'VIZ Media LLC', 'Manga', 12.99, 23, '2008-06-18', 'stone_ocean_3.jpg'),
+('13', 'Snow Country', 'Kawabata Yasunari', 'Knopf Doubleday Publishing Gro', 'Literature', 9.99, 25, '1948-11-05', 'snow_country.jpg');
 
 -- --------------------------------------------------------
 
@@ -98,7 +98,23 @@ CREATE TABLE `buys` (
 --
 
 INSERT INTO `buys` (`Transaction_ID`, `book_ISBN`, `quantity`, `date`) VALUES
-(2, '13', 1, '2024-06-14');
+(2, '13', 1, '2024-06-14'),
+(3, '13', 6, '2024-06-14'),
+(4, '13', 6, '2024-06-14'),
+(5, '13', 7, '2024-06-14'),
+(6, '13', 1, '2024-06-14'),
+(7, '13', 2, '2024-06-14'),
+(8, '13', 1, '2024-06-14'),
+(9, '13', 2, '2024-06-14'),
+(10, '13', 1, '2024-06-14'),
+(11, '13', 2, '2024-06-14'),
+(12, '13', 1, '2024-06-14'),
+(13, '13', 1, '2024-06-14'),
+(35, '13', 1, '2024-06-14'),
+(36, '02', 2, '2024-06-14'),
+(37, '03', 2, '2024-06-14'),
+(38, '02', 6, '2024-06-14'),
+(39, '03', 4, '2024-06-14');
 
 -- --------------------------------------------------------
 
@@ -125,11 +141,13 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`id`, `name`, `username`, `password`, `country`, `city`, `street`, `street_num`, `postal_code`, `phone`, `email`) VALUES
-(1, 'phn', 'user', '123456789', 'greece', 'athens', 'phn', '51', '11242', '6985414123', 'phn@gmail.com'),
+(1, 'babis', 'user', '123456789', 'greece', 'athens', 'babis', '51', '11242', '6985414123', 'babis@gmail.com'),
 (2, 'Sofiaa', 'sofiaaa', '12345', 'greece', 'athens', 'miaou', '2', '35100', '6940884497', 'dndif@jfi.com'),
 (3, 'sofia', 'sofini', '12345', 'greece', 'ath', 'ath', '2', '12345', '1234567890', 'sof@gmail.com'),
 (4, 'test', 'test', '12345', 'sdvc', 'dsvgsdft', 'detf', '3', '12345', '1234565890', 'sdvg@gmail.com'),
-(5, 'june', 'june', 'june', 'Greece', 'Athens', 'AAAA', '123', 'AB21', '293832934', 'june@gmail.com');
+(5, 'june', 'june', 'june', 'Greece', 'Athens', 'AAAA', '123', 'AB21', '293832934', 'june@gmail.com'),
+(7, 'jotaro', 'jotaro', '123', 'Japan', 'MORIOH', 'JOJOJOJOJOJO', '2', '23788237', '48937934', 'jotaro@gmail.com'),
+(8, 'jolyne', 'jolyne', 'jolyne', 'Japan', 'JAIL', 'Jojolili', '123', 'JJ11', '283829932', 'jolyne@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -161,7 +179,33 @@ INSERT INTO `sells` (`Transaction_ID`, `customer_id`, `book_ISBN`, `quantity`, `
 (19, 3, '04', 1, '2024-06-01'),
 (20, 3, '04', 1, '2024-06-03'),
 (21, 3, '11', 1, '2024-06-12'),
-(22, 3, '01', 1, '2024-06-08');
+(22, 3, '01', 1, '2024-06-08'),
+(23, 5, '11', 2, '2024-06-14'),
+(24, 5, '12', 2, '2024-06-14'),
+(25, 5, '07', 4, '2024-06-14'),
+(26, 5, '08', 2, '2024-06-14'),
+(27, 5, '09', 2, '2024-06-14'),
+(28, 3, '13', 2, '2024-06-14'),
+(29, 5, '11', 1, '2024-06-14'),
+(30, 5, '12', 1, '2024-06-14'),
+(31, 5, '13', 1, '2024-06-14'),
+(32, 5, '05', 1, '2024-06-14'),
+(33, 5, '06', 2, '2024-06-14'),
+(34, 5, '06', 1, '2024-06-14'),
+(35, 5, '02', 1, '2024-06-14'),
+(36, 5, '03', 2, '2024-06-14'),
+(37, 5, '02', 2, '2024-06-14'),
+(38, 5, '02', 1, '2024-06-14'),
+(39, 5, '10', 1, '2024-06-14'),
+(40, 5, '06', 1, '2024-06-15'),
+(41, 8, '07', 1, '2024-06-15'),
+(42, 8, '08', 1, '2024-06-15'),
+(43, 8, '08', 1, '2024-06-15'),
+(44, 8, '09', 1, '2024-06-15'),
+(45, 8, '07', 2, '2024-06-15'),
+(46, 8, '09', 2, '2024-06-15'),
+(47, 8, '06', 2, '2024-06-15'),
+(48, 8, '13', 2, '2024-06-15');
 
 --
 -- Indexes for dumped tables
@@ -214,19 +258,19 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT for table `buys`
 --
 ALTER TABLE `buys`
-  MODIFY `Transaction_ID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `Transaction_ID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `sells`
 --
 ALTER TABLE `sells`
-  MODIFY `Transaction_ID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `Transaction_ID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- Constraints for dumped tables
