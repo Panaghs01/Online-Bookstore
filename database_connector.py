@@ -196,7 +196,7 @@ def return_transactions():
             tmp=[]
             cursor.execute(
                 """SELECT book_ISBN FROM sells 
-                WHERE (date= %s AND customer_id= %s)""",date[0],customer[0])
+                WHERE (date={date[0]} AND customer_id={customer[0]} )""")
             transaction = cursor.fetchall()
             if transaction:
                 for i in transaction:
