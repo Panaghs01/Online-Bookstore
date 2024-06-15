@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jun 15, 2024 at 12:46 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Εξυπηρετητής: 127.0.0.1
+-- Χρόνος δημιουργίας: 15 Ιουν 2024 στις 22:23:02
+-- Έκδοση διακομιστή: 10.4.32-MariaDB
+-- Έκδοση PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `bookstore`
+-- Βάση δεδομένων: `bookstore`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admins`
+-- Δομή πίνακα για τον πίνακα `admins`
 --
 
 CREATE TABLE `admins` (
@@ -34,7 +34,7 @@ CREATE TABLE `admins` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `admins`
+-- Άδειασμα δεδομένων του πίνακα `admins`
 --
 
 INSERT INTO `admins` (`ID`, `username`, `password`) VALUES
@@ -46,7 +46,7 @@ INSERT INTO `admins` (`ID`, `username`, `password`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `books`
+-- Δομή πίνακα για τον πίνακα `books`
 --
 
 CREATE TABLE `books` (
@@ -62,7 +62,7 @@ CREATE TABLE `books` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `books`
+-- Άδειασμα δεδομένων του πίνακα `books`
 --
 
 INSERT INTO `books` (`ISBN`, `title`, `author`, `publisher`, `genre`, `price`, `stock`, `date`, `cover`) VALUES
@@ -83,43 +83,44 @@ INSERT INTO `books` (`ISBN`, `title`, `author`, `publisher`, `genre`, `price`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `buys`
+-- Δομή πίνακα για τον πίνακα `buys`
 --
 
 CREATE TABLE `buys` (
   `Transaction_ID` int(100) NOT NULL,
+  `Admin_ID` int(10) NOT NULL,
   `book_ISBN` varchar(12) NOT NULL,
   `quantity` int(30) NOT NULL,
   `date` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `buys`
+-- Άδειασμα δεδομένων του πίνακα `buys`
 --
 
-INSERT INTO `buys` (`Transaction_ID`, `book_ISBN`, `quantity`, `date`) VALUES
-(2, '13', 1, '2024-06-14'),
-(3, '13', 6, '2024-06-14'),
-(4, '13', 6, '2024-06-14'),
-(5, '13', 7, '2024-06-14'),
-(6, '13', 1, '2024-06-14'),
-(7, '13', 2, '2024-06-14'),
-(8, '13', 1, '2024-06-14'),
-(9, '13', 2, '2024-06-14'),
-(10, '13', 1, '2024-06-14'),
-(11, '13', 2, '2024-06-14'),
-(12, '13', 1, '2024-06-14'),
-(13, '13', 1, '2024-06-14'),
-(35, '13', 1, '2024-06-14'),
-(36, '02', 2, '2024-06-14'),
-(37, '03', 2, '2024-06-14'),
-(38, '02', 6, '2024-06-14'),
-(39, '03', 4, '2024-06-14');
+INSERT INTO `buys` (`Transaction_ID`, `Admin_ID`, `book_ISBN`, `quantity`, `date`) VALUES
+(2, 1, '13', 1, '2024-06-14'),
+(3, 1, '13', 6, '2024-06-14'),
+(4, 2, '13', 6, '2024-06-14'),
+(5, 3, '13', 7, '2024-06-14'),
+(6, 2, '13', 1, '2024-06-14'),
+(7, 1, '13', 2, '2024-06-14'),
+(8, 2, '13', 1, '2024-06-14'),
+(9, 3, '13', 2, '2024-06-14'),
+(10, 3, '13', 1, '2024-06-14'),
+(11, 4, '13', 2, '2024-06-14'),
+(12, 4, '13', 1, '2024-06-14'),
+(13, 1, '13', 1, '2024-06-14'),
+(35, 2, '13', 1, '2024-06-14'),
+(36, 2, '02', 2, '2024-06-14'),
+(37, 3, '03', 2, '2024-06-14'),
+(38, 4, '02', 6, '2024-06-14'),
+(39, 3, '03', 4, '2024-06-14');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `customers`
+-- Δομή πίνακα για τον πίνακα `customers`
 --
 
 CREATE TABLE `customers` (
@@ -137,7 +138,7 @@ CREATE TABLE `customers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `customers`
+-- Άδειασμα δεδομένων του πίνακα `customers`
 --
 
 INSERT INTO `customers` (`id`, `name`, `username`, `password`, `country`, `city`, `street`, `street_num`, `postal_code`, `phone`, `email`) VALUES
@@ -152,7 +153,7 @@ INSERT INTO `customers` (`id`, `name`, `username`, `password`, `country`, `city`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sells`
+-- Δομή πίνακα για τον πίνακα `sells`
 --
 
 CREATE TABLE `sells` (
@@ -164,7 +165,7 @@ CREATE TABLE `sells` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `sells`
+-- Άδειασμα δεδομένων του πίνακα `sells`
 --
 
 INSERT INTO `sells` (`Transaction_ID`, `customer_id`, `book_ISBN`, `quantity`, `date`) VALUES
@@ -208,36 +209,37 @@ INSERT INTO `sells` (`Transaction_ID`, `customer_id`, `book_ISBN`, `quantity`, `
 (48, 8, '13', 2, '2024-06-15');
 
 --
--- Indexes for dumped tables
+-- Ευρετήρια για άχρηστους πίνακες
 --
 
 --
--- Indexes for table `admins`
+-- Ευρετήρια για πίνακα `admins`
 --
 ALTER TABLE `admins`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indexes for table `books`
+-- Ευρετήρια για πίνακα `books`
 --
 ALTER TABLE `books`
   ADD PRIMARY KEY (`ISBN`);
 
 --
--- Indexes for table `buys`
+-- Ευρετήρια για πίνακα `buys`
 --
 ALTER TABLE `buys`
   ADD PRIMARY KEY (`Transaction_ID`),
-  ADD KEY `book_ISBN` (`book_ISBN`);
+  ADD KEY `book_ISBN` (`book_ISBN`),
+  ADD KEY `Admin_ID` (`Admin_ID`);
 
 --
--- Indexes for table `customers`
+-- Ευρετήρια για πίνακα `customers`
 --
 ALTER TABLE `customers`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sells`
+-- Ευρετήρια για πίνακα `sells`
 --
 ALTER TABLE `sells`
   ADD PRIMARY KEY (`Transaction_ID`),
@@ -245,45 +247,46 @@ ALTER TABLE `sells`
   ADD KEY `book_ISBN` (`book_ISBN`) USING BTREE;
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT για άχρηστους πίνακες
 --
 
 --
--- AUTO_INCREMENT for table `admins`
+-- AUTO_INCREMENT για πίνακα `admins`
 --
 ALTER TABLE `admins`
   MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `buys`
+-- AUTO_INCREMENT για πίνακα `buys`
 --
 ALTER TABLE `buys`
   MODIFY `Transaction_ID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
--- AUTO_INCREMENT for table `customers`
+-- AUTO_INCREMENT για πίνακα `customers`
 --
 ALTER TABLE `customers`
   MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `sells`
+-- AUTO_INCREMENT για πίνακα `sells`
 --
 ALTER TABLE `sells`
   MODIFY `Transaction_ID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
--- Constraints for dumped tables
+-- Περιορισμοί για άχρηστους πίνακες
 --
 
 --
--- Constraints for table `buys`
+-- Περιορισμοί για πίνακα `buys`
 --
 ALTER TABLE `buys`
-  ADD CONSTRAINT `buys_ibfk_1` FOREIGN KEY (`book_ISBN`) REFERENCES `books` (`ISBN`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `buys_ibfk_1` FOREIGN KEY (`book_ISBN`) REFERENCES `books` (`ISBN`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `buys_ibfk_2` FOREIGN KEY (`Admin_ID`) REFERENCES `admins` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Constraints for table `sells`
+-- Περιορισμοί για πίνακα `sells`
 --
 ALTER TABLE `sells`
   ADD CONSTRAINT `sells_ibfk_2` FOREIGN KEY (`book_ISBN`) REFERENCES `books` (`ISBN`) ON DELETE CASCADE ON UPDATE CASCADE,

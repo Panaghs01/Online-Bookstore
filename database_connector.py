@@ -104,9 +104,8 @@ def login_admin(username, password):
 def add_book_to_cart(isbn,quantity=1):
     #this function takes book_isbn and optionally a value that is default to 1
     #and returns if book can be added to cart or if it is out of stock
-    
     cursor.execute(
-        "SELECT stock FROM books WHERE ISBN=%s", isbn)
+        "SELECT stock FROM books WHERE ISBN=%s", (isbn,))
     inventory = cursor.fetchone()
     if inventory[0] - quantity >= 0: return isbn,quantity 
     #Success, return the isbn and the quantity requested
@@ -135,7 +134,7 @@ def transaction_sell(book_dict,customer_id):
         database.commit()
 
 
-def transaction_buy(book_dict):
+def transaction_buy(book_dict,admin_id):
     #this function takes a dictionary of {book_isbn:quantity} format 
     #as an argument
     #then makes a transaction
@@ -143,8 +142,8 @@ def transaction_buy(book_dict):
 
     for key in book_dict.keys():
         cursor.execute(
-            """INSERT INTO buys (book_ISBN, quantity) 
-            VALUES (%s,%s)""", key, book_dict[key])
+          """INSERT INTO buys (Admin_ID, book_ISBN, quantity) 
+          VALUES (%s ,%s, %s)""", admin_id, key, book_dict[key])
         database.commit()
         cursor.execute(
             "SELECT stock FROM books WHERE ISBN=%s", key)

@@ -226,7 +226,6 @@ def display_latest_books():
             
 def display_popular_books():
     popular_books = ML.top3()
-    print(popular_books)
     
     if popular_books:
         popular_books_frame = ctk.CTkFrame(root)
@@ -359,7 +358,7 @@ def open_cart_window():
         if admin_logged_in:
 
             book_dict = {isbn: book_data['quantity'] for isbn, book_data in cart.items()}
-            DB.transaction_buy(book_dict)
+            DB.transaction_buy(book_dict,admin_id)
             messagebox.showinfo(
                 "Purchase Complete",
                 "Books bought and added to stock successfully!")
@@ -399,11 +398,7 @@ def open_cart_window():
             recommended_book_frame = ctk.CTkFrame(cart_window)
             recommended_book_frame.pack(pady=5)
 
-            print(type(recommended_book))
-
             book = DB.get_book_details(recommended_book)
-
-            print(book)
 
             cover_path = book[8]
             cover_image = Image.open(cover_path)
