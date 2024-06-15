@@ -5,10 +5,10 @@ from mlxtend.frequent_patterns import apriori, association_rules
 from mlxtend.preprocessing import TransactionEncoder
 import database_connector as DB
 
-pd.set_option('display.max_rows', 20)
+pd.set_option('display.max_rows', None)
 
 transactions = DB.return_transactions()
-#print(transactions)
+print(transactions)
 
 #DATASET = BOOKS ISBNs OF EACH TRANSACTION
 dataset = transactions
@@ -24,11 +24,11 @@ df = pd.DataFrame(te_ary, columns= te.columns_)
 ap = apriori(df,min_support= 0.1,use_colnames=True) #run apriori with 10% minimum support
 
 def top3():
-
+    #Applying apriori with max_len 1 so we get 1 antecedent length
+    #Returns a list of the top 3 books (str)
     ap2 = apriori(df,min_support = 0.1,use_colnames=True,max_len=1)
     ap2 = ap2.sort_values('support',ascending = False).head(3)  #Top 3 books
-    #print(ap2)
-    books = [next(iter(x)) for x in ap2.itemsets]
+    books = [next(iter(x)) for x in ap2.itemsets]   #Un-frozenset-ing
     return books
 
 #print(top3())
@@ -39,7 +39,6 @@ def recommendations(cart):
     recommendation = {}
     rules = association_rules(ap,metric='lift')
     rules = rules[["antecedents","consequents","lift","confidence"]]
-    print(rules)
     rules['consequents_len'] = rules['consequents'].apply(lambda x: len(x))
     if rules[(rules['antecedents'] == cart) & (rules['lift'] > 1)].empty:
         for i in cart:
@@ -56,7 +55,7 @@ def recommendations(cart):
         # rules2 = rules2['consequents']
         recommendation['1'] = 1.0234
         recommendation = sorted(recommendation.items(), key = lambda x: x[1],reverse = True)
-        return type(recommendation[0][0])
+        return recommendation[0][0]
     else:
         rules = rules[rules['antecedents'] == cart]
         rules = rules.sort_values(by = ['lift'], ascending = False)
@@ -65,7 +64,7 @@ def recommendations(cart):
         return next(iter(result))
 
     
-print(recommendations(['13','01']))
+print(recommendations(['13','07']))
 
 
 
