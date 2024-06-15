@@ -8,7 +8,7 @@ from tkinter import messagebox
 from tkinter import ttk
 from PIL import Image, ImageTk  # pip install pillow
 import database_connector as DB
-import ML
+import ML as ML
 
 # ----------------------------- TKinter Settings -----------------------------#
 
@@ -380,10 +380,48 @@ def open_cart_window():
                 cart_window.destroy()
                 messagebox.showinfo("Order Successful", "Your order was successful!")
 
-    def recommend_books():
-        username_label = ctk.CTkLabel(cart_window, text="Recommended for you!",
-                                      font=("Helvetica", 16))
-        username_label.pack(pady=10)
+
+    username_label = ctk.CTkLabel(cart_window, text="Recommended for you!",
+                                  font=("Helvetica", 16))
+    username_label.pack(pady=10)
+
+    def display_recommendation():
+        recommended_book = ML.recommendations(cart.keys())
+
+        rr = int(recommended_book)
+        if rr < 10:
+            strr = str(rr)
+            recommended_book = "0"+strr
+
+        print("RECOMMENDED BOOK")
+        print(recommended_book)
+
+        if recommended_book:
+            recommended_book_frame = ctk.CTkFrame(root)
+            recommended_book_frame.pack(pady=5)
+
+            print(type(recommended_book))
+
+            book = DB.get_book_details(recommended_book)
+
+            print(book)
+
+            cover_path = book[8]
+            cover_image = Image.open(cover_path)
+            cover_image = cover_image.resize((90, 110), Image.LANCZOS)
+
+            cover_photo = ImageTk.PhotoImage(cover_image)
+            cover_ctk_image = ctk.CTkImage(light_image=cover_image,
+                                           dark_image=cover_image,
+                                           size=(100, 150))
+
+            cover_label = ctk.CTkLabel(cart_frame, text="", image=cover_ctk_image, cursor="hand2")
+            cover_label.pack(side="left", padx=10)
+            cover_label.bind("<Button-1>", lambda e, book=book: open_book_details(book))
+
+
+
+    display_recommendation()
 
     # Proceed to Purchase button
     proceed_button = ctk.CTkButton(cart_window, text="Proceed to Purchase",
@@ -417,7 +455,7 @@ def open_contact_window():
 
     email_label = ctk.CTkLabel(
         contact_window, text="Email: anteikubookstore@gmail.com",
-        font=("Helvetica", 16)).pack(pady=20)
+        font=("Helvetica", 16)).pack(pady=10)
 
     telephone_label = ctk.CTkLabel(
         contact_window, text="Telephone: xx+xxxxxxx",
@@ -607,7 +645,6 @@ def open_profile():
         show_statistics_buttons()
 
         statistics_window.mainloop()
-        
         
 
     def back_to_menu():

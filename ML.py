@@ -1,7 +1,9 @@
 import numpy as np 
 import pandas as pd 
 #pip install mlxtend
-from mlxtend.frequent_patterns import apriori, association_rules 
+import mlxtend
+from mlxtend.frequent_patterns import apriori
+from mlxtend.frequent_patterns import association_rules
 from mlxtend.preprocessing import TransactionEncoder
 import database_connector as DB
 
@@ -34,6 +36,7 @@ def top3():
 #print(top3())
 
 def recommendations(cart):
+
     cart = set(cart)
     a = []
     recommendation = {}
@@ -44,7 +47,7 @@ def recommendations(cart):
         for i in cart:
             rules2 = rules[
                 (rules['antecedents'] == {i}) &
-                (rules['lift'] > 1) & 
+                (rules['lift'] > 1) &
                 (rules['consequents_len'] == 1)]
             rules2 = rules2.sort_values(by = 'lift' , ascending = False).head(1)
             # print(rules2)

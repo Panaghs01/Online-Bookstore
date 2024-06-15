@@ -239,15 +239,6 @@ def validate_username(username):
     return False
 
 
-lista=[]
-for i in range(0,31):
-    date=date.today() - timedelta(days = i)
-    cursor.execute("SELECT book_ISBN FROM sells WHERE date={date})")
-print(lista)
-
-
-
-
 
 
 
