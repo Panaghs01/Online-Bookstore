@@ -7,12 +7,7 @@ import database_connector as DB
 
 transactions = DB.return_transactions()
 
-print(transactions)
-
-#IDS = TRANSACTIONS IDS
 #DATASET = BOOKS ISBNs OF EACH TRANSACTION
-
-
 dataset = transactions
 
 #ENCODING DATA WITH TRUE/FALSE IF THEY ARE FOUND IN DATASET
@@ -21,15 +16,14 @@ te = TransactionEncoder()
 te_ary = te.fit(dataset).transform(dataset)
 df = pd.DataFrame(te_ary, columns= te.columns_)
 
-#print(df,'\n')
+# print(df,'\n')
 
 ap = apriori(df,min_support= 0.1,use_colnames=True) #run apriori with 10% minimum support
 
 def top3():
 
-    #print("TOP 3 BOOKS WITH MINIMUM SUPPORT 0.5")
-    ap2 = apriori(df,min_support=0.5,use_colnames=True,max_len=1)
-    ap2 = ap2.head(3).sort_values('support',ascending = False)  #Top 3 books
+    ap2 = apriori(df,min_support = 0.1,use_colnames=True,max_len=1)
+    ap2 = ap2.sort_values('support',ascending = False).head(3)  #Top 3 books
     #print(ap2)
     books = [next(iter(x)) for x in ap2.itemsets]
     return books
@@ -60,7 +54,7 @@ def recommendations(cart):
         return set(next(iter(result)))
 
     
-#print(recommendations([1,2]))
+print(recommendations([1,2]))
 
 
 
