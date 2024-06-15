@@ -256,3 +256,19 @@ def validate_username(username):
 
 
 
+def income_last_month():
+    income_per_day=[]
+    for i in range(30,-1,-1):
+        income=0
+        date_variable = date.today()- timedelta(days = i)
+        temp = date_variable.strftime('%Y-X%m-X%d').replace('X0', 'X').replace('X', '')
+        date_variable = datetime.strptime(temp, "%Y-%m-%d").date()
+            f"SELECT book_ISBN,quantity FROM sells WHERE(date='{date_variable}')")
+        a= cursor.fetchall()
+        if a:
+            for book,quantity in a:
+                cursor.execute(f"SELECT price FROM books WHERE ISBN='{book}'")
+                price=cursor.fetchone()
+                income+=price[0]*quantity
+        income_per_day.append((date_variable,income))
+    return income_per_day
