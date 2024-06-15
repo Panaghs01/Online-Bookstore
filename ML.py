@@ -5,7 +5,10 @@ from mlxtend.frequent_patterns import apriori, association_rules
 from mlxtend.preprocessing import TransactionEncoder
 import database_connector as DB
 
+pd.set_option('display.max_rows', 20)
+
 transactions = DB.return_transactions()
+#print(transactions)
 
 #DATASET = BOOKS ISBNs OF EACH TRANSACTION
 dataset = transactions
@@ -33,28 +36,36 @@ def top3():
 def recommendations(cart):
     cart = set(cart)
     a = []
-    recommendation = []
-    rules = association_rules(ap,metric='confidence',min_threshold=0.5)
-    rules['antecedent_len'] = rules["antecedents"].apply(lambda x: len(x))
-    rules = rules[["antecedents","consequents","lift","antecedent_len"]]
-    print(rules,'\n')
+    recommendation = {}
+    rules = association_rules(ap,metric='lift')
+    rules = rules[["antecedents","consequents","lift","confidence"]]
+    print(rules)
+    rules['consequents_len'] = rules['consequents'].apply(lambda x: len(x))
     if rules[(rules['antecedents'] == cart) & (rules['lift'] > 1)].empty:
         for i in cart:
-            rules2 = rules[(rules['antecedents'] == {i}) & (rules['lift'] > 1)]
-            rules2 = rules2['consequents']
-            recommendation.append(next(iter(rules2.values)))
-        for i in recommendation:
-            i = next(iter(i))
-            a.append(i)
-        return set(a)        
+            rules2 = rules[
+                (rules['antecedents'] == {i}) &
+                (rules['lift'] > 1) & 
+                (rules['consequents_len'] == 1)]
+            rules2 = rules2.sort_values(by = 'lift' , ascending = False).head(1)
+            # print(rules2)
+            if not rules2['lift'].empty:
+                recommendation[i] = rules2['lift'].item()
+            # print(recommendation)
+        # rules2 = rules2.sort_values(by = 'lift', ascending = False)
+        # rules2 = rules2['consequents']
+        recommendation['1'] = 1.0234
+        recommendation = sorted(recommendation.items(), key = lambda x: x[1],reverse = True)
+        return type(recommendation[0][0])
     else:
         rules = rules[rules['antecedents'] == cart]
-        rules = rules.sort_values(by = ['lift'])
-        result = rules['consequents'].head(1)
-        return set(next(iter(result)))
+        rules = rules.sort_values(by = ['lift'], ascending = False)
+        rules = rules[(rules['consequents_len'] == 1)].head(1)
+        result = rules['consequents'].item()
+        return next(iter(result))
 
     
-print(recommendations([1,2]))
+print(recommendations(['13','01']))
 
 
 
