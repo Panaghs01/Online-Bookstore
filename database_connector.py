@@ -186,7 +186,7 @@ def return_transactions():
     dates = cursor.fetchall()
     cursor.execute("SELECT customer_id FROM sells GROUP BY(customer_id)")
     customers = cursor.fetchall()
-    for adate in date:
+    for adate in dates:
         for customer in customers:
             cursor.execute(
                 f"""SELECT book_ISBN FROM sells 

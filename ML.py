@@ -2,29 +2,23 @@ import numpy as np
 import pandas as pd 
 from mlxtend.frequent_patterns import apriori, association_rules
 from mlxtend.preprocessing import TransactionEncoder
+import database_connector as DB
 
+transactions = DB.return_transactions()
 
+print(transactions)
 
 #IDS = TRANSACTIONS IDS
 #DATASET = BOOKS ISBNs OF EACH TRANSACTION
 
-ids = [1,2,3,4,5,6,7,8,9,10]
-dataset = [[1,4],
-           [1,2,4],
-           [4,5,1],
-           [69,1,2],
-           [69,2],
-           [69,1,4],
-           [420,2,1],
-           [88,4],
-           [1,5,4],
-           [420,1,2]]
+
+dataset = transactions
 
 #ENCODING DATA WITH TRUE/FALSE IF THEY ARE FOUND IN DATASET
 
 te = TransactionEncoder()
 te_ary = te.fit(dataset).transform(dataset)
-df = pd.DataFrame(te_ary, columns= te.columns_, index = ids)
+df = pd.DataFrame(te_ary, columns= te.columns_)
 
 #print(df,'\n')
 
@@ -65,7 +59,7 @@ def recommendations(cart):
         return set(next(iter(result)))
 
     
-print(recommendations([1,2]))
+#print(recommendations([1,2]))
 
 
 
