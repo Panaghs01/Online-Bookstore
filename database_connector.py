@@ -18,7 +18,7 @@ or tell me to change it however you like
 -xrhstos
 
 """
-
+from datetime import *
 import mysql.connector as sql #pip install mysql-connector
 
 database = sql.connect(user = "root", host = "localhost",
@@ -196,7 +196,7 @@ def return_transactions():
             tmp=[]
             cursor.execute(
                 """SELECT book_ISBN FROM sells 
-                WHERE (date={date[0]} AND customer_id={customer[0]} )""")
+                WHERE (date='{date[0]}' AND customer_id= '{customer[0]}')""")
             transaction = cursor.fetchall()
             if transaction:
                 for i in transaction:
@@ -240,7 +240,10 @@ def validate_username(username):
 
 
 lista=[]
-
+for i in range(0,31):
+    date=date.today() - timedelta(days = i)
+    cursor.execute("SELECT book_ISBN FROM sells WHERE date={date})")
+print(lista)
 
 
 
