@@ -195,7 +195,7 @@ def return_transactions():
             #list, and finally return it
             tmp=[]
             cursor.execute(
-                """SELECT book_ISBN FROM sells 
+                f"""SELECT book_ISBN FROM sells 
                 WHERE (date='{date[0]}' AND customer_id= '{customer[0]}')""")
             transaction = cursor.fetchall()
             if transaction:
@@ -208,14 +208,14 @@ def return_transactions():
 
 def return_user(customer):
     cursor.execute(
-        "SELECT username FROM customers WHERE ID = %s ", customer)
+        "SELECT username FROM customers WHERE ID = %s ", (customer,))
     customer_id = cursor.fetchone()
     return customer_id[0]
 
 
 def return_admin(admin):
     cursor.execute(
-        "SELECT username FROM admins WHERE ID = %s ", admin)
+        "SELECT username FROM admins WHERE ID = %s ", (admin,))
     admin_id = cursor.fetchone()
     return admin_id[0]
 

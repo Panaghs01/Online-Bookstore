@@ -226,6 +226,7 @@ def display_latest_books():
             
 def display_popular_books():
     popular_books = ML.top3()
+    print(popular_books)
     
     if popular_books:
         popular_books_frame = ctk.CTkFrame(root)
@@ -250,7 +251,7 @@ def display_popular_books():
 # Front label settings.
 latest_frame = ctk.CTkFrame(root)
 latest_frame.pack(padx=100, pady=10)
-welcome = ctk.CTkLabel(latest_frame, text="Our latest releases...",
+welcome = ctk.CTkLabel(latest_frame, text="Our latest releases",
                        font=("Helvetica", 36, "bold")).pack(padx=200, pady=10)
 
 display_latest_books()
@@ -258,7 +259,7 @@ display_latest_books()
 # Front label settings.
 latest_frame = ctk.CTkFrame(root)
 latest_frame.pack(padx=100, pady=10)
-welcome = ctk.CTkLabel(latest_frame, text="Most popular picks.",
+welcome = ctk.CTkLabel(latest_frame, text="Most popular picks",
                        font=("Helvetica", 36, "bold")).pack(padx=210, pady=10)
 
 display_popular_books()
@@ -381,23 +382,21 @@ def open_cart_window():
                 messagebox.showinfo("Order Successful", "Your order was successful!")
 
 
-    username_label = ctk.CTkLabel(cart_window, text="Recommended for you!",
+    recommended_label = ctk.CTkLabel(cart_window, text="Recommended for you!",
                                   font=("Helvetica", 16))
-    username_label.pack(pady=10)
+    recommended_label.pack(pady=10)
 
     def display_recommendation():
         recommended_book = ML.recommendations(cart.keys())
 
+        # dont ask me wtf im doing here man i dont know either hel;p
         rr = int(recommended_book)
         if rr < 10:
             strr = str(rr)
             recommended_book = "0"+strr
 
-        print("RECOMMENDED BOOK")
-        print(recommended_book)
-
         if recommended_book:
-            recommended_book_frame = ctk.CTkFrame(root)
+            recommended_book_frame = ctk.CTkFrame(cart_window)
             recommended_book_frame.pack(pady=5)
 
             print(type(recommended_book))
@@ -415,7 +414,7 @@ def open_cart_window():
                                            dark_image=cover_image,
                                            size=(100, 150))
 
-            cover_label = ctk.CTkLabel(cart_frame, text="", image=cover_ctk_image, cursor="hand2")
+            cover_label = ctk.CTkLabel(recommended_book_frame, text="", image=cover_ctk_image, cursor="hand2")
             cover_label.pack(side="left", padx=10)
             cover_label.bind("<Button-1>", lambda e, book=book: open_book_details(book))
 
