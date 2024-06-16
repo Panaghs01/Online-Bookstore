@@ -9,6 +9,8 @@ from tkinter import ttk
 from PIL import Image, ImageTk  # pip install pillow
 import database_connector as DB
 import ML as ML
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 # ----------------------------- TKinter Settings -----------------------------#
 
@@ -598,31 +600,148 @@ def open_profile():
             
         def show_sale_stats():
             clear_statistics_window()
+
+            income_data = DB.income_last_month()
+            days = [entry[0].strftime('%d') for entry in income_data]
+            sales = [entry[1] for entry in income_data]
+
+            fig, ax = plt.subplots(figsize=(6, 4))
+            fig.patch.set_facecolor('black')
+            ax.set_facecolor('black')
+            ax.plot(days, sales, marker='o', color='white')
+            ax.set_title("LAST MONTH'S SALES", color='white')
+            ax.set_xlabel('DAY', color='white')
+            ax.set_ylabel('TOTAL SALES', color='white')
+            ax.tick_params(axis='x', colors='white')
+            ax.tick_params(axis='y', colors='white')
+            ax.grid(True, color='gray')
+
+            canvas = FigureCanvasTkAgg(fig, master=statistics_window)
+            canvas.draw()
+            canvas.get_tk_widget().pack(pady=10, side="top", fill="both", expand=True)
+
             back_button = ctk.CTkButton(statistics_window, text="Back", fg_color="Red", command=back_to_statistics_menu)
             back_button.pack(pady=20, side="bottom")
             
         def show_stats_per_genre():
+            global plot_init
+            plot_init = True
+
             clear_statistics_window()
-            
-            def show_genre_graph():
-                pass
-            
-            combo_label=ctk.CTkLabel(statistics_window, text="Pick a genre.", font=("Helvetica", 20))
+
+            # Showing a matplotlib chart per genre...
+            def show_genre_graph(genre):
+                global plot_init
+
+                # Deleting the existing plot to make a new one!
+                if plot_init == False:
+                    ax.clear()
+
+                genre_data = DB.genre_statistics(genre)
+                days = [entry[0].strftime('%d') for entry in genre_data]
+                sales = [entry[1] for entry in genre_data]
+
+                ax.plot(days, sales, marker='o', color='white')
+                ax.set_title(f'SALES FOR {genre}', color='white')
+                ax.set_xlabel('DAY', color='white')
+                ax.set_ylabel('TOTAL SALES', color='white')
+                ax.tick_params(axis='x', colors='white')
+                ax.tick_params(axis='y', colors='white')
+                ax.grid(True, color='gray')
+
+                canvas.draw()
+
+                plot_init = False # Ensuring that there has been at least one plot printed.
+
+            def on_genre_selected():
+                genre = genre_combo.get()
+                if genre:
+                    show_genre_graph(genre)
+
+            # Combobox.
+            combo_label = ctk.CTkLabel(statistics_window, text="Pick a genre.", font=("Helvetica", 20))
             combo_label.pack(pady=30)
-            
+
             genres = ["Literature", "Manga", "Poems"]
             genre_combo = ctk.CTkComboBox(statistics_window, values=genres, height=34, width=240)
             genre_combo.pack(pady=10)
-            
-            genre_button = ctk.CTkButton(statistics_window, text="Select genre", command=show_genre_graph)
-            genre_button.pack(pady=20)
-            
 
+            genre_button = ctk.CTkButton(statistics_window, text="Select genre", command=on_genre_selected)
+            genre_button.pack(pady=20)
+
+            # Initialising the matplotlib figure here.
+            fig, ax = plt.subplots(figsize=(6, 4))
+            fig.patch.set_facecolor('black')
+            ax.set_facecolor('black')
+
+            canvas = FigureCanvasTkAgg(fig, master=statistics_window)
+            canvas.get_tk_widget().pack(pady=10, side="top", fill="both", expand=True)
+
+            # Returning to genre selection.
+            def back_to_statistics_menu():
+                clear_statistics_window()
+                show_statistics_buttons()
+
+            # Back button.
             back_button = ctk.CTkButton(statistics_window, text="Back", fg_color="Red", command=back_to_statistics_menu)
             back_button.pack(pady=20, side="bottom")
             
         def show_commonly_bought():
             clear_statistics_window()
+
+            # thank u panagh
+            top_books = ML.top20()
+            print(top_books)
+            bottom_books = ML.bottom20()
+
+            main_frame = ctk.CTkFrame(statistics_window)
+            main_frame.pack(fill="both", expand=True, padx=20, pady=20)
+
+            # Top 20 frame.
+            top_frame = ctk.CTkFrame(main_frame)
+            top_frame.pack(side="left", fill="both", expand=True, padx=10, pady=10)
+
+            top_label = ctk.CTkLabel(top_frame, text="Top 20 Books", font=("Helvetica", 16))
+            top_label.pack(pady=10)
+
+            top_left_frame1 = ctk.CTkFrame(top_frame)
+            top_left_frame1.pack(side="left", fill="both", expand=True, padx=5, pady=5)
+
+            top_right_frame1 = ctk.CTkFrame(top_frame)
+            top_right_frame1.pack(side="right", fill="both", expand=True, padx=5, pady=5)
+
+            # Left.
+            for idx, book in enumerate(top_books[:10], start=1):
+                book_label = ctk.CTkLabel(top_left_frame1, text=f"{idx}. {', '.join(book)}", font=("Helvetica", 12))
+                book_label.pack(anchor="w", padx=10, pady=5)
+
+            # Right.
+            for idx, book in enumerate(top_books[10:], start=11):
+                book_label = ctk.CTkLabel(top_right_frame1, text=f"{idx}. {', '.join(book)}", font=("Helvetica", 12))
+                book_label.pack(anchor="w", padx=10, pady=5)
+
+            # Bottom 20 frame.
+            bottom_frame = ctk.CTkFrame(main_frame)
+            bottom_frame.pack(side="right", fill="both", expand=True, padx=10, pady=10)
+
+            bottom_label = ctk.CTkLabel(bottom_frame, text="Bottom 20 Books", font=("Helvetica", 16))
+            bottom_label.pack(pady=10)
+
+            top_left_frame2 = ctk.CTkFrame(bottom_frame)
+            top_left_frame2.pack(side="left", fill="both", expand=True, padx=5, pady=5)
+
+            top_right_frame2 = ctk.CTkFrame(bottom_frame)
+            top_right_frame2.pack(side="right", fill="both", expand=True, padx=5, pady=5)
+
+            # Left.
+            for idx, book in enumerate(bottom_books[:10], start=1):
+                book_label = ctk.CTkLabel(top_left_frame2, text=f"{idx}. {', '.join(book)}", font=("Helvetica", 12))
+                book_label.pack(anchor="w", padx=10, pady=5)
+
+            # Right
+            for idx, book in enumerate(bottom_books[10:], start=11):
+                book_label = ctk.CTkLabel(top_right_frame2, text=f"{idx}. {', '.join(book)}", font=("Helvetica", 12))
+                book_label.pack(anchor="w", padx=10, pady=5)
 
             back_button = ctk.CTkButton(statistics_window, text="Back", fg_color="Red", command=back_to_statistics_menu)
             back_button.pack(pady=20, side="bottom")
@@ -648,7 +767,7 @@ def open_profile():
             
         statistics_window = ctk.CTk()
         statistics_window.title("Statistics")
-        statistics_window.geometry('600x700')
+        statistics_window.geometry('1000x700')
             
         show_statistics_buttons()
 

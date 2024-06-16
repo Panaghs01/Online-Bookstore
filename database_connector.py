@@ -240,3 +240,18 @@ def income_last_month():
                 income+=price[0]*quantity
         income_per_day.append((date_variable,income))
     return income_per_day
+
+def genre_statistics(genre):
+    ''''
+    Gets a genre, returns stats based on the genre.
+    '''
+    cursor.execute("""
+        SELECT sells.date, SUM(sells.quantity) AS total_sales
+        FROM sells
+        JOIN books ON sells.book_ISBN = books.ISBN
+        WHERE books.genre = %s
+        GROUP BY sells.date
+        ORDER BY sells.date
+    """, (genre,))
+    genre_data = cursor.fetchall()
+    return genre_data
