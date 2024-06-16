@@ -20,7 +20,7 @@ te = TransactionEncoder()
 te_ary = te.fit(dataset).transform(dataset)
 df = pd.DataFrame(te_ary, columns= te.columns_)
 
-ap = apriori(df,min_support= 0.1,use_colnames=True) #run apriori with 10% minimum support
+ap = apriori(df,min_support= 0.01,use_colnames=True) #run apriori with 10% minimum support
 
 
 def top3():
