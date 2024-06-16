@@ -71,6 +71,7 @@ def recommendations(cart):
         rules = rules.sort_values(by = ['lift'], ascending = False)
         rules = rules[(rules['consequents_len'] == 1)].head(1)
         result = rules['consequents'].item()
+        print("DEBUG")
         return next(iter(result))
 
 

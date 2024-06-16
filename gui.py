@@ -648,7 +648,7 @@ def open_profile():
             
         statistics_window = ctk.CTk()
         statistics_window.title("Statistics")
-        statistics_window.geometry('600x500')
+        statistics_window.geometry('600x700')
             
         show_statistics_buttons()
 
