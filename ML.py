@@ -40,7 +40,7 @@ def recommendations(cart):
     rules['consequents_len'] = rules['consequents'].apply(lambda x: len(x))
     #Getting the required fields
 
-    if rules[(rules['antecedents'] == cart) & (rules['lift'] > 1)].empty:
+    if rules[(rules['antecedents'] == cart)].empty:
         #If we cannot find any itemset that is in cart, check for each item in the cart
         #Then store the lift and the item in a dictionary
         #If the dictionary is empty at the end it means we don't have any good data
@@ -71,7 +71,6 @@ def recommendations(cart):
         rules = rules.sort_values(by = ['lift'], ascending = False)
         rules = rules[(rules['consequents_len'] == 1)].head(1)
         result = rules['consequents'].item()
-        print("DEBUG")
         return next(iter(result))
 
 
