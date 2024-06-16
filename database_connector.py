@@ -122,15 +122,15 @@ def transaction_sell(book_dict,customer_id):
     for key in book_dict.keys():
         cursor.execute(
             """INSERT INTO sells (customer_id, book_ISBN, quantity) 
-            VALUES (%s ,%s, %s)""", customer_id, key, book_dict[key])
+            VALUES (%s ,%s, %s)""", (customer_id, key, book_dict[key]))
         database.commit()
         cursor.execute(
-            "SELECT stock FROM books WHERE ISBN=%s", key)
+            "SELECT stock FROM books WHERE ISBN=%s", (key,))
         quantity = cursor.fetchone()
         new_quantity=quantity[0]-book_dict[key]
         cursor.execute(
             """UPDATE books SET stock = %s 
-            WHERE ISBN = %s """, new_quantity, key)
+            WHERE ISBN = %s """, (new_quantity, key))
         database.commit()
 
 
@@ -143,15 +143,15 @@ def transaction_buy(book_dict,admin_id):
     for key in book_dict.keys():
         cursor.execute(
           """INSERT INTO buys (Admin_ID, book_ISBN, quantity) 
-          VALUES (%s ,%s, %s)""", admin_id, key, book_dict[key])
+          VALUES (%s ,%s, %s)""", (admin_id, key, book_dict[key]))
         database.commit()
         cursor.execute(
-            "SELECT stock FROM books WHERE ISBN=%s", key)
+            "SELECT stock FROM books WHERE ISBN=%s", (key,))
         quantity = cursor.fetchone()
         new_quantity=quantity[0]+book_dict[key]
         cursor.execute(
             """UPDATE books SET stock = %s
-            WHERE ISBN = %s""",new_quantity, key)
+            WHERE ISBN = %s""",(new_quantity, key))
         database.commit()
 
 

@@ -9,6 +9,7 @@ import random
 pd.set_option('display.max_rows', None)
 
 transactions = DB.return_transactions()
+# print(transactions)
 
 #DATASET = BOOKS ISBNs OF EACH TRANSACTION
 dataset = transactions
@@ -20,6 +21,7 @@ te_ary = te.fit(dataset).transform(dataset)
 df = pd.DataFrame(te_ary, columns= te.columns_)
 
 ap = apriori(df,min_support= 0.1,use_colnames=True) #run apriori with 10% minimum support
+
 
 def top3():
     #Applying apriori with max_len 1 so we get 1 antecedent length
@@ -36,7 +38,6 @@ def recommendations(cart):
     rules = association_rules(ap,metric='lift')
     rules = rules[["antecedents","consequents","lift","confidence"]]
     rules['consequents_len'] = rules['consequents'].apply(lambda x: len(x))
-
     #Getting the required fields
 
     if rules[(rules['antecedents'] == cart) & (rules['lift'] > 1)].empty:
@@ -71,4 +72,40 @@ def recommendations(cart):
         rules = rules[(rules['consequents_len'] == 1)].head(1)
         result = rules['consequents'].item()
         return next(iter(result))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
