@@ -599,19 +599,33 @@ def open_profile():
         def show_sale_stats():
             clear_statistics_window()
             back_button = ctk.CTkButton(statistics_window, text="Back", fg_color="Red", command=back_to_statistics_menu)
-            back_button.pack(pady=10)
+            back_button.pack(pady=20, side="bottom")
             
         def show_stats_per_genre():
             clear_statistics_window()
+            
+            def show_genre_graph():
+                pass
+            
+            combo_label=ctk.CTkLabel(statistics_window, text="Pick a genre.", font=("Helvetica", 20))
+            combo_label.pack(pady=30)
+            
+            genres = ["Literature", "Manga", "Poems"]
+            genre_combo = ctk.CTkComboBox(statistics_window, values=genres, height=34, width=240)
+            genre_combo.pack(pady=10)
+            
+            genre_button = ctk.CTkButton(statistics_window, text="Select genre", command=show_genre_graph)
+            genre_button.pack(pady=20)
+            
 
             back_button = ctk.CTkButton(statistics_window, text="Back", fg_color="Red", command=back_to_statistics_menu)
-            back_button.pack(pady=10)
+            back_button.pack(pady=20, side="bottom")
             
         def show_commonly_bought():
             clear_statistics_window()
 
             back_button = ctk.CTkButton(statistics_window, text="Back", fg_color="Red", command=back_to_statistics_menu)
-            back_button.pack(pady=10)
+            back_button.pack(pady=20, side="bottom")
             
         def show_statistics_buttons():
             
@@ -634,7 +648,7 @@ def open_profile():
             
         statistics_window = ctk.CTk()
         statistics_window.title("Statistics")
-        statistics_window.geometry('500x400')
+        statistics_window.geometry('600x500')
             
         show_statistics_buttons()
 
