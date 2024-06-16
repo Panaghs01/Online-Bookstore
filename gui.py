@@ -691,7 +691,6 @@ def open_profile():
 
             # thank u panagh
             top_books = ML.top20()
-            print(top_books)
             bottom_books = ML.bottom20()
 
             main_frame = ctk.CTkFrame(statistics_window)
@@ -701,7 +700,7 @@ def open_profile():
             top_frame = ctk.CTkFrame(main_frame)
             top_frame.pack(side="left", fill="both", expand=True, padx=10, pady=10)
 
-            top_label = ctk.CTkLabel(top_frame, text="Top 20 Books", font=("Helvetica", 16))
+            top_label = ctk.CTkLabel(top_frame, text="Top 20 Combinations", font=("Helvetica", 16))
             top_label.pack(pady=10)
 
             top_left_frame1 = ctk.CTkFrame(top_frame)
@@ -724,7 +723,7 @@ def open_profile():
             bottom_frame = ctk.CTkFrame(main_frame)
             bottom_frame.pack(side="right", fill="both", expand=True, padx=10, pady=10)
 
-            bottom_label = ctk.CTkLabel(bottom_frame, text="Bottom 20 Books", font=("Helvetica", 16))
+            bottom_label = ctk.CTkLabel(bottom_frame, text="Bottom 20 Combinations", font=("Helvetica", 16))
             bottom_label.pack(pady=10)
 
             top_left_frame2 = ctk.CTkFrame(bottom_frame)
