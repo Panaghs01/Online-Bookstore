@@ -698,48 +698,56 @@ def open_profile():
 
             # Top 20 frame.
             top_frame = ctk.CTkFrame(main_frame)
-            top_frame.pack(side="left", fill="both", expand=True, padx=10, pady=10)
+            top_frame.pack(side="top", fill="both", expand=True, padx=10, pady=10)
 
             top_label = ctk.CTkLabel(top_frame, text="Top 20 Combinations", font=("Helvetica", 16))
             top_label.pack(pady=10)
 
-            top_left_frame1 = ctk.CTkFrame(top_frame)
-            top_left_frame1.pack(side="left", fill="both", expand=True, padx=5, pady=5)
+            top_left_frame = ctk.CTkFrame(top_frame, width=490, height=350)
+            top_left_frame.pack(side="left", fill="both", expand=True, padx=5, pady=5)
 
-            top_right_frame1 = ctk.CTkFrame(top_frame)
-            top_right_frame1.pack(side="right", fill="both", expand=True, padx=5, pady=5)
+            top_right_frame = ctk.CTkFrame(top_frame, width=490, height=350)
+            top_right_frame.pack(side="right", fill="both", expand=True, padx=5, pady=5)
 
             # Left.
             for idx, book in enumerate(top_books[:10], start=1):
-                book_label = ctk.CTkLabel(top_left_frame1, text=f"{idx}. {', '.join(book)}", font=("Helvetica", 12))
+                book_titles = [DB.get_book_details(isbn)[1] for isbn in book]
+                book_label = ctk.CTkLabel(top_left_frame, text=f"{idx}. {', '.join(book_titles)}",
+                                          font=("Helvetica", 12))
                 book_label.pack(anchor="w", padx=10, pady=5)
 
             # Right.
             for idx, book in enumerate(top_books[10:], start=11):
-                book_label = ctk.CTkLabel(top_right_frame1, text=f"{idx}. {', '.join(book)}", font=("Helvetica", 12))
+                book_titles = [DB.get_book_details(isbn)[1] for isbn in book]
+                book_label = ctk.CTkLabel(top_left_frame, text=f"{idx}. {', '.join(book_titles)}",
+                                          font=("Helvetica", 12))
                 book_label.pack(anchor="w", padx=10, pady=5)
 
             # Bottom 20 frame.
             bottom_frame = ctk.CTkFrame(main_frame)
-            bottom_frame.pack(side="right", fill="both", expand=True, padx=10, pady=10)
+            bottom_frame.pack(side="bottom", fill="both", expand=True, padx=10, pady=10)
 
             bottom_label = ctk.CTkLabel(bottom_frame, text="Bottom 20 Combinations", font=("Helvetica", 16))
             bottom_label.pack(pady=10)
 
-            top_left_frame2 = ctk.CTkFrame(bottom_frame)
-            top_left_frame2.pack(side="left", fill="both", expand=True, padx=5, pady=5)
+            bottom_left_frame = ctk.CTkFrame(bottom_frame, width=490, height=350)
+            bottom_left_frame.pack(side="left", fill="both", expand=True, padx=5, pady=5)
 
-            top_right_frame2 = ctk.CTkFrame(bottom_frame)
-            top_right_frame2.pack(side="right", fill="both", expand=True, padx=5, pady=5)
+            bottom_right_frame = ctk.CTkFrame(bottom_frame, width=490, height=350)
+            bottom_right_frame.pack(side="right", fill="both", expand=True, padx=5, pady=5)
 
             # Left.
             for idx, book in enumerate(bottom_books[:10], start=1):
-                book_label = ctk.CTkLabel(top_left_frame2, text=f"{idx}. {', '.join(book)}", font=("Helvetica", 12))
+                book_titles = [DB.get_book_details(isbn)[1] for isbn in book]
+                book_label = ctk.CTkLabel(bottom_left_frame, text=f"{idx}. {', '.join(book_titles)}",
+                                          font=("Helvetica", 12))
                 book_label.pack(anchor="w", padx=10, pady=5)
 
             # Right
             for idx, book in enumerate(bottom_books[10:], start=11):
-                book_label = ctk.CTkLabel(top_right_frame2, text=f"{idx}. {', '.join(book)}", font=("Helvetica", 12))
+                book_titles = [DB.get_book_details(isbn)[1] for isbn in book]
+                book_label = ctk.CTkLabel(bottom_right_frame, text=f"{idx}. {', '.join(book_titles)}",
+                                          font=("Helvetica", 12))
                 book_label.pack(anchor="w", padx=10, pady=5)
 
             back_button = ctk.CTkButton(statistics_window, text="Back", fg_color="Red", command=back_to_statistics_menu)
