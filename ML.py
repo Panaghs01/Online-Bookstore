@@ -73,37 +73,25 @@ def recommendations(cart):
         result = rules['consequents'].item()
         return next(iter(result))
 
+def top20():
+    #Applying apriori with max_len 1 so we get 1 antecedent length
+    #Returns a list of the top 3 books (str)
+    ap2 = apriori(df,min_support = 0.01,use_colnames=True)
+    ap2 = ap2.sort_values('support',ascending = False).head(20)
+    result = []
+    for item in ap2.itemsets:
+        result.append(list(item))
+    return result
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def bottom20():
+    #Applying apriori with max_len 1 so we get 1 antecedent length
+    #Returns a list of the top 3 books (str)
+    ap2 = apriori(df,min_support = 0.01,use_colnames=True)
+    ap2 = ap2.sort_values('support',ascending = False).tail(20)
+    result = []
+    for item in ap2.itemsets:
+        result.append(list(item))
+    return result
 
 
 
