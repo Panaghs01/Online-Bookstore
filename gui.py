@@ -447,18 +447,18 @@ cart_image_label.place(x=1120, y=25)
 def open_contact_window():
     contact_window = ctk.CTk()
     contact_window.title("Contact Information")
-    contact_window.geometry('330x180')
+    contact_window.geometry('330x170')
 
     email_label = ctk.CTkLabel(
         contact_window, text="Email: anteikubookstore@gmail.com",
         font=("Helvetica", 16)).pack(pady=10)
 
     telephone_label = ctk.CTkLabel(
-        contact_window, text="Telephone: xx+xxxxxxx",
+        contact_window, text="Telephone: +30 12345678",
         font=("Helvetica", 16)).pack(pady=10)
 
     address_label = ctk.CTkLabel(
-        contact_window, text="Address: Lamia, Greece",
+        contact_window, text="Address: Athens, Greece",
         font=("Helvetica", 16)).pack(pady=10)
     contact_window.mainloop()
 
